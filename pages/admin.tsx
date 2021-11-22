@@ -1,15 +1,16 @@
 /** @format */
 
 import Head from "next/head";
-import { GetServerSideProps } from "next";
-import type { NextPage } from "next";
-import Link from "next/link";
 import React from "react";
+import { Fragment } from "react";
+import type { NextPage } from "next";
+import { GetServerSideProps } from "next";
+import Link from "next/link";
 
 import { truncate } from "../lib/api-util";
 
 interface ProductType {
-	id: number | string;
+	id: string | number;
 	title: string;
 	description: string;
 	category?: string;
@@ -21,24 +22,26 @@ interface ProductType {
 	}[];
 }
 
-interface HomePageProps {
+interface AdminPageProps {
 	products?: ProductType[];
 }
 
-const HomePage: NextPage<HomePageProps> = ({ products }) => {
+const AdminPage: NextPage<AdminPageProps> = ({ products }) => {
 	return (
-		<React.Fragment>
+		<Fragment>
 			<Head>
-				<title>Products</title>
+				<title>Admin</title>
 			</Head>
-			<meta name='description' content='Add Product' />
+			<meta name='description' content='admin' />
 
 			<div className='text-[18px] max-w-[1100px] mx-auto p-5 mt-11 '>
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
 					{products &&
 						products?.map((product) => {
 							return (
-								<div className='cursor-pointer mb-7 p-4 border border-[#ddd] flex flex-col space-y-6 shadow-lg rounded-[4px]'>
+								<div
+									key={product?.id}
+									className='cursor-pointer mb-7 p-4 border border-[#ddd] flex flex-col space-y-6 shadow-lg rounded-[4px]'>
 									<div className=' overflow-hidden'>
 										<img
 											src={product?.image}
@@ -55,22 +58,22 @@ const HomePage: NextPage<HomePageProps> = ({ products }) => {
 										{truncate(product.description, 100)}
 									</div>
 
-									<div className='text-[19] font-bold text-center'>
+									<div className='text-[19] font-bold'>
 										$ {product?.price}
 									</div>
 									<div className='flex items-center justify-around'>
-										<Link href={`/${product?.id}`}>
-											<button className='btn'>Details</button>
+										<Link href={`/edit-product/${product?.id}`}>
+											<button className='btn'>Edit</button>
 										</Link>
 
-										<button className='btn'>Add to Cart</button>
+										<button className='btn'>Delete</button>
 									</div>
 								</div>
 							);
 						})}
 				</div>
 			</div>
-		</React.Fragment>
+		</Fragment>
 	);
 };
 
@@ -89,4 +92,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	};
 };
 
-export default HomePage;
+export default AdminPage;
