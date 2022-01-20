@@ -5,7 +5,7 @@ import React from "react";
 import { Fragment } from "react";
 import type { NextPage } from "next";
 
-import ChangePasswordPageComponent from "../change-password-page/change-password-page";
+import ChangePasswordPageComponent from "../components/change-password-page/change-password-page";
 
 const ChangePasswordScreen: NextPage = () => {
 	return (
