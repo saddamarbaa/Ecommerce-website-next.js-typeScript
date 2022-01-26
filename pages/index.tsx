@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import { truncate } from "../lib/api-util";
+import { truncate } from "../utils/helpers";
 
 interface ProductType {
 	id: number | string;
