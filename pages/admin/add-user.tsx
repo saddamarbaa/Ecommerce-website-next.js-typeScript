@@ -18,6 +18,7 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
   const { postUserIsPending, postUserIsSuccess, postUserIsError, postUserMessage } = props?.listState;
   const router = useRouter();
+   const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -59,12 +60,28 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
     });
   }, []);
 
+
+  
   useEffect(() => {
-    if (postUserIsSuccess) {
+    if (postUserIsSuccess ||  postUserIsError) {
+       setShowAlert(() => true)
+    }
+  }, [postUserIsSuccess ,  postUserIsError]);
+
+
+   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (postUserIsSuccess) {
+        setShowAlert(() => false)
       props.restUser();
       router.push('/admin/users');
     }
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, [postUserIsSuccess]);
+
+
 
   const onSubmit = (data: UserType ) => {
     let day = data?.day > 9 ? data.day : `0${data?.day}`;
@@ -86,14 +103,10 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
     <div className="flex items-center justify-center py-[3rem]  ">
       <div className=" mx-auto w-[90%]  md:max-w-[35rem] md:min-w[32rem]">
         <div>
-          {postUserIsError && (
-            <Alert onClose={() => {}} variant="filled" severity="error">
-              {postUserMessage}
-            </Alert>
-          )}
 
-          {postUserIsSuccess && (
-            <Alert variant="filled" severity="success">
+           {showAlert && (
+            <Alert  variant="filled" severity={postUserIsError ? "error" : "success"}
+              onClose={() => setShowAlert(false)}>
               {postUserMessage}
             </Alert>
           )}

@@ -87,7 +87,7 @@ export const createUser = (user: UserType) => async (dispatch: any) => {
   dispatch({ type: USER_POST_LOADING });
   try {
     const response = await apiRequests({
-      method: 'Post',
+      method: 'post',
       url: `${getHostUrl}/admin/users`,
       data: user,
     });

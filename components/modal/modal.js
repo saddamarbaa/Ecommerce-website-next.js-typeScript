@@ -11,11 +11,20 @@ import PropTypes from 'prop-types';
 
 import { deleteUser } from '../../redux/actions';
 
-const ModalComponent = ({ deleteUser, id, listState, handleClose, open, handleOpen }) => {
-  const { list, listIsLoading, listIsSuccess, listIsError, listMessage } = listState;
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #19D5C6',
+  boxShadow: 24,
+  p: 4
+};
 
+const ModalComponent = ({ deleteUser, id, handleClose, open, handleOpen }) => {
   const handleDelete = () => {
-    console.log('ok', id);
     if (id) {
       deleteUser(id);
     }
@@ -56,21 +65,7 @@ ModalComponent.propTypes = {
   deleteUser: PropTypes.func
 };
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #19D5C6',
-  boxShadow: 24,
-  p: 4
-};
-
-const mapStateToProps = state => ({
-  listState: state.users
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   deleteUser
