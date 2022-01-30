@@ -1,4 +1,4 @@
-/** @format */
+
 
 import AddProductPageComponent from "../components/add-product-page/add-product";
 

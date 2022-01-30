@@ -1,5 +1,3 @@
-/** @format */
-
 import React from "react";
 
 const ProductDetailPageComponent: React.FunctionComponent = () => {

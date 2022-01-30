@@ -1,5 +1,3 @@
-/** @format */
-
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
