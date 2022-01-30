@@ -2,15 +2,13 @@ import axios, { AxiosError, AxiosResponse, AxiosPromise, AxiosInstance, AxiosReq
 
 let AUTH_TOKEN;
 if (typeof window !== 'undefined') {
-  console.log( JSON.parse(localStorage.getItem('user')))
   AUTH_TOKEN = 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token;
-  console.log(AUTH_TOKEN )
 }
 
 // default config that will be applied to every request.
 axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 
-export function axiosClient(config: any) {
+export function axiosClient(config: AxiosRequestConfig ) {
   // init axios instance
   const instance = axios.create({});
 

@@ -5,27 +5,38 @@ import { connect } from 'react-redux';
 
 import moment from 'moment';
 import { Alert } from '@mui/material';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 import Pagination from '../../components/pagination/pagination';
 import { getUsers } from '../../redux/actions';
 import { ReducerType } from '../../redux/reducers/rootReducer';
 import { truncate } from '../../utils/functions/helpers';
+import Modal from '../../components/modal/modal';
 
 const AdminUserSPage: React.FunctionComponent = (props: any) => {
-  const { list, listIsLoading, listIsSuccess, listIsError, listMessage } = props.listState;
+  const { list, listIsLoading, listIsSuccess, listIsError, listMessage,  deleteUserIsPending,deleteUserIsSuccess,deleteUserIsError,deleteUserMessage} = props.listState;
   const router = useRouter();
   const [addNewUser, setAddNewUser] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
+  const [open, setOpen] = useState<boolean>(false);
+  const [id, setId] = useState<string | undefined>();
+   const [showAlert, setShowAlert] = useState<boolean>(false);
 
-
- 
   useEffect(() => {
-      const filteredUrl = `/admin/users?page=${page}&limit=${limit}`
-   props.getUsers(filteredUrl);
+    const filteredUrl = `/admin/users?page=${page}&limit=${limit}`;
+    props.getUsers(filteredUrl);
   }, [page, limit]);
 
 
+  useEffect(() => {
+    if (deleteUserIsSuccess || deleteUserIsError) {
+       setOpen(()=> false)
+       setShowAlert(() => true)
+     }
+  }, [deleteUserIsSuccess , deleteUserIsError]);
 
   useEffect(() => {
     const redirectToSignUp = () => {
@@ -40,9 +51,19 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
     router.push('/admin/add-user');
   }
 
+ 
   const handleChange = (event: any, value: number) => {
     setPage(value);
   };
+
+  const handleOpen = (id: string) => {
+    setId(() => (id))
+     setOpen(() =>(true))
+  };
+  const handleClose = () => setOpen(false);
+
+
+
 
   return (
     <div>
@@ -52,12 +73,21 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
       <meta name="description" content="admin" />
       <div className="text-[18px] max-w-[1250px] mx-auto p-5 mt-11 min-h-[200px] ">
         <div className="flex flex-col max-h-[80vh]">
-          {listIsError && (
-            <Alert onClose={() => {}} variant="filled" severity="error">
-              {listMessage}
+         
+
+          {showAlert && (
+            <Alert  variant="filled" severity={deleteUserIsError ? "error" : "success"}
+              onClose={() => setShowAlert(false)}>
+              {deleteUserMessage}
             </Alert>
           )}
 
+          {/* {listIsError && (
+            <Alert onClose={() => {}} variant="filled" severity="error">
+              {listMessage}
+            </Alert>
+          )} */}
+          <Modal handleOpen={handleOpen} handleClose={handleClose} open={open} id={id}/>
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block py-2 min-w-full sm:px-6 lg:px-8">
               <div className="overflow-hidden shadow-md sm:rounded-lg">
@@ -68,7 +98,9 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                   >
                     <span>Add New User</span>
                   </button>
-                  <Pagination handleChange={handleChange} page={page} totalPages={list?.data?.totalPages}/>
+                  {list?.data && (
+                    <Pagination handleChange={handleChange} page={page} totalPages={list.data.totalPages} />
+                  )}
                 </div>
                 <div />
                 <table className="min-w-full">
@@ -119,20 +151,6 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                       >
                         Role
                       </th>
-
-                      <th
-                        scope="col"
-                        className="py-3 px-6 text-xs tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                      >
-                        joined Date
-                      </th>
-
-                      <th
-                        scope="col"
-                        className="py-3 px-6 text-xs tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-                      >
-                        Edidted Date
-                      </th>
                       <th
                         scope="col"
                         className="py-3 px-6 text-xs tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
@@ -149,7 +167,7 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                   </thead>
                   <tbody>
                     {list?.data &&
-                      list.data?.users.map((user: any, index: number) => {
+                      list.data.users.map((user: any, index: number) => {
                         return (
                           <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -177,27 +195,32 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                               {user.role}
                             </td>
 
-                            <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {moment(user.createdAt).format('YYYY/MM/DD')}
-                            </td>
-                            <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {moment(user.updatedAt).format('YYYY/MM/DD')}
-                            </td>
+                           
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               <a
                                 href="#"
-                                className="text-blue-600 hover:text-blue-900 dark:text-blue-500 dark:hover:underline"
+                               
+                              >
+                                <Button
+                                variant="outlined"
+                                startIcon={<EditIcon />}
+                                onClick={() =>console.log("redy to edit")}
                               >
                                 Edit
+                              </Button>
                               </a>
                             </td>
+
+
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              <a
-                                href="#"
-                                className="text-blue-600 hover:text-blue-900 dark:text-blue-500 dark:hover:underline"
+                              <Button
+                                color="warning"
+                                variant="outlined"
+                                startIcon={<DeleteIcon />}
+                                 onClick={() =>{handleOpen(user?._id)}}
                               >
                                 Delete
-                              </a>
+                              </Button>
                             </td>
                           </tr>
                         );

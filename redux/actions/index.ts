@@ -8,7 +8,10 @@ import {
   USER_LIST_FAILER,
   USER_LIST_SUCCESS,
   USER_LIST_LOADING,
-  USER_POST_LOADING, USER_POST_SUCCESS,USER_POST_FAILER,USER_POST_REST
+  USER_POST_LOADING, USER_POST_SUCCESS,USER_POST_FAILER,USER_POST_REST,
+  USER_DELETE_FAILER,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_LOADING
 } from '../../constants/ActionTypes';
 
 import { UserType } from '../../types/user';
@@ -92,6 +95,24 @@ export const createUser = (user: UserType) => async (dispatch: any) => {
   } catch (error: any) {
     dispatch({
       type: USER_POST_FAILER,
+      payload: { error: error?.data?.message || error.statusText },
+    });
+  }
+};
+
+
+
+export const deleteUser = (id: string) => async (dispatch: any) => {
+  dispatch({ type: USER_DELETE_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl}/admin/users/${id}`,
+    });
+    dispatch({ type:  USER_DELETE_SUCCESS, payload: response });
+  } catch (error: any) {
+    dispatch({
+      type:  USER_DELETE_FAILER,
       payload: { error: error?.data?.message || error.statusText },
     });
   }

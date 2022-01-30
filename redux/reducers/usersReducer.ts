@@ -1,6 +1,17 @@
 import { AnyAction } from 'redux';
 
-import { USER_LIST_FAILER, USER_LIST_SUCCESS, USER_LIST_LOADING, USER_POST_LOADING, USER_POST_SUCCESS,USER_POST_FAILER,USER_POST_REST } from '../../constants/ActionTypes';
+import {
+  USER_LIST_FAILER,
+  USER_LIST_SUCCESS,
+  USER_LIST_LOADING,
+  USER_POST_LOADING,
+  USER_POST_SUCCESS,
+  USER_POST_FAILER,
+  USER_POST_REST,
+  USER_DELETE_FAILER,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_LOADING
+} from '../../constants/ActionTypes';
 
 const initialState = {
   list: {},
@@ -13,6 +24,11 @@ const initialState = {
   postUserIsSuccess: false,
   postUserIsError: false,
   postUserMessage: '',
+
+  deleteUserIsPending: false,
+  deleteUserIsSuccess: false,
+  deleteUserIsError: false,
+  deleteUserMessage: ''
 };
 
 export default function actionReducer(state = initialState, action: AnyAction) {
@@ -23,7 +39,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         listIsLoading: true,
         listIsSuccess: false,
         listIsError: false,
-        listMessage: 'PENDING',
+        listMessage: 'PENDING'
       };
     case USER_LIST_SUCCESS:
       return {
@@ -32,7 +48,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         listIsLoading: false,
         listIsSuccess: true,
         listIsError: false,
-        listMessage: action.payload?.message || 'Success',
+        listMessage: action.payload.message || 'Success'
       };
     case USER_LIST_FAILER:
       return {
@@ -41,7 +57,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         listIsLoading: false,
         listIsSuccess: false,
         listIsError: true,
-        listMessage: action.payload?.message || action.payload?.error || 'Error',
+        listMessage: action.payload.message || action.payload.error || 'Error'
       };
 
     case USER_POST_LOADING:
@@ -50,7 +66,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         postUserIsPending: true,
         postUserIsSuccess: false,
         postUserIsError: false,
-        postUserMessage: 'PENDING',
+        postUserMessage: 'PENDING'
       };
     case USER_POST_SUCCESS:
       return {
@@ -58,7 +74,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         postUserIsPending: false,
         postUserIsSuccess: true,
         postUserIsError: false,
-        postUserMessage: action.payload?.message || 'Success',
+        postUserMessage: action.payload.message || 'Success'
       };
     case USER_POST_FAILER:
       return {
@@ -66,7 +82,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         postUserIsPending: false,
         postUserIsSuccess: false,
         postUserIsError: true,
-        postUserMessage: action.payload?.message || action.payload?.error || 'Error',
+        postUserMessage: action.payload.message || action.payload.error || 'Error'
       };
 
     case USER_POST_REST:
@@ -75,9 +91,34 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         postUserIsPending: false,
         postUserIsSuccess: false,
         postUserIsError: false,
-        postUserMessage: '',
+        postUserMessage: ''
       };
 
+    case USER_DELETE_LOADING:
+      return {
+        ...state,
+        deleteUserIsPending: true,
+        deleteUserIsSuccess: false,
+        deleteUserIsError: false,
+        deleteUserMessage: 'PENDING'
+      };
+    case USER_DELETE_SUCCESS:
+      return {
+        ...state,
+        deleteUserIsPending: false,
+        deleteUserIsSuccess: true,
+        deleteUserIsError: false,
+        deleteUserMessage: action.payload.message || 'Success'
+      };
+    case USER_DELETE_FAILER:
+      return {
+        ...state,
+
+        deleteUserIsPending: false,
+        deleteUserIsSuccess: false,
+        deleteUserIsError: true,
+        deleteUserMessage: action.payload.message || 'Success'
+      };
     default:
       return state;
   }
