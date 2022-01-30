@@ -1,3 +1,5 @@
+import { UserType } from '../../types/user';
+
 //  function to truncate(cut) the string if the length of given string
 //  bigger than  given number(n)
 export function truncate(string: string, n: number) {
@@ -17,3 +19,11 @@ export function getYearsIntBetween(startYear = 1940) {
   }
   return years;
 }
+
+export const saveUserInLocalStorage = (user: UserType) => {
+  localStorage.setItem('user', JSON.stringify(user));
+};
+
+export const removedUserFromLocalStorage = () => {
+  localStorage.removeItem('user');
+};

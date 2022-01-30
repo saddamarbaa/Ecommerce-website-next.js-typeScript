@@ -7,22 +7,11 @@ import { connect } from 'react-redux';
 
 import { Alert } from '@mui/material';
 
-import { getYearsIntBetween } from '../../utils/helpers';
-import { createUser, restPostUserState } from '../../redux/actions';
+import { getYearsIntBetween } from '../../utils/functions/helpers';
+import {createUser,restUser} from '../../redux/actions';
 import { ReducerType } from '../../redux/reducers/rootReducer';
+import { UserType } from '../../types/user';
 
-type UserSubmitForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: string;
-  gender: string;
-  month: string;
-  day: number;
-  year: string;
-};
 
 const SignUpPageComponent: React.FunctionComponent = (props: any) => {
   const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
@@ -54,7 +43,7 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm<UserType >({
     resolver: yupResolver(validationSchema),
   });
 
@@ -72,12 +61,12 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
 
   useEffect(() => {
     if (postUserIsSuccess) {
-      props.restPostUserState();
+      props.restUser();
       router.push('/admin/users');
     }
   }, [postUserIsSuccess]);
 
-  const onSubmit = (data: UserSubmitForm) => {
+  const onSubmit = (data: UserType ) => {
     let day = data?.day > 9 ? data.day : `0${data?.day}`;
     const finalData = {
       firstName: data?.firstName,
@@ -89,7 +78,7 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
       role: data?.role,
       dateOfBirth: `${data?.month}-${day}-${data?.year}`,
     };
-
+  
     props.createUser(finalData);
   };
 
@@ -350,13 +339,13 @@ const SignUpPageComponent: React.FunctionComponent = (props: any) => {
 
 const mapStateToProps = (state: ReducerType) => {
   return {
-    listState: state.user,
+    listState: state.users
   };
 };
 
 const mapDispatchToProps = {
   createUser,
-  restPostUserState,
+ restUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpPageComponent);

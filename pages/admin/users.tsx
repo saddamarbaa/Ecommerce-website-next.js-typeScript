@@ -1,48 +1,31 @@
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { Fragment } from 'react';
-import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 
 import moment from 'moment';
-import { Alert} from '@mui/material';
+import { Alert } from '@mui/material';
 
+import Pagination from '../../components/pagination/pagination';
 import { getUsers } from '../../redux/actions';
 import { ReducerType } from '../../redux/reducers/rootReducer';
-import { truncate } from '../../utils/helpers';
+import { truncate } from '../../utils/functions/helpers';
 
-interface UserType {
-  _id: string | number;
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  gender?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  role?: string;
-  dateOfBirth?: string;
-  cart?: any;
-}
-
-interface listStateType {
-  list: UserType[] | [];
-  listIsLoading: boolean;
-  listIsSuccess: boolean;
-  listIsError: boolean;
-  listMessage: string | undefined;
-}
-
-interface AdminUserSPageProps {
-  users?: UserType[];
-  getUsers: Function;
-  listState: listStateType;
-}
-
-const AdminUserSPage: NextPage<AdminUserSPageProps> = ({ getUsers, listState }) => {
-  const { list, listIsLoading, listIsError, listMessage } = listState;
+const AdminUserSPage: React.FunctionComponent = (props: any) => {
+  const { list, listIsLoading, listIsSuccess, listIsError, listMessage } = props.listState;
   const router = useRouter();
   const [addNewUser, setAddNewUser] = useState<boolean>(false);
+  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+
+
+ 
+  useEffect(() => {
+      const filteredUrl = `/admin/users?page=${page}&limit=${limit}`
+   props.getUsers(filteredUrl);
+  }, [page, limit]);
+
+
 
   useEffect(() => {
     const redirectToSignUp = () => {
@@ -53,16 +36,16 @@ const AdminUserSPage: NextPage<AdminUserSPageProps> = ({ getUsers, listState }) 
     redirectToSignUp();
   }, [addNewUser]);
 
-  useEffect(() => {
-    getUsers();
-  }, []);
-
   if (addNewUser) {
     router.push('/admin/add-user');
   }
 
+  const handleChange = (event: any, value: number) => {
+    setPage(value);
+  };
+
   return (
-    <Fragment>
+    <div>
       <Head>
         <title>Admin</title>
       </Head>
@@ -78,14 +61,16 @@ const AdminUserSPage: NextPage<AdminUserSPageProps> = ({ getUsers, listState }) 
           <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block py-2 min-w-full sm:px-6 lg:px-8">
               <div className="overflow-hidden shadow-md sm:rounded-lg">
-                <div>
+                <div className="flex items-center gap-6">
                   <button
                     onClick={() => setAddNewUser(true)}
                     className="bg-blue-500 text-white hover:bg-blue-400  font-bold py-2 px-4 rounded inline-flex items-center"
                   >
                     <span>Add New User</span>
                   </button>
+                  <Pagination handleChange={handleChange} page={page} totalPages={list?.data?.totalPages}/>
                 </div>
+                <div />
                 <table className="min-w-full">
                   <thead className="bg-gray-50 dark:bg-gray-700 font-bold">
                     <tr>
@@ -163,40 +148,40 @@ const AdminUserSPage: NextPage<AdminUserSPageProps> = ({ getUsers, listState }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {list &&
-                      list?.map((user, index: number) => {
+                    {list?.data &&
+                      list.data?.users.map((user: any, index: number) => {
                         return (
-                          <tr key={user?._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {index + 1}
                             </td>
 
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {user?.firstName}
+                              {user.firstName}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {user?.lastName}
+                              {user.lastName}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {truncate(user?.email, 20)}
+                              {truncate(user.email, 20)}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {user?.gender}
-                            </td>
-
-                            <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {user?.dateOfBirth}
+                              {user.gender}
                             </td>
 
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {user?.role}
+                              {user.dateOfBirth}
                             </td>
 
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {moment(user?.createdAt).format('YYYY/MM/DD')}
+                              {user.role}
+                            </td>
+
+                            <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                              {moment(user.createdAt).format('YYYY/MM/DD')}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
-                              {moment(user?.updatedAt).format('YYYY/MM/DD')}
+                              {moment(user.updatedAt).format('YYYY/MM/DD')}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                               <a
@@ -224,18 +209,21 @@ const AdminUserSPage: NextPage<AdminUserSPageProps> = ({ getUsers, listState }) 
           </div>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
 const mapStateToProps = (state: ReducerType) => {
   return {
-    listState: state.user,
+    listState: state.users
   };
 };
 
 const mapDispatchToProps = {
-  getUsers,
+  getUsers
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminUserSPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AdminUserSPage);

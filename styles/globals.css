@@ -10,7 +10,7 @@
 	}
 
 	.customlink {
-		@apply text-[#fff] text-[1.2rem] transition duration-200 hover:text-[#ffeb3b] active:text-[#ffeb3b];
+		@apply text-[#fff] text-[1.2rem] no-underline transition duration-200 hover:text-[#ffeb3b] active:text-[#ffeb3b] hover:underline ;
 	}
 
 	.custom-span {

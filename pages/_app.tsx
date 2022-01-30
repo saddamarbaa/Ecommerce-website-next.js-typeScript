@@ -1,13 +1,17 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import ProgressBar from '@badrap/bar-of-progress';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 
+import { useSelector } from 'react-redux';
 import Layout from '../components/layout/layout';
 import { wrapper } from '../redux/store/configureStore';
+
+import Login from './login';
 import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
+
 
 const progress = new ProgressBar({
   size: 3,
@@ -21,23 +25,18 @@ Router.events.on('routeChangeComplete', progress.finish);
 Router.events.on('routeChangeError', progress.finish);
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState<any>();
+  const isAuth = useSelector((state) => state?.auth.isAuth);
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const expiryDate = localStorage.getItem('expiryDate');
+    if (typeof window !== 'undefined') {
+      setUser(() => localStorage.getItem('user'));
+    }
+  }, [user]);
 
-    // 	const userId = localStorage.getItem("userId");
-    // 	const remainingMilliseconds =
-    // 		new Date(expiryDate).getTime() - new Date().getTime();
-    // 	this.setState({ isAuth: true, token: token, userId: userId });
-    // 	this.setAutoLogout(remainingMilliseconds);
-
-    // logoutHandler = () => {
-    // 	this.setState({ isAuth: false, token: null });
-    // 	localStorage.removeItem("token");
-    // 	localStorage.removeItem("expiryDate");
-    // 	localStorage.removeItem("userId");
-    // };
-  }, []);
+  if (!isAuth && !user) {
+    return <Login />;
+  }
 
   return (
     <React.Fragment>
@@ -48,7 +47,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="author" content="Saddam Arbaa" />
           <meta name="description" content="ecommerce website build with React + Next Js + TypeScript" />
         </Head>
-
         <Component {...pageProps} />
       </Layout>
     </React.Fragment>
