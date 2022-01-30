@@ -1,8 +1,9 @@
 import { createStore, applyMiddleware, compose, Store, AnyAction } from 'redux';
 import ReduxThunkMiddleware from 'redux-thunk';
+import ReduxPromiseMiddleware from 'redux-promise-middleware';
 import ReduxLoggerMiddleware from 'redux-logger';
-import { createWrapper, MakeStore } from 'next-redux-wrapper';
 
+import { createWrapper, MakeStore } from 'next-redux-wrapper';
 import rootReducer, { ReducerType } from '../reducers/rootReducer';
 
 declare global {
@@ -12,8 +13,12 @@ declare global {
 }
 
 // Log only in development
-let middlewares =
-  process.env.NODE_ENV !== `development` ? [ReduxLoggerMiddleware, ReduxThunkMiddleware] : [ReduxThunkMiddleware];
+// let middlewares =
+process.env.NODE_ENV === `development`
+  ? [ReduxLoggerMiddleware, ReduxThunkMiddleware, ReduxPromiseMiddleware]
+  : [ReduxThunkMiddleware, ReduxPromiseMiddleware];
+
+let middlewares = [ReduxThunkMiddleware];
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
 
-import { USER_LIST, USER_POST } from '../../constants/ActionTypes';
+import { USER_LIST_FAILER, USER_LIST_SUCCESS, USER_LIST_LOADING, USER_POST_LOADING, USER_POST_SUCCESS,USER_POST_FAILER,USER_POST_REST } from '../../constants/ActionTypes';
 
 const initialState = {
-  list: [],
+  list: {},
   listIsLoading: false,
   listIsSuccess: false,
   listIsError: false,
@@ -17,7 +17,7 @@ const initialState = {
 
 export default function actionReducer(state = initialState, action: AnyAction) {
   switch (action.type) {
-    case `${USER_LIST}_PENDING`:
+    case USER_LIST_LOADING:
       return {
         ...state,
         listIsLoading: true,
@@ -25,26 +25,26 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         listIsError: false,
         listMessage: 'PENDING',
       };
-    case `${USER_LIST}_FULFILLED`:
+    case USER_LIST_SUCCESS:
       return {
         ...state,
-        list: action.payload?.result?.users || [],
+        list: action.payload || {},
         listIsLoading: false,
         listIsSuccess: true,
         listIsError: false,
-        listMessage: 'Success',
+        listMessage: action.payload?.message || 'Success',
       };
-    case `${USER_LIST}_REJECTED`:
+    case USER_LIST_FAILER:
       return {
         ...state,
-        list: [],
+        list: {},
         listIsLoading: false,
         listIsSuccess: false,
         listIsError: true,
-        listMessage: action?.payload?.response?.data?.error?.message || 'Error',
+        listMessage: action.payload?.message || action.payload?.error || 'Error',
       };
 
-    case `${USER_POST}_PENDING`:
+    case USER_POST_LOADING:
       return {
         ...state,
         postUserIsPending: true,
@@ -52,24 +52,24 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         postUserIsError: false,
         postUserMessage: 'PENDING',
       };
-    case `${USER_POST}_FULFILLED`:
+    case USER_POST_SUCCESS:
       return {
         ...state,
         postUserIsPending: false,
         postUserIsSuccess: true,
         postUserIsError: false,
-        postUserMessage: 'Success',
+        postUserMessage: action.payload?.message || 'Success',
       };
-    case `${USER_POST}_REJECTED`:
+    case USER_POST_FAILER:
       return {
         ...state,
         postUserIsPending: false,
         postUserIsSuccess: false,
         postUserIsError: true,
-        postUserMessage: action?.payload || 'Error',
+        postUserMessage: action.payload?.message || action.payload?.error || 'Error',
       };
 
-    case `${USER_POST}_REST`:
+    case USER_POST_REST:
       return {
         ...state,
         postUserIsPending: false,
