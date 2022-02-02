@@ -12,8 +12,17 @@ import {createUser,restUser} from '../../redux/actions';
 import { ReducerType } from '../../redux/reducers/rootReducer';
 import { UserType } from '../../types/user';
 
+const data = {
+  	firstName:"Saddam ",
+		lastName:"Arbaa",
+		email:"saddam@rushowl.sg",
+		password:"0914888681s",
+		gender:"MALE    ",
+    dateOfBirth:"02-12-1994",
+		confirmPassword:"0914888681s"
+}
 
-const AdminAddUser: React.FunctionComponent = (props: any) => {
+const AdminEditUser: React.FunctionComponent = (props: any) => {
   const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
   const { postUserIsPending, postUserIsSuccess, postUserIsError, postUserMessage } = props?.listState;
@@ -74,7 +83,7 @@ const AdminAddUser: React.FunctionComponent = (props: any) => {
       if (postUserIsSuccess) {
         setShowAlert(() => false)
       props.restUser();
-      router.push('/admin/users-ui');
+      router.push('/admin/users');
     }
     }, 2000);
 
@@ -120,7 +129,7 @@ const AdminAddUser: React.FunctionComponent = (props: any) => {
         >
           <section>
             <div className="title border-b border-[#dadde1 p-[0.7rem] text-center">
-              <h1 className="text-[1.1rem] md:text-[1.5rem] text-[#1c1e21] mb-[8px] font-bold">Add New User</h1>
+              <h1 className="text-[1.1rem] md:text-[1.5rem] text-[#1c1e21] mb-[8px] font-bold">Edit user: ID</h1>
             </div>
 
             <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="px-[2rem] mt-8">
@@ -129,6 +138,7 @@ const AdminAddUser: React.FunctionComponent = (props: any) => {
                   {errors.firstName && <p className="error">{errors.firstName?.message}</p>}
                   <input
                     id="firstName"
+                    value={data.firstName}
                     className={` ${errors.firstName ? 'is-invalid' : 'input custom-input'}`}
                     placeholder={errors.firstName ? '' : 'First name'}
                     {...register('firstName')}
@@ -361,4 +371,4 @@ const mapDispatchToProps = {
  restUser,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminAddUser);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminEditUser);

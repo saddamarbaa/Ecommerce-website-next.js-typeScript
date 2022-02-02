@@ -27,3 +27,7 @@ export const saveUserInLocalStorage = (user: UserType) => {
 export const removedUserFromLocalStorage = () => {
   localStorage.removeItem('user');
 };
+
+export const format = () => {
+  return 'YYYY-MM-DD';
+};

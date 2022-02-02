@@ -24,29 +24,26 @@ const Navbar: React.FunctionComponent = () => {
           <Link href="/">
             <a className="customlink">Shop</a>
           </Link>
-
           <Link href="/">
             <a className="customlink">Products</a>
           </Link>
-
           <Link href="/cart">
             <a className="customlink">Cart</a>
           </Link>
-
           <Link href="/add-product">
             <a className="customlink">Add Product</a>
           </Link>
-
           <Link href="/order">
             <a className="customlink">Oder</a>
           </Link>
-
           <Link href="/admin/products">
             <a className="customlink">Admin Products</a>
           </Link>
-
-          <Link href="/admin/users">
-            <a className="customlink"> Admin Users</a>
+          <Link href="/admin/users-ui">
+            <a className="customlink"> Admin Users UI</a>
+          </Link>
+          <Link href="/admin/users-table">
+            <a className="customlink"> Admin Users Table</a>
           </Link>
         </div>
         {user && (

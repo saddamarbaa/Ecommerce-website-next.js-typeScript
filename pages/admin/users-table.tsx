@@ -15,8 +15,10 @@ import { ReducerType } from '../../redux/reducers/rootReducer';
 import { truncate } from '../../utils/functions/helpers';
 import Modal from '../../components/modal/modal';
 
-const AdminUserSPage: React.FunctionComponent = (props: any) => {
-  const { list, listIsLoading, listIsSuccess, listIsError, listMessage,  deleteUserIsPending,deleteUserIsSuccess,deleteUserIsError,deleteUserMessage} = props.listState;
+const AdminUserSTablePage: React.FunctionComponent = (props: any) => {
+  const { users,
+    list,
+    totalDocs, listIsLoading, listIsSuccess, listIsError, listMessage,  deleteUserIsPending,deleteUserIsSuccess,deleteUserIsError,deleteUserMessage} = props.listState;
   const router = useRouter();
   const [addNewUser, setAddNewUser] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(10);
@@ -47,6 +49,8 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
     redirectToSignUp();
   }, [addNewUser]);
 
+
+
   if (addNewUser) {
     router.push('/admin/add-user');
   }
@@ -60,7 +64,14 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
     setId(() => (id))
      setOpen(() =>(true))
   };
+
   const handleClose = () => setOpen(false);
+
+
+  const handleEditUser = () => {
+    router.push('/admin/edit-user');
+  }
+
 
 
 
@@ -98,8 +109,8 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                   >
                     <span>Add New User</span>
                   </button>
-                  {list?.data && (
-                    <Pagination handleChange={handleChange} page={page} totalPages={list.data.totalPages} />
+                  { totalDocs>0 && (
+                    <Pagination handleChange={handleChange} page={page} totalPages={ totalDocs} />
                   )}
                 </div>
                 <div />
@@ -166,8 +177,8 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {list?.data &&
-                      list.data.users.map((user: any, index: number) => {
+                    {users &&
+                      users.map((user: any, index: number) => {
                         return (
                           <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td className="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -204,12 +215,13 @@ const AdminUserSPage: React.FunctionComponent = (props: any) => {
                                 <Button
                                 variant="outlined"
                                 startIcon={<EditIcon />}
-                                onClick={() =>console.log("redy to edit")}
+                                onClick={() =>{handleEditUser(user?._id)}}
                               >
                                 Edit
                               </Button>
                               </a>
                             </td>
+                            
 
 
                             <td className="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
@@ -249,4 +261,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdminUserSPage);
+)(AdminUserSTablePage);

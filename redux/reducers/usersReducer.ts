@@ -19,6 +19,9 @@ const initialState = {
   listIsSuccess: false,
   listIsError: false,
   listMessage: '',
+  users: [],
+  totalDocs:0,
+  
 
   postUserIsPending: false,
   postUserIsSuccess: false,
@@ -44,6 +47,8 @@ export default function actionReducer(state = initialState, action: AnyAction) {
     case USER_LIST_SUCCESS:
       return {
         ...state,
+        users: action.payload?.data?.users || [],
+        totalDocs:action.payload?.data?.totalDocs || 0,
         list: action.payload || {},
         listIsLoading: false,
         listIsSuccess: true,
@@ -53,6 +58,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
     case USER_LIST_FAILER:
       return {
         ...state,
+        users: [],
         list: {},
         listIsLoading: false,
         listIsSuccess: false,

@@ -15,6 +15,6 @@
 		"isolatedModules": true,
 		"jsx": "preserve"
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin/users.tsx", "redux/store/test.js", "components/pagination/pagination.js", "components/modal/modal.js"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin/users-table.tsx", "redux/store/test.js", "components/pagination/pagination.js", "components/modal/modal.js"],
 	"exclude": ["node_modules"]
 }
