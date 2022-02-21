@@ -1,7 +1,6 @@
 {
-	"compilerOptions": {
+  "compilerOptions": {
 		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
@@ -13,8 +12,21 @@
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"jsx": "preserve"
-	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/admin/users-table.tsx", "redux/store/test.js", "components/pagination/pagination.js", "components/modal/modal.js"],
-	"exclude": ["node_modules"]
+		"jsx": "preserve",
+		 "baseUrl":  ".",
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+	
 }

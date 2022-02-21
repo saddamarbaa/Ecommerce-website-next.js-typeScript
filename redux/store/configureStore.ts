@@ -14,9 +14,9 @@ declare global {
 
 // Log only in development
 // let middlewares =
-process.env.NODE_ENV === `development`
-  ? [ReduxLoggerMiddleware, ReduxThunkMiddleware, ReduxPromiseMiddleware]
-  : [ReduxThunkMiddleware, ReduxPromiseMiddleware];
+// process.env.NODE_ENV === `development`
+//   ? [ReduxLoggerMiddleware, ReduxThunkMiddleware, ReduxPromiseMiddleware]
+//   : [ReduxThunkMiddleware, ReduxPromiseMiddleware];
 
 let middlewares = [ReduxThunkMiddleware];
 
@@ -27,6 +27,27 @@ const composeEnhancers =
 
 const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 
-const makeStore: MakeStore<Store<ReducerType, AnyAction>> = () => createStore(rootReducer, enhancer);
+const makeStore = ({ isServer }) => {
+  if (isServer) {
+    return createStore(rootReducer, enhancer);
+  } else {
+    //If it's on client side, create a store which will persist
+    const { persistStore, persistReducer, autoRehydrate } = require('redux-persist');
+    const storage = require('redux-persist/lib/storage').default;
+    const persistConfig = {
+      key: 'nextjs',
+      whitelist: ['auth', 'users', 'user'], // only counter will be persisted, add other reducers if needed
+      storage // if needed, use a safer storage
+    };
+
+    const persistedReducer = persistReducer(persistConfig, rootReducer); // Create a new reducer with our existing reducer
+
+    const store = createStore(persistedReducer, {}, ...middlewares); // Creating the store again
+
+    store.__persistor = persistStore(store); // This creates a persistor object & push that persisted object to .__persistor, so that we can avail the persistability feature
+
+    return store;
+  }
+};
 
 export const wrapper = createWrapper(makeStore);

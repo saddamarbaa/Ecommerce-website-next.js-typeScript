@@ -1,20 +1,17 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
+import { connect } from 'react-redux';
+import { removeAuthenticatedUser } from '../../redux/actions/index';
+import { ReducerType } from '../../redux/reducers/rootReducer';
 import { removedUserFromLocalStorage } from '../../utils/functions/helpers';
 
-const Navbar: React.FunctionComponent = () => {
-  const [user, setUser] = useState<any>(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setUser(() => localStorage.getItem('user'));
-    }
-  }, [user]);
+const Navbar: React.FunctionComponent = (props: any) => {
+  const { isAuthenticated, isADmin } = props.auth;
 
   const signedOutHandler = () => {
+    props.removeAuthenticatedUser();
     removedUserFromLocalStorage();
-    setUser(false);
   };
 
   return (
@@ -30,31 +27,36 @@ const Navbar: React.FunctionComponent = () => {
           <Link href="/cart">
             <a className="customlink">Cart</a>
           </Link>
-          <Link href="/add-product">
-            <a className="customlink">Add Product</a>
-          </Link>
+          {isADmin === 'admin' && (
+            <Link href="/add-product">
+              <a className="customlink">Add Product</a>
+            </Link>
+          )}
           <Link href="/order">
             <a className="customlink">Oder</a>
           </Link>
-          <Link href="/admin/products">
-            <a className="customlink">Admin Products</a>
-          </Link>
-          <Link href="/admin/users-ui">
-            <a className="customlink"> Admin Users UI</a>
-          </Link>
-          <Link href="/admin/users-table">
-            <a className="customlink"> Admin Users Table</a>
-          </Link>
+          {isADmin === 'admin' && (
+            <>
+              <Link href="/admin/products">
+                <a className="customlink">Admin Products</a>
+              </Link>
+              <Link href="/admin/users-ui">
+                <a className="customlink"> Admin Users UI</a>
+              </Link>
+              <Link href="/admin/users-table">
+                <a className="customlink"> Admin Users Table</a>
+              </Link>
+            </>
+          )}
         </div>
-        {user && (
+        {isAuthenticated && (
           <div>
             <button className=" customlink" onClick={signedOutHandler}>
               SignOut
             </button>
           </div>
         )}
-
-        {!user && (
+        {!isAuthenticated && (
           <div className=" flex  justify-between items-center space-x-8">
             <Link href="/login">
               <a className="customlink cursor-pointer">Login</a>
@@ -70,4 +72,17 @@ const Navbar: React.FunctionComponent = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = (state: ReducerType) => {
+  return {
+    auth: state.auth
+  };
+};
+
+const mapDispatchToProps = {
+  removeAuthenticatedUser
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navbar);

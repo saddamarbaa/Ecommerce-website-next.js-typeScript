@@ -1,23 +1,49 @@
-/** @format */
+import { connect } from 'react-redux';
+import Head from 'next/head';
+import React, { useEffect } from 'react';
+import { Fragment } from 'react';
 
-import Head from "next/head";
-import React from "react";
-import { Fragment } from "react";
-import type { NextPage } from "next";
+import OrderPageComponent from '../components/order-page/order-page';
+import { ReducerType } from '../redux/reducers/rootReducer';
+import Login from './login';
+const OrderPage = (props: any) => {
+  const { isAuthenticated, isADmin } = props.auth;
 
-import OrderPageComponent from "../components/order-page/order-page";
+  useEffect(() => {
+    const redirectToLogin = () => {
+      if (!isAuthenticated) {
+        return <Login />;
+      }
+    };
 
-const OrderPage: NextPage = () => {
-	return (
-		<Fragment>
-			<Head>
-				<title>LogIn to the website</title>
-			</Head>
-			<meta name='description' content='order' />
+    redirectToLogin();
+  }, [isAuthenticated]);
 
-			<OrderPageComponent />
-		</Fragment>
-	);
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return (
+    <Fragment>
+      <Head>
+        <title>LogIn to the website</title>
+      </Head>
+      <meta name="description" content="order" />
+
+      <OrderPageComponent />
+    </Fragment>
+  );
 };
 
-export default OrderPage;
+const mapStateToProps = (state: ReducerType) => {
+  return {
+    auth: state.auth
+  };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(OrderPage);

@@ -1,11 +1,10 @@
-/** @format */
 
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { Card, CardBody, Button } from 'reactstrap';
+
 
 
 import { truncate } from '../utils/functions/helpers';

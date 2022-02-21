@@ -10,7 +10,7 @@ import { Alert } from '@mui/material';
 import { getYearsIntBetween } from '../../utils/functions/helpers';
 import {createUser,restUser} from '../../redux/actions';
 import { ReducerType } from '../../redux/reducers/rootReducer';
-import { UserType } from '../../types/user';
+import { UserType } from '../../types';
 
 
 const AdminAddUser: React.FunctionComponent = (props: any) => {
@@ -102,15 +102,7 @@ const AdminAddUser: React.FunctionComponent = (props: any) => {
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
       <div className=" mx-auto w-[90%]  md:max-w-[35rem] md:min-w[32rem]">
-        <div>
-
-           {showAlert && (
-            <Alert  variant="filled" severity={postUserIsError ? "error" : "success"}
-              onClose={() => setShowAlert(false)}>
-              {postUserMessage}
-            </Alert>
-          )}
-        </div>
+        
 
         <div
           className=" pb-[2rem] w-full rounded-[6px]  mt-[2rem] min-h-[10rem]"
@@ -118,6 +110,15 @@ const AdminAddUser: React.FunctionComponent = (props: any) => {
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
           }}
         >
+          <div>
+           {showAlert && (
+            <Alert  variant="filled" severity={postUserIsError ? "error" : "success"}
+              onClose={() => setShowAlert(false)}>
+              {postUserMessage}
+            </Alert>
+          )}
+          </div>
+          
           <section>
             <div className="title border-b border-[#dadde1 p-[0.7rem] text-center">
               <h1 className="text-[1.1rem] md:text-[1.5rem] text-[#1c1e21] mb-[8px] font-bold">Add New User</h1>

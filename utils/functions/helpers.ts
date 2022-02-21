@@ -1,4 +1,4 @@
-import { UserType } from '../../types/user';
+import { UserType } from '../../types/auth';
 
 //  function to truncate(cut) the string if the length of given string
 //  bigger than  given number(n)
@@ -20,14 +20,14 @@ export function getYearsIntBetween(startYear = 1940) {
   return years;
 }
 
-export const saveUserInLocalStorage = (user: UserType) => {
-  localStorage.setItem('user', JSON.stringify(user));
+export const format = () => {
+  return 'YYYY-MM-DD';
+};
+
+export const saveUserInLocalStorage = (token: string) => {
+  localStorage.setItem('authToken', JSON.stringify(token));
 };
 
 export const removedUserFromLocalStorage = () => {
-  localStorage.removeItem('user');
-};
-
-export const format = () => {
-  return 'YYYY-MM-DD';
+  localStorage.removeItem('authToken');
 };
