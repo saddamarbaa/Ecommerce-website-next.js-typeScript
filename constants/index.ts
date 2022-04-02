@@ -1,1 +1,1 @@
-export * from './ActionTypes';
+export * from './actionTypes'

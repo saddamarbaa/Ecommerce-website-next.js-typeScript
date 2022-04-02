@@ -1,8 +1,267 @@
 {
-  "extends": ["react-app", "prettier", "plugin:react/recommended"],
-  "plugins": ["prettier"],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/react",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "plugins": [
+    "react",
+    "jsx-a11y",
+    "import",
+    "eslint-plugin-react"
+  ],
   "rules": {
-    "prettier/prettier": "error",
-    "react/no-unescaped-entities": 0
-  }
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": false,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": [
+      2,
+      {
+        "commonjs": true,
+        "amd": true
+      }
+    ],
+    "import/named": 2,
+    "import/namespace": 2,
+    "import/default": 2,
+    "import/export": 2,
+    "react/prefer-stateless-function": [
+      0
+    ],
+    // "react/jsx-indent": [0],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".tsx"
+        ]
+      }
+    ],
+    "react/jsx-closing-tag-location": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unescaped-entities": [
+      "error",
+      {
+        "forbid": [
+          ">",
+          "}"
+        ]
+      }
+    ],
+    "react/no-array-index-key": "off",
+    "react/forbid-prop-types": [
+      0
+    ],
+    "react/sort-comp": [
+      0
+    ],
+    "react/destructuring-assignment": "off",
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "react/require-default-props": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": [
+          "Link"
+        ],
+        "specialLink": [
+          "hrefLeft",
+          "hrefRight"
+        ],
+        "aspects": [
+          "invalidHref",
+          "preferButton"
+        ]
+      }
+    ],
+    // "jsx-quotes": ["error", "prefer-double"],
+    "no-use-before-define": "off",
+    "no-underscore-dangle": "off",
+    // "no-undef": "off",
+    "no-unused-vars": "off",
+    // "comma-dangle": "off",
+    "global-require": "off",
+    "linebreak-style": "off",
+    "array-callback-return": "off",
+    "arrow-parens": [
+      "error",
+      "always"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "camelcase": "off",
+    "max-len": "off",
+    "operator-linebreak": "off",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": false
+      }
+    ],
+    "dot-notation": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/explicit-module-boundary-types": [
+      "off"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    
+    "@typescript-eslint/no-use-before-define": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+     
+      // My Own overwrites
+     "consistent-return": "off",
+     "jsx-a11y/click-events-have-key-events": "off",
+     "jsx-a11y/no-static-element-interactions": "off",
+     "default-param-last": "off"
+  },
+  "globals": {
+    "React": "writable"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "jest": true
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      },
+      "alias": {
+        "map": [
+          [
+            "@/*",
+            "./"
+          ],
+          [
+            "pages",
+            "./pages"
+          ],
+          [
+            "components",
+            "./components"
+          ],
+          [
+            "page-components",
+            "./page-components"
+          ],
+           [
+            "utils",
+            "./utils"
+          ],
+          [
+            "services",
+            "./services"
+          ],
+           [
+            "layouts",
+            "./components/layouts"
+          ],
+          [
+            "tests",
+            "./tests"
+          ],
+          [
+            "types",
+            "./types"
+          ],
+          [
+            "global-states",
+            "./global-states"
+          ],[
+            "constants",
+            "./constants"
+          ],[
+            "contexts",
+            "./contexts"
+          ]
+        ],
+        "extensions": [
+          ".ts",
+          ".js",
+          ".jsx",
+          ".tsx",
+          ".json"
+        ]
+      },
+      "typescript": {
+        "alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+      }
+    },
+    "import/extensions": [
+      ".js",
+      ".mjs",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        ".eslintrc.json",
+        "*.config.js"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      },
+      "env": {
+        "node": true
+      }
+    }
+  ]
 }

@@ -1,32 +1,30 @@
 {
   "compilerOptions": {
-		"target": "es5",
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"incremental": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		 "baseUrl":  ".",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "preserve",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "moduleResolution": "node",
+    "strict": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "preserveConstEnums": true,
     "removeComments": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/design-system/pagination/index.js"],
   "exclude": ["node_modules"]
-	
 }
