@@ -1,18 +1,28 @@
-import Head from 'next/head'
-import React from 'react'
+import { GetServerSideProps } from 'next';
+import { CountryType } from 'types/index';
 
-import HomePageComponent from 'page-components/home-page/index'
+import { MainContent } from '@/page-components';
 
-function HomePage() {
-  return (
-    <>
-      <Head>
-        <title>Products</title>
-      </Head>
-      <meta name="description" content="All Products" />
-      <HomePageComponent />
-    </>
-  )
+type Props = {
+  countries: CountryType[];
+};
+
+export default function Index({ countries }: Props) {
+  return <MainContent countries={countries} />;
 }
 
-export default HomePage
+// This gets called on every request
+export const getServerSideProps: GetServerSideProps = async () => {
+  // Fetch data from external API
+  const res = await fetch('https://restcountries.com/v3.1/all');
+  const data = await res.json();
+
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  }
+
+  // Pass data to the page via props
+  return { props: { countries: data } };
+};

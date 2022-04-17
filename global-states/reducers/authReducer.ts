@@ -1,31 +1,29 @@
-import { AnyAction } from 'redux'
-
-import { saveUserInLocalStorage } from 'utils/functions/helpers'
-import { _authPrototypeReducerState as ReducerState } from 'types'
 import {
-  IS_AUTHENTICATED_SUCCESS,
-  AUTH_SIGINUP_LOADING,
-  AUTH_SIGINUP_SUCCESS,
-  AUTH_SIGINUP_FAILER,
-  AUTH_SIGINUP_REST,
-  AUTH_CONFIRM_EMAIL_LOADING,
-  AUTH_CONFIRM_EMAIL_SUCCESS,
   AUTH_CONFIRM_EMAIL_FAILER,
+  AUTH_CONFIRM_EMAIL_LOADING,
   AUTH_CONFIRM_EMAIL_REST,
-  AUTH_LOGIN_LOADING,
-  AUTH_LOGIN_SUCCESS,
+  AUTH_CONFIRM_EMAIL_SUCCESS,
   AUTH_LOGIN_FAILER,
+  AUTH_LOGIN_LOADING,
   AUTH_LOGIN_REST,
-  REMOVE_AUTHENTICATED_USER,
-  FORGET_PASSWORD_LOADING,
-  FORGET_PASSWORD_SUCCESS,
+  AUTH_LOGIN_SUCCESS,
+  AUTH_SIGINUP_FAILER,
+  AUTH_SIGINUP_LOADING,
+  AUTH_SIGINUP_REST,
+  AUTH_SIGINUP_SUCCESS,
   FORGET_PASSWORD_FAILER,
+  FORGET_PASSWORD_LOADING,
   FORGET_PASSWORD_REST,
-  REST_PASSWORD_LOADING,
-  REST_PASSWORD_SUCCESS,
+  FORGET_PASSWORD_SUCCESS,
+  IS_AUTHENTICATED_SUCCESS,
+  REMOVE_AUTHENTICATED_USER,
   REST_PASSWORD_FAILER,
+  REST_PASSWORD_LOADING,
   REST_PASSWORD_REST,
-} from 'constants/actionTypes'
+  REST_PASSWORD_SUCCESS,
+} from '../../constants/actionTypes';
+import { _authPrototypeReducerState as ReducerState } from '../../types';
+import { saveUserInLocalStorage } from '../../utils';
 
 const initialState: ReducerState = {
   loginUser: {},
@@ -57,21 +55,24 @@ const initialState: ReducerState = {
   restPasswordIsSuccess: false,
   restPasswordIsError: false,
   restPasswordMessage: '',
-}
+};
 
-export default function actionReducer(state = initialState, action: AnyAction) {
-  switch (action?.type) {
+export default function actionReducer(
+  state = initialState,
+  { type, payload }: { type: string; payload: any }
+): any {
+  switch (type) {
     case IS_AUTHENTICATED_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
-      }
+      };
     case REMOVE_AUTHENTICATED_USER:
       return {
         ...state,
         isAuthenticated: false,
         isADmin: false,
-      }
+      };
     case AUTH_SIGINUP_LOADING:
       return {
         ...state,
@@ -79,16 +80,16 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         signUpUserIsSuccess: false,
         signUpUserIsError: false,
         signUpUserMessage: 'PENDING',
-      }
+      };
     case AUTH_SIGINUP_SUCCESS:
       return {
         ...state,
-        signUpUser: action.payload || {},
+        signUpUser: payload || {},
         signUpUserIsLoading: false,
         signUpUserIsSuccess: true,
         signUpUserIsError: false,
-        signUpUserMessage: action.payload.message || 'Success',
-      }
+        signUpUserMessage: payload.message || 'Success',
+      };
     case AUTH_SIGINUP_FAILER:
       return {
         ...state,
@@ -96,8 +97,8 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         signUpUserIsLoading: false,
         signUpUserIsSuccess: false,
         signUpUserIsError: true,
-        signUpUserMessage: action.payload.message || action.payload.error || 'Error',
-      }
+        signUpUserMessage: payload.message || payload.payload.error || 'Error',
+      };
 
     case AUTH_SIGINUP_REST:
       return {
@@ -107,7 +108,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         signUpUserIsSuccess: false,
         signUpUserIsError: false,
         signUpUserMessage: '',
-      }
+      };
 
     case AUTH_CONFIRM_EMAIL_LOADING:
       return {
@@ -116,23 +117,23 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         confirmEmailIsSuccess: false,
         confirmEmailIsError: false,
         confirmEmailIsMessage: 'PENDING',
-      }
+      };
     case AUTH_CONFIRM_EMAIL_SUCCESS:
       return {
         ...state,
         confirmEmailIsLoading: false,
         confirmEmailIsSuccess: true,
         confirmEmailIsError: false,
-        confirmEmailIsMessage: action.payload.message || 'Success',
-      }
+        confirmEmailIsMessage: payload.message || 'Success',
+      };
     case AUTH_CONFIRM_EMAIL_FAILER:
       return {
         ...state,
         confirmEmailIsLoading: false,
         confirmEmailIsSuccess: false,
         confirmEmailIsError: true,
-        confirmEmailIsMessage: action.payload.message || action.payload.error || 'Error',
-      }
+        confirmEmailIsMessage: payload.message || payload.error || 'Error',
+      };
     case AUTH_CONFIRM_EMAIL_REST:
       return {
         ...state,
@@ -140,7 +141,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         confirmEmailIsSuccess: false,
         confirmEmailIsError: false,
         confirmEmailIsMessage: '',
-      }
+      };
 
     case AUTH_LOGIN_LOADING:
       return {
@@ -149,19 +150,19 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         loginUserIsSuccess: false,
         loginUserIsError: false,
         loginMessage: 'PENDING',
-      }
+      };
     case AUTH_LOGIN_SUCCESS:
-      saveUserInLocalStorage(action.payload.data.user.token)
+      saveUserInLocalStorage(payload.data.user.token);
       return {
         ...state,
-        isADmin: action.payload.data.user.role || false,
-        loginUser: action.payload.data || {},
+        isADmin: payload.data.user.role || false,
+        loginUser: payload.data || {},
         loginUserIsLoading: false,
         loginUserIsSuccess: true,
         loginUserIsError: false,
-        loginMessage: action.payload.message || 'Success',
+        loginMessage: payload.message || 'Success',
         isAuthenticated: true,
-      }
+      };
     case AUTH_LOGIN_FAILER:
       return {
         ...state,
@@ -169,10 +170,9 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         loginUserIsLoading: false,
         loginUserIsSuccess: false,
         loginUserIsError: true,
-        loginMessage: action.payload.message || action.payload.error || 'Error',
-      }
+        loginMessage: payload.message || payload.error || 'Error',
+      };
     case AUTH_LOGIN_REST:
-      console.log(state)
       return {
         ...state,
         loginUser: {},
@@ -180,7 +180,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         loginUserIsSuccess: false,
         loginUserIsError: false,
         loginMessage: '',
-      }
+      };
     case FORGET_PASSWORD_LOADING:
       return {
         ...state,
@@ -188,23 +188,23 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         forgetPasswordIsSuccess: false,
         forgetPasswordIsError: false,
         forgetPasswordMessage: 'PENDING',
-      }
+      };
     case FORGET_PASSWORD_SUCCESS:
       return {
         ...state,
         forgetPasswordIsLoading: false,
         forgetPasswordIsSuccess: true,
         forgetPasswordIsError: false,
-        forgetPasswordMessage: action.payload.message || 'Success',
-      }
+        forgetPasswordMessage: payload.message || 'Success',
+      };
     case FORGET_PASSWORD_FAILER:
       return {
         ...state,
         forgetPasswordIsLoading: false,
         forgetPasswordIsSuccess: false,
         forgetPasswordIsError: true,
-        forgetPasswordMessage: action.payload.message || action.payload.error || 'Error',
-      }
+        forgetPasswordMessage: payload.message || payload.error || 'Error',
+      };
     case FORGET_PASSWORD_REST:
       return {
         ...state,
@@ -212,7 +212,7 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         forgetPasswordIsSuccess: false,
         forgetPasswordIsError: false,
         forgetPasswordMessage: '',
-      }
+      };
 
     case REST_PASSWORD_LOADING:
       return {
@@ -221,23 +221,23 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         restPasswordIsSuccess: false,
         restPasswordIsError: false,
         restPasswordMessage: 'PENDING',
-      }
+      };
     case REST_PASSWORD_SUCCESS:
       return {
         ...state,
         restPasswordIsLoading: false,
         restPasswordIsSuccess: true,
         restPasswordIsError: false,
-        restPasswordMessage: action.payload.message || 'Success',
-      }
+        restPasswordMessage: payload.message || 'Success',
+      };
     case REST_PASSWORD_FAILER:
       return {
         ...state,
         restPasswordIsLoading: false,
         restPasswordIsSuccess: false,
         restPasswordIsError: true,
-        restPasswordMessage: action.payload.message || action.payload.error || 'Error',
-      }
+        restPasswordMessage: payload.message || payload.error || 'Error',
+      };
     case REST_PASSWORD_REST:
       return {
         ...state,
@@ -245,9 +245,9 @@ export default function actionReducer(state = initialState, action: AnyAction) {
         restPasswordIsSuccess: false,
         restPasswordIsError: false,
         restPasswordMessage: '',
-      }
+      };
 
     default:
-      return state
+      return state;
   }
 }

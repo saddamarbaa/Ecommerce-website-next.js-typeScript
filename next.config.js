@@ -1,4 +1,4 @@
-module.exports = (phase) => ({
+module.exports = () => ({
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -16,9 +16,12 @@ module.exports = (phase) => ({
     APP_ID: process.env.APP_ID,
     CONSOLE_BACKEND_ENDPOINT: process.env.CONSOLE_BACKEND_ENDPOINT,
     CONSOLE_BACKEND_IMG_ENDPOIN: process.env.CONSOLE_BACKEND_IMG_ENDPOIN,
-
   },
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: [
+      'lh3.googleusercontent.com',
+      'flagcdn.com',
+      'upload.wikimedia.org',
+    ],
   },
-})
+});

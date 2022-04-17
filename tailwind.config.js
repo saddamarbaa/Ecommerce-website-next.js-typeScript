@@ -5,8 +5,8 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
     './page-components/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: false, // or 'media' or 'class'
   important: true,
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {},
   },
@@ -14,4 +14,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-}
+};

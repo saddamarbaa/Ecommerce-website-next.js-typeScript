@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, {
-  createContext, useContext, ReactNode, useState,
-} from 'react'
+import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 type authContextType = {
   user: boolean;
@@ -13,12 +11,12 @@ const authContextDefaultValues: authContextType = {
   user: false,
   login: () => {},
   logout: () => {},
-}
+};
 
-const AuthContext = createContext<authContextType>(authContextDefaultValues)
+const AuthContext = createContext<authContextType>(authContextDefaultValues);
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
 
 type Props = {
@@ -26,22 +24,22 @@ type Props = {
 };
 
 export default function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<boolean>(false)
+  const [user, setUser] = useState<boolean>(false);
 
   const login = () => {
-    setUser(true)
-  }
+    setUser(true);
+  };
 
   const logout = () => {
-    setUser(false)
-  }
+    setUser(false);
+  };
 
   // eslint-disable-next-line react/jsx-no-constructed-context-values
   const value = {
     user,
     login,
     logout,
-  }
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

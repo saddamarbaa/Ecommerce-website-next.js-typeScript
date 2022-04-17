@@ -4,12 +4,12 @@ export type UserType = {
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;
+  role?: string;
   acceptTerms: boolean;
   gender: string;
-  month: string;
-  day: number;
-  year: string;
+  month?: string;
+  day?: number;
+  year?: string;
   familyName?: string;
   mobileNumber?: string;
   bio?: string;
@@ -18,6 +18,18 @@ export type UserType = {
   companyName?: string;
   profileImage?: any;
   jobTitle?: string;
+  status?: string;
+  isVerified?: boolean;
+  address?: string;
+  dateOfBirth?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  _id?: string | undefined | any;
+};
+
+export type LoginType = {
+  email: string;
+  password: string;
 };
 
 export type forgetPasswordEmailType = {
@@ -52,7 +64,7 @@ export interface _authPrototypeReducerState {
   signUpUserMessage: string;
 
   isAuthenticated: boolean;
-  isADmin: boolean;
+  isADmin: boolean | string;
 
   forgetPasswordIsLoading: boolean;
   forgetPasswordIsSuccess: boolean;

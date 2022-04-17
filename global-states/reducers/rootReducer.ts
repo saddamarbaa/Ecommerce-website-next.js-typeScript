@@ -1,15 +1,14 @@
-import { combineReducers } from 'redux'
-import userReducer from './adminUsersReducer'
-import authReducer from './authReducer'
-import productReducer from './adminProductReducer'
+import { combineReducers } from 'redux';
+
+import authReducer from './authReducer';
+import listReducer from './countryReducer';
 
 export const rootReducer = combineReducers({
   auth: authReducer,
-  users: userReducer,
-  products: productReducer,
-})
+  list: listReducer,
+});
 
 // RootState[type]
 export type ReducerType = ReturnType<typeof rootReducer>;
 
-export default rootReducer
+export default rootReducer;
