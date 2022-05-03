@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen;
+  }
+  html {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+}
+
+@layer components {
+  .customButton {
+    @apply cursor-pointer rounded-full border  px-4 py-2 hover:shadow-lg;
+  }
+
+  .customlink {
+    @apply text-[1.2rem] text-[#fff] no-underline transition duration-200 hover:text-[#ffeb3b] hover:underline active:text-[#ffeb3b];
+  }
+
+  .custom-span {
+    @apply cursor-pointer text-[#0066c0] transition duration-100 hover:underline;
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.25rem 1.2rem;
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid #00695c;
+  color: #00695c;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover,
+.btn:active {
+  background-color: #00695c;
+  color: white;
+}
+
+.btn.danger {
+  color: red;
+  border-color: red;
+}
+
+.btn.danger:hover,
+.btn.danger:active {
+  background: red;
+  color: white;
+}
+
+.control {
+  margin-bottom: 2rem;
+  color: #1c1e21;
+}
+
+.control label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  font-weight: bold;
+  color: #222;
+}
+
+.control label#filePicker-label,
+.control textarea,
+.control input {
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.7rem;
+  justify-content: flex-start;
+  line-height: normal;
+  padding: 1rem;
+  align-items: center;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 50%), 0 1px 0 rgb(0 0 0 / 7%) inset;
+  border: 1px solid #a6a6a6;
+  border-top-color: #949494;
+  transition: 0.4s;
+}
+
+.control textarea {
+  height: 9.688rem;
+  resize: none;
+}
+
+.control textarea:hover,
+.control input:hover {
+  outline: none;
+  border: 1px solid rgb(220, 227, 232);
+}
+
+.control textarea:hover,
+.control input:focus,
+.control input:active {
+  outline: 0 !important;
+  border-color: #00695c;
+  box-shadow: 0 0 3px 2px rgb(14 118 168/ 50%);
+}
+
+.control label#touched.invalid,
+.control textarea.is-invalid,
+.control textarea.touched.invalid,
+.control input.is-invalid,
+.control input.touched.invalid {
+  border-color: red;
+  background: #ffc2c2;
+  box-shadow: none;
+  transition: 0.3s;
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+p.option {
+  border-bottom: 1px solid #a6a6a6;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1.813rem !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important ;
+}
+
+.month-container,
+.day-container,
+.year-container {
+  flex: 1;
+  display: flex;
+}
+
+/* Reset Select */
+.select select {
+  cursor: pointer;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+  border-radius: 0.25em;
+  color: gray;
+  height: 2.4rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 50%), 0 1px 0 rgb(0 0 0 / 7%) inset;
+  border: 1px solid #dadde1;
+  border-top-color: #dadde1;
+  width: 100%;
+  padding: 0.4rem 0;
+  background-color: #fff;
+}
+.select select:hover {
+  outline: none;
+  border: 1px solid rgb(220, 227, 232);
+}
+.select select:focus,
+.select select:active {
+  outline: 0 !important;
+  border-color: #00695c;
+  box-shadow: 0 0 3px 2px rgb(14 118 168/ 50%);
+}
+
+.select select.is-invalid {
+  border-color: red;
+  transition: 0.3s;
+}
+
+.rest-btn {
+  margin-top: 1.5rem;
+  border: 1px solid;
+  border-color: #3b0062;
+  background: rgba(59, 0, 98, 0.1);
+  color: #3b0062;
+  transition: 0.2s;
+}
+
+.rest-btn:hover {
+  background: rgba(59, 0, 98, 0.2);
+}
+
+.error {
+  width: 100%;
+  color: red;
+  color: #ff9700;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.footer-link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.control label#is-invalid {
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.7rem;
+  justify-content: flex-start;
+  line-height: normal;
+  padding: 1rem;
+  align-items: center;
+  background-color: #fff;
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 50%), 0 1px 0 rgb(0 0 0 / 7%) inset;
+  border: 1px solid #a6a6a6;
+  border-top-color: #949494;
+  transition: 0.4s;
+  border-color: red;
+  background: #ffc2c2;
+  box-shadow: none;
+  transition: 0.3s;
+}
+
+#custom-button {
+  width: 100%;
+  display: block;
+  cursor: pointer;
+  padding: 7px;
+  border: 1px solid;
+  background: #f0c14b;
+  border-color: #a88734 #9c7e31 #846a29;
+  color: #111;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.4s;
+}
+
+#custom-button:hover {
+  background: #f4d078;
+  background: -webkit-linear-gradient(top, #f7dfa5, #f0c14b);
+  background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+}

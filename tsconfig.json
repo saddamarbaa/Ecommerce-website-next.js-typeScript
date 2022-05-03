@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
     },
@@ -25,11 +25,6 @@
     "sourceMap": true,
     "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "components/design-system/pagination/index.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
