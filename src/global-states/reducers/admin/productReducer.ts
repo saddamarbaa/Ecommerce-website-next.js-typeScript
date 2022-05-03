@@ -25,10 +25,15 @@ const initialState: ProductReducerState = {
   limit: 100,
   page: 1,
   sortBy: 'createdAt',
-  sort: 'asc',
+  sort: 'desc',
+
+  deleteProductIsPending: false,
+  deleteProductIsSuccess: false,
+  deleteProductIsError: false,
+  deleteProductMessage: '',
 };
 
-export function productReducer(state = initialState, action: ProductsAction) {
+export function productReducer(state: ProductReducerState = initialState, action: ProductsAction) {
   switch (action?.type) {
     case ProductsActionType.GET_PRODUCTS_LOADING:
       return {
@@ -125,6 +130,36 @@ export function productReducer(state = initialState, action: ProductsAction) {
         selectedCategory: 'All Products',
         page: action.payload || 1,
       };
+    case ProductsActionType.UPDATE_PRODUCT_SORTBY:
+      return {
+        ...state,
+        sort: action.payload || 'asc',
+      };
+    case ProductsActionType.DELETE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        deleteProductIsPending: false,
+        deleteProductIsSuccess: true,
+        deleteProductIsError: false,
+        deleteProductMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.DELETE_PRODUCT_FAILED:
+      return {
+        ...state,
+        deleteProductIsPending: false,
+        deleteProductIsSuccess: false,
+        deleteProductIsError: true,
+        deleteProductMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.DELETE_PRODUCT_REST:
+      return {
+        ...state,
+        deleteProductIsPending: false,
+        deleteProductIsSuccess: false,
+        deleteProductIsError: false,
+        deleteProductMessage: '',
+      };
+
     default:
       return state;
   }

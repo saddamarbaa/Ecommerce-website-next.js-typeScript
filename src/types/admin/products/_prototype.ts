@@ -32,6 +32,11 @@ export interface _productPrototypeReducerState {
   page: number;
   sort: string;
   sortBy: string;
+
+  deleteProductIsPending: boolean;
+  deleteProductIsSuccess: boolean;
+  deleteProductIsError: boolean;
+  deleteProductMessage: string;
 }
 
 export interface ProductsResponseType {

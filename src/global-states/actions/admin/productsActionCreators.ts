@@ -46,6 +46,26 @@ export const restAddProduct = () => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.ADD_PRODUCT_REST });
 };
 
+export const deleteProduct = (id: string) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_PRODUCT_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl()}/admin/products/${id}`,
+    });
+    dispatch({ type: ProductsActionType.DELETE_PRODUCT_SUCCESS, payload: response });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.DELETE_PRODUCT_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restDeleteProduct = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_PRODUCT_REST });
+};
+
 export const handleProductSearchTerm = (payload: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.PRODUCT_SEARCH_TERM, payload });
 };
@@ -56,4 +76,8 @@ export const handleSelectedCategory = (payload: string) => async (dispatch: Disp
 
 export const handleUpdatePageNumber = (payload: number) => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.UPDATE_PAGE_NUMBER, payload });
+};
+
+export const updateProductSortBy = (payload: string) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.UPDATE_PRODUCT_SORTBY, payload });
 };

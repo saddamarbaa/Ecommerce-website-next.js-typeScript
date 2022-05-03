@@ -13,9 +13,15 @@ export enum ProductsActionType {
   GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS',
   GET_PRODUCTS_FAILED = 'GET_PRODUCTS_FAILED',
   GET_PRODUCTS_REST = 'GET_PRODUCTS_REST',
+  DELETE_PRODUCT_LOADING = 'DELETE_PRODUCT_LOADING',
+  DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS',
+  DELETE_PRODUCT_FAILED = 'DELETE_PRODUCT_FAILED',
+  DELETE_PRODUCT_REST = 'DELETE_PRODUCT_REST',
   PRODUCT_SEARCH_TERM = 'PRODUCT_SEARCH_TERM',
   PRODUCT_CATEGORY = 'PRODUCT_CATEGORY',
   UPDATE_PAGE_NUMBER = 'UPDATE_PAGE_NUMBER',
+  UPDATE_PRODUCT_ORDERBY = 'UPDATE_PRODUCT_ORDERBY',
+  UPDATE_PRODUCT_SORTBY = 'UPDATE_PRODUCT_SORTBY',
   HYDRATE = 'HYDRATE',
 }
 
@@ -77,6 +83,29 @@ export interface actionUpdatePageNumber extends Action {
   payload: number;
 }
 
+export interface actionUpdateProductSortBy extends Action {
+  type: ProductsActionType.UPDATE_PRODUCT_SORTBY;
+  payload: string;
+}
+
+export interface actionDeleteProductIsPending extends Action {
+  type: ProductsActionType.DELETE_PRODUCT_LOADING;
+}
+
+export interface actionDeleteProductIsSuccess extends Action {
+  type: ProductsActionType.DELETE_PRODUCT_SUCCESS;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteProductIsError extends Action {
+  type: ProductsActionType.DELETE_PRODUCT_FAILED;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteProductRest extends Action {
+  type: ProductsActionType.DELETE_PRODUCT_REST;
+}
+
 export type ProductsAction =
   | actionAddProductIsPending
   | actionAddProductIsSuccess
@@ -88,4 +117,9 @@ export type ProductsAction =
   | actionGetProductRest
   | actionProductSearchTerm
   | actionProductCategory
-  | actionUpdatePageNumber;
+  | actionUpdatePageNumber
+  | actionDeleteProductIsPending
+  | actionDeleteProductIsSuccess
+  | actionDeleteProductIsError
+  | actionDeleteProductRest
+  | actionUpdateProductSortBy;

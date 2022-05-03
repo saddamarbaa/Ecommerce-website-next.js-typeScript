@@ -63,6 +63,7 @@ export function HomePageComponent({
   // As a result the API call should only fire once user stops typing
   const debouncedSearchTerm = useDebounce(productSearchTerm, 200);
 
+  console.log(limit, page, sortBy, sort);
   useEffect(() => {
     handleSelectedCategory('All Products');
     handleProductSearchTerm('');

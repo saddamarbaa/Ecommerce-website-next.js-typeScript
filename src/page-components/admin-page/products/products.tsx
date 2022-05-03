@@ -11,11 +11,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { ModalComponent as Modal, PaginationComponent as Pagination } from '@/components';
 import { useDebounce } from '@/components/custom-hooks';
 import {
+  deleteProduct,
   getProducts,
   handleProductSearchTerm,
   handleSelectedCategory,
   handleUpdatePageNumber,
   ReducerType,
+  restDeleteProduct,
+  updateProductSortBy,
 } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
 import { getRandomIntNumberBetween, truncate } from '@/utils/functions/helpers';
@@ -28,6 +31,9 @@ interface MapDispatchProps {
   handleProductSearchTerm: (payload: string) => void;
   handleSelectedCategory: (payload: string) => void;
   handleUpdatePageNumber: (payload: number) => void;
+  deleteProduct: (productId: string) => void;
+  restDeleteProduct: () => void;
+  updateProductSortBy: (payload: string) => void;
 }
 
 // props from connect mapStateToProps
@@ -43,6 +49,9 @@ export function HomePageComponent({
   handleSelectedCategory,
   listState,
   handleUpdatePageNumber,
+  deleteProduct,
+  restDeleteProduct,
+  updateProductSortBy,
 }: PropsType) {
   const {
     // list,
@@ -58,10 +67,15 @@ export function HomePageComponent({
     page,
     sortBy,
     sort,
+    deleteProductIsPending,
+    deleteProductIsSuccess,
+    deleteProductIsError,
+    deleteProductMessage,
   } = listState;
 
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<string | undefined>();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   // Debounce search term so that it only gives us latest value ...
   // ... if searchTerm has not been updated within last 200ms
@@ -71,6 +85,8 @@ export function HomePageComponent({
   useEffect(() => {
     handleSelectedCategory('All Products');
     handleProductSearchTerm('');
+    handleUpdatePageNumber(1);
+    updateProductSortBy('desc');
   }, []);
 
   useEffect(() => {
@@ -81,20 +97,37 @@ export function HomePageComponent({
     }
 
     getProducts(filteredUrl);
-  }, [page, limit, sortBy, sort, debouncedSearchTerm, selectedCategory]);
+  }, [page, limit, sortBy, sort, debouncedSearchTerm, selectedCategory, deleteProductIsSuccess]);
 
   const handleChange = (_event: React.MouseEvent, value: number) => {
     handleUpdatePageNumber(value);
   };
+
+  useEffect(() => {
+    if (deleteProductIsError || deleteProductIsSuccess) {
+      setId(() => undefined);
+      setShowAlert(() => true);
+      setOpen(() => false);
+
+      const timer = setTimeout(() => {
+        setShowAlert(() => false);
+        restDeleteProduct();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [deleteProductIsError, deleteProductIsSuccess]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleDelete = () => {
     if (id) {
-      //  api call
+      deleteProduct(id);
     }
   };
+
+  console.log('ProductI');
 
   return (
     <div className="mx-auto mt-11 max-w-[1150px] p-5 text-[18px]">
@@ -119,12 +152,20 @@ export function HomePageComponent({
             )}
           </div>
         )}
-
+        {showAlert && (
+          <Alert
+            variant="filled"
+            severity={deleteProductIsError ? 'error' : 'success'}
+            onClose={() => setShowAlert(false)}
+          >
+            {deleteProductMessage}
+          </Alert>
+        )}
         <Modal
           handleClose={handleClose}
           open={open}
           handleSubmit={handleDelete}
-          handlePending={false}
+          handlePending={deleteProductIsPending}
           message="user"
         />
       </div>
@@ -187,7 +228,7 @@ export function HomePageComponent({
                   type="button"
                   className="inline-flex items-center rounded-lg bg-red-700 py-2 px-4 text-center text-sm font-bold text-white hover:bg-red-800 focus:ring-4 focus:ring-blue-300"
                   onClick={() => {
-                    setId(() => product.id);
+                    setId(() => product._id);
                     handleOpen();
                   }}
                 >
@@ -215,6 +256,9 @@ const mapDispatchToProps = {
   handleProductSearchTerm,
   handleSelectedCategory,
   handleUpdatePageNumber,
+  deleteProduct,
+  restDeleteProduct,
+  updateProductSortBy,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePageComponent);
