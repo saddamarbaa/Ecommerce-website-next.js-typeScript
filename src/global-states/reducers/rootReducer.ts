@@ -17,13 +17,6 @@ export const masterReducer = (state, action) => {
     // console.log('action.type', action.payload.products);
     const nextState = {
       ...state,
-      products: {
-        products: [...new Set([...action.payload.products.products, ...state.products.products])],
-        limit: 100,
-        page: 1,
-        sortBy: 'createdAt',
-        sort: 'asc',
-      },
     };
     return nextState;
   }

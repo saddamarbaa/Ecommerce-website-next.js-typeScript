@@ -1,15 +1,15 @@
-export type ProductType = {
+export interface ProductType {
   id?: string;
   _id?: string;
   name: string;
   price: string;
   description: string;
   productImage: any;
-  category?: string;
+  category: string;
   rating?: string;
   count?: string;
   stock?: string;
-};
+}
 
 export interface _productPrototypeReducerState {
   product: object;

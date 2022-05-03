@@ -28,12 +28,12 @@ const { publicRuntimeConfig } = getConfig();
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
   getProducts: (filteredUrl: string) => void;
-  handleProductSearchTerm: (payload: string) => void;
+  // handleProductSearchTerm: (payload: string) => void;
   handleSelectedCategory: (payload: string) => void;
   handleUpdatePageNumber: (payload: number) => void;
   deleteProduct: (productId: string) => void;
   restDeleteProduct: () => void;
-  updateProductSortBy: (payload: string) => void;
+  // updateProductSortBy: (payload: string) => void;
 }
 
 // props from connect mapStateToProps
@@ -45,14 +45,14 @@ type PropsType = MapDispatchProps & MapStateProps;
 
 export function HomePageComponent({
   getProducts,
-  handleProductSearchTerm,
+  // handleProductSearchTerm,
   handleSelectedCategory,
   listState,
   handleUpdatePageNumber,
   deleteProduct,
   restDeleteProduct,
-  updateProductSortBy,
-}: PropsType) {
+}: // updateProductSortBy,
+PropsType) {
   const {
     // list,
     listIsLoading,
@@ -84,9 +84,9 @@ export function HomePageComponent({
 
   useEffect(() => {
     handleSelectedCategory('All Products');
-    handleProductSearchTerm('');
-    handleUpdatePageNumber(1);
-    updateProductSortBy('desc');
+    // handleProductSearchTerm('');
+    // handleUpdatePageNumber(1);
+    // updateProductSortBy('desc');
   }, []);
 
   useEffect(() => {

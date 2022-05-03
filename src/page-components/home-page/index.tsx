@@ -23,7 +23,7 @@ const { publicRuntimeConfig } = getConfig();
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
   getProducts: (filteredUrl: string) => void;
-  handleProductSearchTerm: (payload: string) => void;
+  // handleProductSearchTerm: (payload: string) => void;
   handleSelectedCategory: (payload: string) => void;
   handleUpdatePageNumber: (payload: number) => void;
 }
@@ -37,10 +37,9 @@ type PropsType = MapDispatchProps & MapStateProps;
 
 export function HomePageComponent({
   getProducts,
-  handleProductSearchTerm,
-  handleSelectedCategory,
   handleUpdatePageNumber,
   listState,
+  handleSelectedCategory,
 }: PropsType) {
   const {
     // list,
@@ -63,11 +62,10 @@ export function HomePageComponent({
   // As a result the API call should only fire once user stops typing
   const debouncedSearchTerm = useDebounce(productSearchTerm, 200);
 
-  console.log(limit, page, sortBy, sort);
   useEffect(() => {
     handleSelectedCategory('All Products');
-    handleProductSearchTerm('');
-    handleUpdatePageNumber(1);
+    // handleProductSearchTerm('');
+    // handleUpdatePageNumber(1);
   }, []);
 
   useEffect(() => {

@@ -21,7 +21,6 @@ const initialState: ProductReducerState = {
 
   productSearchTerm: '',
   selectedCategory: 'All Products',
-
   limit: 100,
   page: 1,
   sortBy: 'createdAt',
@@ -116,6 +115,7 @@ export function productReducer(state: ProductReducerState = initialState, action
     case ProductsActionType.PRODUCT_CATEGORY:
       return {
         ...state,
+        productSearchTerm: '',
         selectedCategory: action.payload,
       };
     case ProductsActionType.PRODUCT_SEARCH_TERM:
@@ -133,7 +133,7 @@ export function productReducer(state: ProductReducerState = initialState, action
     case ProductsActionType.UPDATE_PRODUCT_SORTBY:
       return {
         ...state,
-        sort: action.payload || 'asc',
+        sort: action.payload || 'desc',
       };
     case ProductsActionType.DELETE_PRODUCT_SUCCESS:
       return {

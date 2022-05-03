@@ -6,11 +6,10 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
-import { v4 as uuidv4 } from 'uuid';
 
 import { addProduct, ReducerType, restAddProduct } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
-import { addProductSchemaValidation, getCategories } from '@/utils';
+import { addProductSchemaValidation } from '@/utils';
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
@@ -30,7 +29,6 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
   const [isHomePage, setIsHomePage] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const router = useRouter();
-
   const { addProductIsLoading, addProductIsSuccess, addProductIsError, addProductMessage } =
     productsState;
 
@@ -75,7 +73,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
       if (isHomePage) {
         restAddProduct();
         setIsHomePage(() => false);
-        router.push('/');
+        router.push('/admin/products');
       }
     };
     redirectToHomePage();
@@ -94,7 +92,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
   }, [addProductIsError, addProductIsSuccess]);
 
   if (isHomePage) {
-    router.push('/');
+    router.push('/admin/products');
   }
 
   const onSubmit = (data: ProductType) => {
@@ -104,9 +102,10 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     formData.append('price', data.price);
     formData.append('description', data.description);
     formData.append('productImage', data.productImage[0]);
-    /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-    formData.append('category', data?.category!);
-    formData.append('count', data?.count!);
+    formData.append('category', data.category);
+    if (data.count) {
+      formData.append('count', data.count);
+    }
 
     addProduct(formData);
   };
@@ -233,17 +232,20 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                       {...register('category')}
                       onChange={(e) =>
                         setValue('category', e.target.value, { shouldValidate: true })
-                      } // Using setValue
+                      }
                     >
-                      <option value="" disabled selected hidden>
-                        Please choose one category...
-                      </option>
-
-                      {getCategories().map((item) => (
-                        <option key={uuidv4()} value={item}>
-                          {item}
-                        </option>
-                      ))}
+                      <option value="All Products">All Products</option>
+                      <option value="Sports">Sports</option>
+                      <option value="Football">Football</option>
+                      <option value="Books">Books</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Personal Computers">Computers</option>
+                      <option value="Women's clothing">Women&apos;s clothing</option>
+                      <option value="Women's Shoes">Women&apos;s Shoes</option>
+                      <option value="Jewelery">Jewelery</option>
+                      <option value="Men's clothing">Men&apos;s clothing</option>
+                      <option value="Men's Shoes">Men&apos;s Shoes</option>
+                      <option value="Toys">Toys</option>
                     </select>
                   </div>
                 </div>
