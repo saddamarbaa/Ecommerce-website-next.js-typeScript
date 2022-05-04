@@ -128,19 +128,22 @@ export function HomePageComponent({
                   <div className="my-5 text-[19px] capitalize  text-[#007185]">
                     <h2> {truncate(product.name, 30)}</h2>
                   </div>
-                  <div>
+                  <div className="flex items-center">
                     {product.rating &&
                       Array(parseInt(product.rating, 10) || 4)
-                        .fill(1, 2, 3)
+                        .fill(product.rating)
                         .map(() => (
-                          <span className="font-bold  text-[#f6991e]" key={uuidv4()}>
+                          <span className="text-[1.6rem]  font-bold text-yellow-300" key={uuidv4()}>
                             ✶
                           </span>
                         ))}{' '}
-                    <span className="text-base font-semibold text-[#007185]">
+                    <p className="inline text-base font-semibold text-[#007185]">
                       {'  '}
+                      <span className="mr-2 ml-3 rounded bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-200 dark:text-blue-800">
+                        5.0
+                      </span>
                       {getRandomIntNumberBetween(1000, 7000)}
-                    </span>
+                    </p>
                   </div>
                   <div className=" h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
                     {truncate(product.description, 119)}
@@ -166,13 +169,15 @@ export function HomePageComponent({
                     </button>
                   </a>
                 </Link>
-                <button
-                  type="button"
-                  id="custom-button"
-                  className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
-                >
-                  Add to Cart
-                </button>
+                <div>
+                  <button
+                    type="button"
+                    id="custom-button"
+                    className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </div>
             </div>
           ))}

@@ -61,7 +61,7 @@ const onResponseError = (error: AxiosError): Promise<AxiosError> => {
     }
   }
 
-  console.log('===  Axios ERROR RESPONSE ===>', error.message);
+  console.log('===  Axios ERROR RESPONSE ===>', error, error.response);
   return Promise.reject(error.response || error.message);
 };
 
