@@ -2,7 +2,7 @@
 
 import { Action } from 'redux';
 
-import { ProductsResponseType, ProductType } from './_prototype';
+import { ProductResponseType, ProductsResponseType, ProductType } from './_prototype';
 
 export enum ProductsActionType {
   ADD_PRODUCT_LOADING = 'ADD_PRODUCT_LOADING',
@@ -22,6 +22,10 @@ export enum ProductsActionType {
   UPDATE_PAGE_NUMBER = 'UPDATE_PAGE_NUMBER',
   UPDATE_PRODUCT_ORDERBY = 'UPDATE_PRODUCT_ORDERBY',
   UPDATE_PRODUCT_SORTBY = 'UPDATE_PRODUCT_SORTBY',
+  GET_INDIVIDUAL_PRODUCT_LOADING = 'GET_INDIVIDUAL_PRODUCT_LOADING',
+  GET_INDIVIDUAL_PRODUCT_SUCCESS = 'GET_INDIVIDUAL_PRODUCT_SUCCESS',
+  GET_INDIVIDUAL_PRODUCT_FAILED = 'GET_INDIVIDUAL_PRODUCT_FAILED',
+  GET_INDIVIDUAL_PRODUCT_REST = 'GET_INDIVIDUAL_PRODUCT_REST',
   HYDRATE = 'HYDRATE',
 }
 
@@ -73,6 +77,24 @@ export interface actionProductSearchTerm extends Action {
   payload: string;
 }
 
+export interface actionGetIndividualProductISPending extends Action {
+  type: ProductsActionType.GET_INDIVIDUAL_PRODUCT_LOADING;
+}
+
+export interface actionGetIndividualProductISSSuccess extends Action {
+  type: ProductsActionType.GET_INDIVIDUAL_PRODUCT_SUCCESS;
+  payload: ProductResponseType;
+}
+
+export interface actionGetIndividualProductISError extends Action {
+  type: ProductsActionType.GET_INDIVIDUAL_PRODUCT_FAILED;
+  payload: ProductResponseType;
+}
+
+export interface actionGetIndividualProductISRest extends Action {
+  type: ProductsActionType.GET_INDIVIDUAL_PRODUCT_REST;
+}
+
 export interface actionProductCategory extends Action {
   type: ProductsActionType.PRODUCT_CATEGORY;
   payload: string;
@@ -122,4 +144,8 @@ export type ProductsAction =
   | actionDeleteProductIsSuccess
   | actionDeleteProductIsError
   | actionDeleteProductRest
-  | actionUpdateProductSortBy;
+  | actionUpdateProductSortBy
+  | actionGetIndividualProductISPending
+  | actionGetIndividualProductISSSuccess
+  | actionGetIndividualProductISError
+  | actionGetIndividualProductISRest;

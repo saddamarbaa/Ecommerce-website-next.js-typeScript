@@ -37,6 +37,12 @@ export interface _productPrototypeReducerState {
   deleteProductIsSuccess: boolean;
   deleteProductIsError: boolean;
   deleteProductMessage: string;
+
+  individualProduct: ProductType | null;
+  getIndividualProductIsPending: boolean;
+  getIndividualProductIsSuccess: boolean;
+  getIndividualProductIsError: boolean;
+  getIndividualProductIsMessage: string;
 }
 
 export interface ProductsResponseType {
@@ -47,6 +53,16 @@ export interface ProductsResponseType {
     count: number;
     currentPage: number;
     products: ProductType[];
+  };
+  success: string;
+  error: string;
+  message: string;
+  status: boolean;
+}
+
+export interface ProductResponseType {
+  data: {
+    product: ProductType;
   };
   success: string;
   error: string;

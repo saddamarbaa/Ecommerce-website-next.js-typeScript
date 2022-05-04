@@ -30,6 +30,12 @@ const initialState: ProductReducerState = {
   deleteProductIsSuccess: false,
   deleteProductIsError: false,
   deleteProductMessage: '',
+
+  individualProduct: null,
+  getIndividualProductIsPending: false,
+  getIndividualProductIsSuccess: false,
+  getIndividualProductIsError: false,
+  getIndividualProductIsMessage: '',
 };
 
 export function productReducer(state: ProductReducerState = initialState, action: ProductsAction) {
@@ -158,6 +164,40 @@ export function productReducer(state: ProductReducerState = initialState, action
         deleteProductIsSuccess: false,
         deleteProductIsError: false,
         deleteProductMessage: '',
+      };
+    case ProductsActionType.GET_INDIVIDUAL_PRODUCT_LOADING:
+      return {
+        ...state,
+        getIndividualProductIsPending: true,
+        getIndividualProductIsSuccess: false,
+        getIndividualProductIsError: false,
+        getIndividualProductIsMessage: 'loading',
+      };
+    case ProductsActionType.GET_INDIVIDUAL_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        individualProduct: action.payload.data.product || null,
+        getIndividualProductIsPending: false,
+        getIndividualProductIsSuccess: true,
+        getIndividualProductIsError: false,
+        getIndividualProductIsMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.GET_INDIVIDUAL_PRODUCT_FAILED:
+      return {
+        ...state,
+        individualProduct: null,
+        getIndividualProductIsPending: false,
+        getIndividualProductIsSuccess: false,
+        getIndividualProductIsError: true,
+        getIndividualProductIsMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.GET_INDIVIDUAL_PRODUCT_REST:
+      return {
+        ...state,
+        getIndividualProductIsPending: false,
+        getIndividualProductIsSuccess: false,
+        getIndividualProductIsError: false,
+        getIndividualProductIsMessage: '',
       };
 
     default:

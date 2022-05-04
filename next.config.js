@@ -19,6 +19,6 @@ module.exports = () => ({
     CONSOLE_BACKEND_IMG_ENDPOIN: process.env.CONSOLE_BACKEND_IMG_ENDPOIN,
   },
   images: {
-    domains: ['lh3.googleusercontent.com', 'flagcdn.com', 'upload.wikimedia.org'],
+    domains: ['localhost', 'lh3.googleusercontent.com', 'flagcdn.com', 'upload.wikimedia.org'],
   },
 });

@@ -109,72 +109,72 @@ export function HomePageComponent({
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {products.length > 0 &&
           products.map((product: ProductType, index: number) => (
-            <Link href={`/products/${product.id}`}>
-              <div
-                key={product._id}
-                className="mb-7 flex cursor-pointer flex-col space-y-4 rounded-[4px] border  border-[#ddd]  p-4 shadow-lg"
-              >
-                <div className="-mt-[10px] flex justify-end text-base  capitalize text-[#007185] ">
-                  {product.category}
-                </div>
-                <div className="overflow-hidden">
-                  <img
-                    className="mx-auto h-[200px] w-[200px] object-contain"
-                    src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
-                    alt={product.name}
-                  />
-                </div>
-                <div className="my-5 text-[19px] capitalize  text-[#007185]">
-                  <h2> {truncate(product.name, 30)}</h2>
-                </div>
-                <div>
-                  {product.rating &&
-                    Array(parseInt(product.rating, 10) || 4)
-                      .fill(1, 2, 3)
-                      .map(() => (
-                        <span className="font-bold  text-[#f6991e]" key={uuidv4()}>
-                          ✶
-                        </span>
-                      ))}{' '}
-                  <span className="text-base font-semibold text-[#007185]">
-                    {'  '}
-                    {getRandomIntNumberBetween(1000, 7000)}
-                  </span>
-                </div>
-                <div className=" h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
-                  {truncate(product.description, 119)}
-                </div>
-                <div className="item-center flex text-base ">
-                  <span className=" font-bold ">$ {product.price} </span>
-                  {!(index % 2) && (
-                    <span className="pl-2 font-semibold text-[#007185]">Save 5%</span>
-                  )}
-                </div>
-                <div className=" text-[1rem] capitalize text-[#c45500]">
-                  {product.stock ? product.stock : 'In Stock - order soon.'}
-                </div>
-                <div className="flex items-center justify-between space-x-4 ">
-                  <Link href={`/products/${product.id}`}>
-                    <a>
-                      <button
-                        type="button"
-                        id="custom-button"
-                        className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
-                      >
-                        Details
-                      </button>
-                    </a>
-                  </Link>
-                  <button
-                    type="button"
-                    id="custom-button"
-                    className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
-                  >
-                    Add to Cart
-                  </button>
-                </div>
+            <div
+              key={product._id}
+              className="mb-7 flex cursor-pointer flex-col space-y-4 rounded-[4px] border  border-[#ddd]  p-4 shadow-lg"
+            >
+              <Link href={`/products/${product._id}`}>
+                <a className="flex flex-col space-y-4 ">
+                  <div className="-mt-[10px] flex justify-end text-base  capitalize text-[#007185] ">
+                    {product.category}
+                  </div>
+                  <div className="overflow-hidden">
+                    <img
+                      className="mx-auto h-[200px] w-[200px] object-contain"
+                      src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="my-5 text-[19px] capitalize  text-[#007185]">
+                    <h2> {truncate(product.name, 30)}</h2>
+                  </div>
+                  <div>
+                    {product.rating &&
+                      Array(parseInt(product.rating, 10) || 4)
+                        .fill(1, 2, 3)
+                        .map(() => (
+                          <span className="font-bold  text-[#f6991e]" key={uuidv4()}>
+                            ✶
+                          </span>
+                        ))}{' '}
+                    <span className="text-base font-semibold text-[#007185]">
+                      {'  '}
+                      {getRandomIntNumberBetween(1000, 7000)}
+                    </span>
+                  </div>
+                  <div className=" h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
+                    {truncate(product.description, 119)}
+                  </div>
+                  <div className="item-center flex text-base text-[#007185]">
+                    <span className="font-bold">$ {product.price} </span>
+                    {!(index % 2) && <span className="pl-2 font-semibold">Save 5%</span>}
+                  </div>
+                  <div className=" text-[1rem] capitalize text-[#c45500]">
+                    {product.stock ? product.stock : 'In Stock - order soon.'}
+                  </div>
+                </a>
+              </Link>
+              <div className="flex items-center justify-between space-x-4 ">
+                <Link href={`/products/${product._id}`}>
+                  <a>
+                    <button
+                      type="button"
+                      id="custom-button"
+                      className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                    >
+                      Details
+                    </button>
+                  </a>
+                </Link>
+                <button
+                  type="button"
+                  id="custom-button"
+                  className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                >
+                  Add to Cart
+                </button>
               </div>
-            </Link>
+            </div>
           ))}
       </div>
       {totalDocs > 0 && (
