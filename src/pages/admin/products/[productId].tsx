@@ -10,10 +10,10 @@ function EditProductPage() {
   return (
     <>
       <Head>
-        <title>Users</title>
+        <title>Update Product</title>
       </Head>
-      <meta name="description" content="Users" />
-      <EditProductPageComponent userId={productId} />
+      <meta name="description" content="Update Product" />
+      <EditProductPageComponent productId={productId} />
     </>
   );
 }

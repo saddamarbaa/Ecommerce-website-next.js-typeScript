@@ -73,6 +73,8 @@ PropsType) {
     deleteProductMessage,
   } = listState;
 
+  console.log(selectedCategory);
+
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<string | undefined>();
   const [showAlert, setShowAlert] = useState<boolean>(false);

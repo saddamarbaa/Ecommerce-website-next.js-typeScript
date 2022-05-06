@@ -26,6 +26,10 @@ export enum ProductsActionType {
   GET_INDIVIDUAL_PRODUCT_SUCCESS = 'GET_INDIVIDUAL_PRODUCT_SUCCESS',
   GET_INDIVIDUAL_PRODUCT_FAILED = 'GET_INDIVIDUAL_PRODUCT_FAILED',
   GET_INDIVIDUAL_PRODUCT_REST = 'GET_INDIVIDUAL_PRODUCT_REST',
+  UPDATE_PRODUCT_LOADING = 'UPDATE_PRODUCT_LOADING',
+  UPDATE_PRODUCT_SUCCESS = 'UPDATE_PRODUCT_SUCCESS',
+  UPDATE_PRODUCT_FAILED = 'UPDATE_PRODUCT_FAILED',
+  UPDATE_PRODUCT_REST = 'UPDATE_PRODUCT_REST',
   HYDRATE = 'HYDRATE',
 }
 
@@ -128,6 +132,24 @@ export interface actionDeleteProductRest extends Action {
   type: ProductsActionType.DELETE_PRODUCT_REST;
 }
 
+export interface actionUpdateProductIsPending extends Action {
+  type: ProductsActionType.UPDATE_PRODUCT_LOADING;
+}
+
+export interface actionUpdateProductIsSuccess extends Action {
+  type: ProductsActionType.UPDATE_PRODUCT_SUCCESS;
+  payload: ProductResponseType;
+}
+
+export interface actionUpdateProductIsError extends Action {
+  type: ProductsActionType.UPDATE_PRODUCT_FAILED;
+  payload: ProductResponseType;
+}
+
+export interface actionUpdateProductRest extends Action {
+  type: ProductsActionType.UPDATE_PRODUCT_REST;
+}
+
 export type ProductsAction =
   | actionAddProductIsPending
   | actionAddProductIsSuccess
@@ -148,4 +170,8 @@ export type ProductsAction =
   | actionGetIndividualProductISPending
   | actionGetIndividualProductISSSuccess
   | actionGetIndividualProductISError
-  | actionGetIndividualProductISRest;
+  | actionGetIndividualProductISRest
+  | actionUpdateProductIsPending
+  | actionUpdateProductIsSuccess
+  | actionUpdateProductIsError
+  | actionUpdateProductRest;

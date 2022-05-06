@@ -66,6 +66,28 @@ export const restDeleteProduct = () => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.DELETE_PRODUCT_REST });
 };
 
+export const updateProduct =
+  (_product: ProductType, id: string | string[]) => async (dispatch: Dispatch) => {
+    dispatch({ type: ProductsActionType.UPDATE_PRODUCT_LOADING });
+    try {
+      const response = await apiRequests({
+        method: 'patch',
+        url: `${getHostUrl()}/admin/products/${id}`,
+        data: _product,
+      });
+      dispatch({ type: ProductsActionType.UPDATE_PRODUCT_SUCCESS, payload: response });
+    } catch (error: any) {
+      dispatch({
+        type: ProductsActionType.UPDATE_PRODUCT_FAILED,
+        payload: { error: error?.data?.message || error.statusText || error },
+      });
+    }
+  };
+
+export const restUpdateProduct = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.UPDATE_PRODUCT_REST });
+};
+
 export const getIndividualProduct = (id: string | string[]) => async (dispatch: any) => {
   dispatch({ type: ProductsActionType.GET_INDIVIDUAL_PRODUCT_LOADING });
   try {

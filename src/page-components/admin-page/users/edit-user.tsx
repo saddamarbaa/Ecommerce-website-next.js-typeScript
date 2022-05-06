@@ -179,7 +179,7 @@ export function AdminEditUser({
 
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
-      <div className=" md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
+      <div className="md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
         {getIndividualUserIsPending && (
           <div className=" flex items-center justify-center ">
             <CircularProgress color="secondary" />

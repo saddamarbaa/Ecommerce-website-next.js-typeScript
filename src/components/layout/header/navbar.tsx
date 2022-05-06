@@ -115,21 +115,27 @@ function Navbar({
               <Link href="/admin/products/add-product">
                 <a className="customlink">Add Product</a>
               </Link>
+              <Link href="/admin/users/add-user">
+                <a className="customlink">Add User</a>
+              </Link>
               <Link href="/admin/products">
-                <a className="customlink">Admin Products</a>
+                <a className="customlink">Products</a>
               </Link>
               <Link href="/admin/users/users-ui">
-                <a className="customlink"> Admin Users UI</a>
+                <a className="customlink">Users</a>
               </Link>
               <Link href="/admin/users/users-table">
-                <a className="customlink"> Admin Users Table</a>
+                <a className="customlink">Users Table</a>
               </Link>
             </>
           )}
         </div>
         <div className="hidden items-center space-x-12 sm:flex">
-          {isAuthenticated && isADmin !== 'admin' && (
+          {isAuthenticated && (
             <>
+              <Link href="/order">
+                <a className="customlink">Contact Us </a>
+              </Link>
               <Link href="/order">
                 <a className="customlink">Your order</a>
               </Link>

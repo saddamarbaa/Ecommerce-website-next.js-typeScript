@@ -36,9 +36,18 @@ const initialState: ProductReducerState = {
   getIndividualProductIsSuccess: false,
   getIndividualProductIsError: false,
   getIndividualProductIsMessage: '',
+
+  updatedProduct: null,
+  updateProductIsPending: false,
+  updateProductIsSuccess: false,
+  updateProductIsError: false,
+  updateProductMessage: '',
 };
 
-export function productReducer(state: ProductReducerState = initialState, action: ProductsAction) {
+export function productReducer(
+  state: ProductReducerState = initialState,
+  action: ProductsAction
+): ProductReducerState {
   switch (action?.type) {
     case ProductsActionType.GET_PRODUCTS_LOADING:
       return {
@@ -180,7 +189,7 @@ export function productReducer(state: ProductReducerState = initialState, action
         getIndividualProductIsPending: false,
         getIndividualProductIsSuccess: true,
         getIndividualProductIsError: false,
-        getIndividualProductIsMessage: action.payload.message || action.payload.error || 'Error',
+        getIndividualProductIsMessage: action.payload.message || 'Success',
       };
     case ProductsActionType.GET_INDIVIDUAL_PRODUCT_FAILED:
       return {
@@ -198,6 +207,41 @@ export function productReducer(state: ProductReducerState = initialState, action
         getIndividualProductIsSuccess: false,
         getIndividualProductIsError: false,
         getIndividualProductIsMessage: '',
+      };
+    case ProductsActionType.UPDATE_PRODUCT_LOADING:
+      return {
+        ...state,
+        updateProductIsPending: true,
+        updateProductIsSuccess: false,
+        updateProductIsError: false,
+        updateProductMessage: 'loading',
+      };
+    case ProductsActionType.UPDATE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        updatedProduct: action.payload.data.product || null,
+        updateProductIsPending: false,
+        updateProductIsSuccess: true,
+        updateProductIsError: false,
+        updateProductMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.UPDATE_PRODUCT_FAILED:
+      return {
+        ...state,
+        updatedProduct: null,
+        updateProductIsPending: false,
+        updateProductIsSuccess: false,
+        updateProductIsError: true,
+        updateProductMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.UPDATE_PRODUCT_REST:
+      return {
+        ...state,
+        updatedProduct: null,
+        updateProductIsPending: false,
+        updateProductIsSuccess: false,
+        updateProductIsError: false,
+        updateProductMessage: '',
       };
 
     default:

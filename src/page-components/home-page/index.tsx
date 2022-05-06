@@ -63,9 +63,11 @@ export function HomePageComponent({
   const debouncedSearchTerm = useDebounce(productSearchTerm, 200);
 
   useEffect(() => {
-    handleSelectedCategory('All Products');
-    // handleProductSearchTerm('');
-    // handleUpdatePageNumber(1);
+    if (selectedCategory !== 'All Products') {
+      handleSelectedCategory('All Products');
+      // handleProductSearchTerm('');
+      // handleUpdatePageNumber(1);
+    }
   }, []);
 
   useEffect(() => {

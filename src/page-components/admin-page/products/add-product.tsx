@@ -7,6 +7,7 @@ import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 
+import { defaultValues } from '@/constants';
 import { addProduct, ReducerType, restAddProduct } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
 import { addProductSchemaValidation } from '@/utils';
@@ -39,6 +40,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     reset,
     formState: { errors },
   } = useForm<ProductType>({
+    defaultValues,
     mode: 'onChange',
     resolver: yupResolver(addProductSchemaValidation),
   });
@@ -103,6 +105,10 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     formData.append('description', data.description);
     formData.append('productImage', data.productImage[0]);
     formData.append('category', data.category);
+
+    if (data.stock) {
+      formData.append('stock', data.stock);
+    }
     if (data.count) {
       formData.append('count', data.count);
     }
@@ -112,7 +118,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
 
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
-      <div className=" mx-auto w-[90%]  md:min-w-[30rem] md:max-w-[30rem]">
+      <div className="md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
         <div
           style={{
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
@@ -234,7 +240,9 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                         setValue('category', e.target.value, { shouldValidate: true })
                       }
                     >
-                      <option value="All Products">All Products</option>
+                      <option defaultValue="All Products" value="All Products">
+                        All Products
+                      </option>
                       <option value="Sports">Sports</option>
                       <option value="Football">Football</option>
                       <option value="Books">Books</option>
@@ -248,6 +256,17 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                       <option value="Toys">Toys</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="control">
+                  {!errors.stock && <label htmlFor="stock">Stock Info</label>}
+                  {errors.stock && <p className="error">{errors.stock?.message} </p>}
+                  <input
+                    type="text"
+                    id="stock"
+                    className={` ${errors.stock ? 'is-invalid' : 'input custom-input'}`}
+                    {...register('stock')}
+                  />
                 </div>
 
                 <div className="control">

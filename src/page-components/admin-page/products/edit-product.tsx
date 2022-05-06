@@ -1,37 +1,34 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
-import { v4 as uuidv4 } from 'uuid';
 
+import { defaultValues } from '@/constants';
 import {
-  getIndividualUser,
+  getIndividualProduct,
   ReducerType,
-  restGetIndividualUser,
-  restUpdateUser,
-  updateUser,
+  restGetIndividualProduct,
+  restUpdateProduct,
+  updateProduct,
 } from '@/global-states';
-import { _usersPrototypeReducerState as ReducerState, UserType } from '@/types';
-import {
-  getCurrentYear,
-  getYearsIntBetween,
-  signupSchemaValidation as validationSchema,
-} from '@/utils';
+import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
+import { addProductSchemaValidation } from '@/utils';
 
 // props passed in to the component
 interface OwnProps {
-  userId: string | string[] | undefined;
+  productId: string | string[] | undefined;
 }
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
-  getIndividualUser: (userId: string | string[] | undefined) => void;
-  updateUser: (finalData: UserType, userId: string | string[] | undefined) => void;
-  restUpdateUser: () => void;
-  restGetIndividualUser: () => void;
+  getIndividualProduct: (productId: string | string[]) => void;
+  restGetIndividualProduct: () => void;
+  updateProduct: (finalData: any, productId: string | string[]) => void;
+  restUpdateProduct: () => void;
 }
 
 // props from connect mapStateToProps
@@ -41,448 +38,313 @@ interface MapStateProps {
 
 type PropsType = OwnProps & MapDispatchProps & MapStateProps;
 
-export function AdminEditProduct({
-  getIndividualUser,
-  restGetIndividualUser,
-  updateUser,
-  restUpdateUser,
+export function ProductDetailPageComponent({
+  restGetIndividualProduct,
+  getIndividualProduct,
   listState,
-  userId,
+  productId,
+  updateProduct,
+  restUpdateProduct,
 }: PropsType) {
-  const router = useRouter();
-
-  const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
   const {
-    individualUser,
-    getIndividualUserIsPending,
-    getIndividualUserIsSuccess,
-    getIndividualUserIsError,
-    getIndividualUserIsMessage,
-    updateUserIsPending,
-    updateUserIsSuccess,
-    updateUserIsError,
-    updateUserMessage,
+    individualProduct,
+    getIndividualProductIsPending,
+    getIndividualProductIsError,
+    getIndividualProductIsMessage,
+    getIndividualProductIsSuccess,
+    // updatedProduct,
+    updateProductIsPending,
+    updateProductIsSuccess,
+    updateProductIsError,
+    updateProductMessage,
   } = listState;
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const [userData, setUserData] = useState<any>({
-    firstName: individualUser?.firstName,
-    lastName: individualUser?.lastName,
-    email: individualUser?.email,
-    dateOfBirth: individualUser?.dateOfBirth,
-    gender: individualUser?.gender,
-    role: individualUser?.role,
-    month: '01',
-    day: '01',
-    year: getCurrentYear(),
-  });
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserType>({
-    resolver: yupResolver(validationSchema),
+  } = useForm<ProductType>({
+    defaultValues,
+    resolver: yupResolver(addProductSchemaValidation),
   });
 
-  // Auto Scroll functionality
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-    // Auto Scroll functionality
-    autoScrollToBottomRef?.current?.scrollIntoView({
-      behavior: 'smooth',
-    });
+    restGetIndividualProduct();
+    restUpdateProduct();
   }, []);
 
   useEffect(() => {
-    restGetIndividualUser();
-    restUpdateUser();
-
-    if (userId) {
-      getIndividualUser(userId);
+    if (productId) {
+      getIndividualProduct(productId);
     }
-  }, []);
+  }, [productId]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (updateUserIsSuccess) {
+      if (updateProductIsSuccess) {
         setShowAlert(() => false);
-        restUpdateUser();
-        // router.push('/admin/users/users-ui');
-        router.back();
+        restGetIndividualProduct();
+        restUpdateProduct();
+        router.push('/admin/products');
+        // router.back();
       }
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [userId, updateUserIsSuccess]);
+  }, [productId, updateProductIsSuccess]);
 
   useEffect(() => {
-    if (getIndividualUserIsSuccess) {
-      const splicedDate = individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
-      setUserData(() => ({
-        firstName: individualUser?.firstName,
-        lastName: individualUser?.lastName,
-        email: individualUser?.email,
-        dateOfBirth: individualUser?.dateOfBirth,
-        gender: individualUser?.gender,
-        role: individualUser?.role,
-        month: splicedDate && splicedDate[0],
-        day: splicedDate && splicedDate[1],
-        year: splicedDate && splicedDate[2],
-      }));
+    if (
+      getIndividualProductIsSuccess &&
+      individualProduct &&
+      individualProduct.stock &&
+      individualProduct.count
+    ) {
+      reset({
+        name: individualProduct.name,
+        price: individualProduct.price,
+        description: individualProduct.description,
+        category: individualProduct.category,
+        stock: individualProduct.stock,
+        count: individualProduct.count,
+      });
     }
 
-    if (updateUserIsSuccess || updateUserIsError || getIndividualUserIsError) {
+    if (updateProductIsSuccess || updateProductIsError || getIndividualProductIsError) {
       setShowAlert(() => true);
     }
-  }, [updateUserIsSuccess, updateUserIsError, getIndividualUserIsError]);
+  }, [
+    getIndividualProductIsSuccess,
+    productId,
+    updateProductIsSuccess,
+    updateProductIsError,
+    getIndividualProductIsError,
+  ]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (updateUserIsSuccess || updateUserIsError) {
+      if (updateProductIsSuccess || updateProductIsError) {
         setShowAlert(() => false);
-        restGetIndividualUser();
-        restUpdateUser();
+        restGetIndividualProduct();
+        restUpdateProduct();
       }
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, [updateUserIsSuccess, updateUserIsError]);
+  }, [updateProductIsSuccess, updateProductIsError]);
 
-  const onSubmit = (data: UserType) => {
-    const day = data?.day && data.day > 9 ? data.day : `0${data.day}`;
-    const finalData = {
-      firstName: data?.firstName,
-      lastName: data?.firstName,
-      email: data?.email,
-      password: data?.password,
-      confirmPassword: data?.confirmPassword,
-      gender: data?.gender,
-      role: data?.role,
-      dateOfBirth: `${data?.month}-${day}-${data?.year}`,
-      acceptTerms: data?.acceptTerms || true,
-    };
+  const onSubmit = (data: ProductType) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('price', data.price);
+    formData.append('description', data.description);
+    formData.append('productImage', data.productImage[0]);
+    formData.append('category', data.category);
 
-    if (userId) {
-      updateUser(finalData, userId);
+    if (data.count) {
+      formData.append('count', data.count as string);
     }
-  };
 
-  const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData((prevState: UserType) => ({ ...prevState, gender: e.target.value }));
+    if (data.stock) {
+      formData.append('stock', data.stock);
+    }
+
+    if (productId) {
+      updateProduct(formData, productId);
+    }
   };
 
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
-      <div className=" md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
-        {getIndividualUserIsPending && (
+      <div className="md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
+        {getIndividualProductIsPending && (
           <div className=" flex items-center justify-center ">
             <CircularProgress color="secondary" />
           </div>
         )}
 
-        {!getIndividualUserIsPending && (
+        {getIndividualProductIsError && showAlert && (
+          <div
+            className="mt-[2rem] w-full  rounded-[6px]"
+            style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
+          >
+            <Alert variant="filled" severity="error">
+              {getIndividualProductIsMessage}
+            </Alert>
+          </div>
+        )}
+        {!getIndividualProductIsError &&
+          showAlert &&
+          (updateProductIsSuccess || updateProductIsError) && (
+            <div
+              className="mt-[2rem] w-full  rounded-[6px]"
+              style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
+            >
+              <Alert
+                variant="filled"
+                severity={getIndividualProductIsError || updateProductIsError ? 'error' : 'success'}
+                onClose={() => setShowAlert(false)}
+              >
+                {updateProductMessage}
+              </Alert>
+            </div>
+          )}
+
+        {getIndividualProductIsSuccess && (
           <div
             className=" mt-[2rem] min-h-[10rem] w-full  rounded-[6px] pb-[2rem]"
             style={{
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
             }}
           >
-            {getIndividualUserIsError && showAlert && (
-              <div
-                className="mt-[2rem] w-full  rounded-[6px]"
-                style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
-              >
-                <Alert variant="filled" severity="error" onClose={() => restGetIndividualUser()}>
-                  {getIndividualUserIsMessage}
-                </Alert>
-              </div>
-            )}
-
-            {!getIndividualUserIsError && showAlert && (updateUserIsError || updateUserIsSuccess) && (
-              <div
-                className="mt-[2rem] w-full  rounded-[6px]"
-                style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
-              >
-                <Alert
-                  variant="filled"
-                  severity={getIndividualUserIsError || updateUserIsError ? 'error' : 'success'}
-                  onClose={() => setShowAlert(false)}
-                >
-                  {updateUserMessage}
-                </Alert>
-              </div>
-            )}
-
-            <section>
-              <div className="title border-[#dadde1 border-b p-[0.7rem] text-center">
-                <h1 className="mb-[8px] text-[1.1rem] font-bold text-[#1c1e21] md:text-[1.5rem]">
-                  Edit user with ID <span className="text-blue-500">{userId}</span>
-                </h1>
-              </div>
-
-              <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="mt-8 px-[2rem]">
-                <div className="justify-between md:flex md:items-center md:space-x-[1.3rem]">
-                  <div className="control ">
-                    {errors.firstName && <p className="error">{errors.firstName?.message}</p>}
+            <div className="title border-[#dadde1 border-b p-[0.7rem] text-center">
+              <h1 className="text-[1.1rem] font-bold text-[#1c1e21] md:text-[1.5rem]">
+                Edit product with ID <span className="text-blue-500">{productId}</span>
+              </h1>
+            </div>
+            <div className="min-h-[10rem] w-full rounded-[6px] p-5  py-[2rem]">
+              <section>
+                <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                  <div className="control">
+                    {!errors.name && <label htmlFor="name">Title</label>}
+                    {errors.name && <p className="error">{errors.name?.message} </p>}
                     <input
-                      id="firstName"
-                      className={` ${errors.firstName ? 'is-invalid' : 'input custom-input'}`}
-                      placeholder={errors.firstName ? '' : 'First name'}
-                      {...register('firstName')}
-                      value={userData.firstName}
-                      onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
+                      type="text"
+                      id="name"
+                      className={` ${errors.name ? 'is-invalid' : 'input custom-input'}`}
+                      {...register('name')}
                     />
                   </div>
                   <div className="control">
-                    {errors.lastName && <p className="error">{errors.lastName?.message}</p>}
+                    {!errors.productImage && (
+                      <label
+                        htmlFor="productImage"
+                        className={` ${errors.productImage ? 'is-invalid' : 'custom-input'}`}
+                      >
+                        Image URL
+                      </label>
+                    )}
+                    <p className="error">{errors.productImage?.message} </p>
+                    <label
+                      id={`${errors.productImage ? 'is-invalid' : 'filePicker-label'}`}
+                      htmlFor="filePicker"
+                    >
+                      <AttachFileIcon
+                        style={{
+                          fontSize: '1.3rem',
+                          marginRight: '8px',
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </label>
                     <input
-                      id="lastName"
-                      {...register('lastName')}
-                      placeholder={errors.lastName ? '' : 'Surname'}
-                      className={` ${errors.lastName ? 'is-invalid' : 'input custom-input'}`}
-                      value={userData.lastName}
-                      onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+                      id="filePicker"
+                      style={{ visibility: 'hidden', display: 'none' }}
+                      type="file"
+                      {...register('productImage')}
                     />
                   </div>
-                </div>
-
-                <div className="control">
-                  {errors.email && <p className="error">{errors.email?.message} </p>}
-                  <input
-                    type="text"
-                    id="email"
-                    className={` ${errors.email ? 'is-invalid' : 'input custom-input'}`}
-                    {...register('email')}
-                    placeholder={errors.email ? '' : 'Email'}
-                    value={userData.email}
-                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-                  />
-                </div>
-
-                <div className="control">
-                  <p className="error">{errors.password?.message} </p>
-                  <input
-                    type="password"
-                    id="password"
-                    className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
-                    {...register('password')}
-                    placeholder={errors.password ? '' : 'New Password Or the Old one '}
-                  />
-                </div>
-
-                <div className="control">
-                  <p className="error">{errors.confirmPassword?.message} </p>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
-                    {...register('confirmPassword')}
-                    placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
-                  />
-                </div>
-
-                <div
-                  style={{
-                    marginBottom: '1rem',
-                  }}
-                >
-                  <div
-                    style={{
-                      color: 'gray',
-                      fontSize: '0.9rem',
-                    }}
-                  >
-                    User Role ?
+                  <div className="control ">
+                    {!errors.price && <label htmlFor="price">Price</label>}
+                    <p className="error">{errors.price?.message} </p>
+                    <input
+                      type="text"
+                      id="price"
+                      className={` ${errors.price ? 'is-invalid' : 'custom-input'}`}
+                      {...register('price')}
+                    />
                   </div>
-                  <div className="flex items-center justify-between space-x-[1.3rem]">
+                  <div className="control ">
+                    {!errors.count && <label htmlFor="count">Total Count</label>}
+                    <p className="error">{errors.count?.message} </p>
+                    <input
+                      type="text"
+                      id="count"
+                      className={` ${errors.count ? 'is-invalid' : 'custom-input'}`}
+                      {...register('count')}
+                    />
+                  </div>
+                  <div className="control">
+                    {errors.category && <p className="error">{errors.category.message}</p>}
+                    {!errors.category && (
+                      <label
+                        htmlFor="category"
+                        className={` ${errors.productImage ? 'is-invalid' : 'custom-input'}`}
+                      >
+                        Category
+                      </label>
+                    )}
                     <div className="month-container select">
                       <select
-                        id="Month"
-                        className="select-css-month"
-                        {...register('role')}
-                        value={userData.role}
-                        onChange={(e) => setUserData({ ...userData, role: e.target.value })}
+                        className={` ${errors.category ? 'select is-invalid' : 'select'}`}
+                        {...register('category')}
                       >
-                        <option defaultValue={userData.role} value="user">
-                          User
-                        </option>
-                        <option value="guide">Guide</option>
-                        <option value="admin">Admin</option>
+                        <option value="All Products">All Products</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Football">Football</option>
+                        <option value="Books">Books</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Personal Computers">Computers</option>
+                        <option value="Women's clothing">Women&apos;s clothing</option>
+                        <option value="Women's Shoes">Women&apos;s Shoes</option>
+                        <option value="Jewelery">Jewelery</option>
+                        <option value="Men's clothing">Men&apos;s clothing</option>
+                        <option value="Men's Shoes">Men&apos;s Shoes</option>
+                        <option value="Toys">Toys</option>
                       </select>
                     </div>
                   </div>
-                </div>
-
-                <div
-                  style={{
-                    color: 'gray',
-                    marginTop: '6px',
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  Date of birth ?
-                </div>
-                <div className="flex items-center justify-between space-x-[1.3rem]">
-                  <div className="month-container select">
-                    <select
-                      id="Month"
-                      className="select-css-month"
-                      {...register('month')}
-                      value={userData.Month}
-                      onChange={(e) => setUserData({ ...userData, Month: e.target.value })}
-                    >
-                      <option defaultValue={userData.Month} value="01">
-                        January
-                      </option>
-                      <option value="02">February</option>
-                      <option value="03">March</option>
-                      <option value="04">April</option>
-                      <option value="05">May</option>
-                      <option value="06">June</option>
-                      <option value="07">July</option>
-                      <option value="08">August</option>
-                      <option value="09">September </option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12"> December</option>
-                    </select>
-                  </div>
-
-                  <div className="day-container select">
-                    <select
-                      id="day"
-                      className="select-css"
-                      {...register('day')}
-                      value={userData.day}
-                      onChange={(e) => setUserData({ ...userData, day: e.target.value })}
-                    >
-                      {Array.from(Array(30).keys())?.map((_day, index) => (
-                        <option key={uuidv4()} defaultValue={userData.day} value={index + 1}>
-                          {index + 1}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="year-container select">
-                    <select
-                      id="year"
-                      className="select-css"
-                      {...register('year')}
-                      value={userData.year}
-                      onChange={(e) => setUserData({ ...userData, year: e.target.value })}
-                    >
-                      {getYearsIntBetween()
-                        .slice(0)
-                        .reverse()
-                        .map((year) => (
-                          <option key={uuidv4()} defaultValue={userData.year} value={year}>
-                            {year}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    color: 'gray',
-                    fontSize: '0.9rem',
-                    marginTop: '1rem',
-                  }}
-                >
-                  Gender ?
-                </div>
-
-                <div className="flex items-center justify-between space-x-[1.3rem]">
-                  <div className="control" style={{ position: 'relative' }}>
-                    <input type="text" id="Female" placeholder="Female" />
+                  <div className="control">
+                    {!errors.stock && <label htmlFor="stock">Stock Info</label>}
+                    {errors.stock && <p className="error">{errors.stock?.message} </p>}
                     <input
-                      {...register('gender')}
-                      type="radio"
-                      value="Female"
-                      id="Female"
-                      placeholder="Female"
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        fontSize: '0.9rem',
-                        width: '1rem',
-                      }}
-                      checked={userData.gender === 'Female'}
-                      onChange={(e) => handleGenderChange(e)}
-                      className="cursor-pointer"
+                      type="text"
+                      id="stock"
+                      className={` ${errors.stock ? 'is-invalid' : 'input custom-input'}`}
+                      {...register('stock')}
                     />
                   </div>
-
-                  <div className="control" style={{ position: 'relative' }}>
-                    <input type="text" id="Male" placeholder="Male" />
-
-                    <input
-                      {...register('gender')}
-                      type="radio"
-                      value="male"
-                      id="Male"
-                      placeholder="Male"
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        fontSize: '0.9rem',
-                        width: '1rem',
-                      }}
-                      checked={userData.gender === 'male'}
-                      onChange={(e) => handleGenderChange(e)}
-                      className="cursor-pointer"
+                  <div className="control">
+                    {!errors.description && <label htmlFor="description">Description</label>}
+                    <p className="error">{errors.description?.message} </p>
+                    <textarea
+                      className={`outline-none hover:outline-none ${
+                        errors.description ? 'is-invalid' : 'custom-input'
+                      }`}
+                      id="description"
+                      rows={4}
+                      cols={50}
+                      {...register('description')}
                     />
                   </div>
-
-                  <div className="control" style={{ position: 'relative' }}>
-                    <input type="text" id="Custom" placeholder="Custom" />
-                    <input
-                      {...register('gender')}
-                      type="radio"
-                      value="custom"
-                      id="Custom"
-                      placeholder="Custom"
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        fontSize: '0.9rem',
-                        width: '1rem',
-                      }}
-                      checked={userData.gender === 'custom'}
-                      onChange={(e) => handleGenderChange(e)}
-                      className="cursor-pointer"
-                    />
+                  <div className="mt-[-2rem] flex  flex-col justify-between lg:flex-row lg:items-center lg:justify-between  lg:space-x-5 ">
+                    <div>
+                      <button
+                        disabled={updateProductIsPending}
+                        type="submit"
+                        className=" mx-auto mt-[1.5rem] block h-[2.7rem]    w-full  min-w-[150px] rounded-[4px]  border border-[#42b72a] bg-[#42b72a] py-[8px] px-[16px] text-[1rem]  font-bold text-white transition duration-150 hover:border-[#256818]  hover:bg-[#256818]"
+                      >
+                        Update
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        className=" rest-btn mx-auto block h-[2.7rem]    w-full  min-w-[150px]   rounded-[4px] border py-[8px] px-[16px] text-[1rem] font-bold transition duration-150"
+                        onClick={() => reset()}
+                      >
+                        Reset?
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="actions">
-                  <button
-                    disabled={updateUserIsPending || getIndividualUserIsPending}
-                    type="submit"
-                    className="mx-auto block h-[2.7rem] w-full rounded-[4px] bg-[#00695c] py-[8px] px-[16px] font-bold text-white transition duration-150 hover:bg-green-800 "
-                  >
-                    Update User
-                  </button>
-                </div>
-
-                <div className="actions">
-                  <button
-                    type="button"
-                    className="rest-btn mx-auto block h-[2.7rem] w-full   rounded-[4px]  py-[8px] px-[16px]  font-bold"
-                    onClick={() => reset()}
-                  >
-                    Reset?
-                  </button>
-                </div>
-              </form>
-            </section>
+                </form>
+              </section>
+            </div>
           </div>
         )}
       </div>
@@ -491,14 +353,14 @@ export function AdminEditProduct({
 }
 
 const mapStateToProps = (state: ReducerType) => ({
-  listState: state.users,
+  listState: state.products,
 });
 
 const mapDispatchToProps = {
-  getIndividualUser,
-  restGetIndividualUser,
-  updateUser,
-  restUpdateUser,
+  restGetIndividualProduct,
+  getIndividualProduct,
+  updateProduct,
+  restUpdateProduct,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminEditProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailPageComponent);

@@ -11,7 +11,7 @@ export const addProductSchemaValidation = Yup.object().shape({
     .max(500, 'Description must not exceed 500 characters'),
   price: Yup.string()
     .required('Price is required')
-    .matches(/^[0-9]+$/, 'Please enter valid number '),
+    .matches(/^[0-9-.]+$/, 'Please enter valid number '),
   productImage: Yup.mixed()
     .test('required', 'Image is required', (value: any) => value && value.length)
     .test('fileSize', 'File Size is too large', (value) => {
@@ -26,6 +26,9 @@ export const addProductSchemaValidation = Yup.object().shape({
   count: Yup.string()
     .required('Count is required')
     .matches(/^[0-9]+$/, 'Please enter valid number '),
-  stock: Yup.string().matches(/^[0-9]+$/, 'Please enter valid number '),
   rating: Yup.string().matches(/^[0-9]+$/, 'Please enter valid number '),
+  stock: Yup.string()
+    .required('Stock Info is required')
+    .min(3, 'Stock Info must be at least 3 characters')
+    .max(100, 'Stock Info must not exceed 100 characters'),
 });

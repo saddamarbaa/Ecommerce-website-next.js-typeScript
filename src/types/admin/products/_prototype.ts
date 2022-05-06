@@ -1,3 +1,5 @@
+import { UserType } from '../../auth';
+
 export interface ProductType {
   id?: string;
   _id?: string;
@@ -9,6 +11,7 @@ export interface ProductType {
   rating?: string;
   count?: string;
   stock?: string;
+  user?: UserType;
 }
 
 export interface _productPrototypeReducerState {
@@ -43,6 +46,12 @@ export interface _productPrototypeReducerState {
   getIndividualProductIsSuccess: boolean;
   getIndividualProductIsError: boolean;
   getIndividualProductIsMessage: string;
+
+  updatedProduct: ProductType | null;
+  updateProductIsPending: boolean;
+  updateProductIsSuccess: boolean;
+  updateProductIsError: boolean;
+  updateProductMessage: string;
 }
 
 export interface ProductsResponseType {
