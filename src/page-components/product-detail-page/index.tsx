@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  addProductToCart,
   getIndividualProduct,
   getProducts,
   ReducerType,
@@ -29,6 +30,7 @@ interface MapDispatchProps {
   getIndividualProduct: (productId: string | string[]) => void;
   restGetIndividualProduct: () => void;
   getProducts: (filteredUrl: string) => void;
+  addProductToCart: (payload: string) => void;
 }
 
 // props from connect mapStateToProps
@@ -44,6 +46,7 @@ export function ProductDetailPageComponent({
   listState,
   productId,
   getProducts,
+  addProductToCart,
 }: PropsType) {
   const {
     individualProduct,
@@ -51,6 +54,7 @@ export function ProductDetailPageComponent({
     getIndividualProductIsError,
     getIndividualProductIsMessage,
     getIndividualProductIsSuccess,
+    AddToCartIsLoading,
     products,
   } = listState;
 
@@ -135,9 +139,15 @@ export function ProductDetailPageComponent({
                   </p>
                   <div className="mt-5 flex border-t border-gray-300 pt-5">
                     <button
+                      onClick={() => {
+                        if (individualProduct._id) {
+                          addProductToCart(individualProduct._id);
+                        }
+                      }}
                       id="custom-button"
                       type="submit"
                       className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                      disabled={AddToCartIsLoading}
                     >
                       Add to Cart
                     </button>
@@ -222,9 +232,15 @@ export function ProductDetailPageComponent({
                             </Link>
                             <div>
                               <button
+                                disabled={AddToCartIsLoading}
                                 type="button"
                                 id="custom-button"
                                 className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                                onClick={() => {
+                                  if (product._id) {
+                                    addProductToCart(product._id);
+                                  }
+                                }}
                               >
                                 Add to Cart
                               </button>
@@ -252,6 +268,7 @@ const mapDispatchToProps = {
   restGetIndividualProduct,
   getIndividualProduct,
   getProducts,
+  addProductToCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetailPageComponent);

@@ -2,7 +2,12 @@
 
 import { Action } from 'redux';
 
-import { ProductResponseType, ProductsResponseType, ProductType } from './_prototype';
+import {
+  CartIResponseType,
+  ProductResponseType,
+  ProductsResponseType,
+  ProductType,
+} from './_prototype';
 
 export enum ProductsActionType {
   ADD_PRODUCT_LOADING = 'ADD_PRODUCT_LOADING',
@@ -31,6 +36,25 @@ export enum ProductsActionType {
   UPDATE_PRODUCT_FAILED = 'UPDATE_PRODUCT_FAILED',
   UPDATE_PRODUCT_REST = 'UPDATE_PRODUCT_REST',
   HYDRATE = 'HYDRATE',
+  ADD_PRODUCT_TO_CART_LOADING = 'ADD_PRODUCT_TO_CART_LOADING ',
+  ADD_PRODUCT_TO_CART_SUCCESS = 'ADD_PRODUCT_TO_CART_SUCCESS',
+  ADD_PRODUCT_TO_CART_FAILED = 'ADD_PRODUCT_TO_CART_FAILED',
+  ADD_PRODUCT_TO_CART_REST = 'ADD_PRODUCT_TO_CART_REST',
+
+  GET_CART_LOADING = 'GET_CART_LOADING',
+  GET_CART_SUCCESS = 'GET_CART_SUCCESS',
+  GET_CART_FAILED = 'GET_CART_FAILED',
+  GET_CART_REST = 'GET_CART_REST',
+
+  DELETE_ITEM_FROM_CART_LOADING = 'DELETE_ITEM_FROM_CART_LOADING ',
+  DELETE_ITEM_FROM_CART_SUCCESS = 'DELETE_ITEM_FROM_CART_SUCCESS',
+  DELETE_ITEM_FROM_CART_FAILED = 'DELETE_ITEM_FROM_CART_FAILED',
+  DELETE_ITEM_FROM_CART_REST = 'DELETE_ITEM_FROM_CART_REST',
+
+  CLEAR_CART_LOADING = 'GET_CART_LOADING',
+  CLEAR_CART_SUCCESS = 'GET_CART_SUCCESS',
+  CLEAR_CART_FAILED = 'GET_CART_FAILED',
+  CLEAR_CART_REST = 'GET_CART_REST',
 }
 
 export interface actionAddProductIsPending extends Action {
@@ -150,6 +174,74 @@ export interface actionUpdateProductRest extends Action {
   type: ProductsActionType.UPDATE_PRODUCT_REST;
 }
 
+export interface actionAddToCartIsPending extends Action {
+  type: ProductsActionType.ADD_PRODUCT_TO_CART_LOADING;
+}
+
+export interface actionAddToCartIsSuccess extends Action {
+  type: ProductsActionType.ADD_PRODUCT_TO_CART_SUCCESS;
+  payload: ProductsResponseType;
+}
+
+export interface actionAddToCartIsError extends Action {
+  type: ProductsActionType.ADD_PRODUCT_TO_CART_FAILED;
+  payload: ProductsResponseType;
+}
+
+export interface actionAddToCartRest extends Action {
+  type: ProductsActionType.ADD_PRODUCT_TO_CART_REST;
+}
+
+export interface actionGetCartIsPending extends Action {
+  type: ProductsActionType.GET_CART_LOADING;
+}
+
+export interface actionGetCartIsSuccess extends Action {
+  type: ProductsActionType.GET_CART_SUCCESS;
+  payload: CartIResponseType;
+}
+
+export interface actionGetCartIsError extends Action {
+  type: ProductsActionType.GET_CART_FAILED;
+  payload: CartIResponseType;
+}
+
+export interface actionGetCartRest extends Action {
+  type: ProductsActionType.GET_CART_REST;
+}
+
+export interface actionDeleteItemFromCartIsPending extends Action {
+  type: ProductsActionType.DELETE_ITEM_FROM_CART_LOADING;
+}
+
+export interface actionDeleteItemFromCartIsSuccess extends Action {
+  type: ProductsActionType.DELETE_ITEM_FROM_CART_SUCCESS;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteItemFromCartIsError extends Action {
+  type: ProductsActionType.DELETE_ITEM_FROM_CART_FAILED;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteItemFromCartRest extends Action {
+  type: ProductsActionType.DELETE_ITEM_FROM_CART_REST;
+}
+
+export interface actionClearCartIsPending extends Action {
+  type: ProductsActionType.CLEAR_CART_LOADING;
+}
+
+export interface actionClearCartIsSuccess extends Action {
+  type: ProductsActionType.CLEAR_CART_SUCCESS;
+  payload: CartIResponseType;
+}
+
+export interface actionClearCartIsError extends Action {
+  type: ProductsActionType.CLEAR_CART_REST;
+  payload: CartIResponseType;
+}
+
 export type ProductsAction =
   | actionAddProductIsPending
   | actionAddProductIsSuccess
@@ -174,4 +266,19 @@ export type ProductsAction =
   | actionUpdateProductIsPending
   | actionUpdateProductIsSuccess
   | actionUpdateProductIsError
-  | actionUpdateProductRest;
+  | actionUpdateProductRest
+  | actionAddToCartIsPending
+  | actionAddToCartIsSuccess
+  | actionAddToCartIsError
+  | actionAddToCartRest
+  | actionGetCartIsPending
+  | actionGetCartIsSuccess
+  | actionGetCartIsError
+  | actionGetCartRest
+  | actionDeleteItemFromCartIsPending
+  | actionDeleteItemFromCartIsSuccess
+  | actionDeleteItemFromCartIsError
+  | actionDeleteItemFromCartRest
+  | actionClearCartIsPending
+  | actionClearCartIsSuccess
+  | actionClearCartIsError;

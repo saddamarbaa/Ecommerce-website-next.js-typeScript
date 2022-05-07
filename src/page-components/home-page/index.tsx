@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { PaginationComponent as Pagination } from '@/components';
 import { useDebounce } from '@/components/custom-hooks';
 import {
+  addProductToCart,
   getProducts,
   handleProductSearchTerm,
   handleSelectedCategory,
@@ -26,6 +27,7 @@ interface MapDispatchProps {
   // handleProductSearchTerm: (payload: string) => void;
   handleSelectedCategory: (payload: string) => void;
   handleUpdatePageNumber: (payload: number) => void;
+  addProductToCart: (payload: string) => void;
 }
 
 // props from connect mapStateToProps
@@ -37,6 +39,7 @@ type PropsType = MapDispatchProps & MapStateProps;
 
 export function HomePageComponent({
   getProducts,
+  addProductToCart,
   handleUpdatePageNumber,
   listState,
   handleSelectedCategory,
@@ -147,7 +150,7 @@ export function HomePageComponent({
                       {getRandomIntNumberBetween(1000, 7000)}
                     </p>
                   </div>
-                  <div className=" h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
+                  <div className="h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
                     {truncate(product.description, 119)}
                   </div>
                   <div className="item-center flex text-base text-[#007185]">
@@ -165,7 +168,7 @@ export function HomePageComponent({
                     <button
                       type="button"
                       id="custom-button"
-                      className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                      className="inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
                     >
                       Details
                     </button>
@@ -173,6 +176,11 @@ export function HomePageComponent({
                 </Link>
                 <div>
                   <button
+                    onClick={() => {
+                      if (product._id) {
+                        addProductToCart(product._id);
+                      }
+                    }}
                     type="button"
                     id="custom-button"
                     className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
@@ -199,6 +207,7 @@ const mapStateToProps = (state: ReducerType) => ({
 
 const mapDispatchToProps = {
   getProducts,
+  addProductToCart,
   handleProductSearchTerm,
   handleSelectedCategory,
   handleUpdatePageNumber,

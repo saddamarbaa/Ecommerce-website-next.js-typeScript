@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,10 +11,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import {
+  getCart,
   handleProductSearchTerm,
   handleSelectedCategory,
   ReducerType,
   removeAuthenticatedUser,
+  restGetCart,
 } from 'global-states';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -28,6 +30,8 @@ interface MapDispatchProps {
   removeAuthenticatedUser: () => void;
   handleProductSearchTerm: (payload: string) => void;
   handleSelectedCategory: (payload: string) => void;
+  getCart: () => void;
+  restGetCart: () => void;
 }
 
 interface MapStateProps {
@@ -43,8 +47,19 @@ function Navbar({
   removeAuthenticatedUser,
   handleProductSearchTerm,
   handleSelectedCategory,
+  getCart,
+  restGetCart,
 }: PropsType) {
-  const { productSearchTerm } = listState;
+  const {
+    productSearchTerm,
+    cart,
+    // getCartIsPending,
+    // getCartIsSuccess,
+    // getCartIsError,
+    // getCartMessage,
+    AddToCartIsSuccess,
+    clearCartIsSuccess,
+  } = listState;
   const { publicRuntimeConfig } = getConfig();
   const { isAuthenticated, isADmin, loginUser } = authState;
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -68,6 +83,16 @@ function Navbar({
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const getTotalItems = () => cart.reduce((acc, obj) => acc + obj.quantity, 0);
+
+  useEffect(() => {
+    restGetCart();
+  }, []);
+
+  useEffect(() => {
+    getCart();
+  }, [AddToCartIsSuccess, clearCartIsSuccess]);
 
   return (
     <header className="sticky top-0 z-50 overflow-hidden bg-[#00695c] ">
@@ -134,7 +159,7 @@ function Navbar({
           {isAuthenticated && (
             <>
               <Link href="/order">
-                <a className="customlink">Contact Us </a>
+                <a className="customlink ml-5">Contact Us </a>
               </Link>
               <Link href="/order">
                 <a className="customlink">Your order</a>
@@ -143,7 +168,7 @@ function Navbar({
                 <div className="cursor-pointer">
                   <ShoppingCartIcon className="relative cursor-pointer text-[2.2rem]" />
                   <div className="absolute top-[0px] flex h-7 w-7 items-center justify-center rounded-full bg-[#f08804] text-[12px] font-bold text-black">
-                    2
+                    {getTotalItems()}
                   </div>
                 </div>
               </Link>
@@ -225,6 +250,8 @@ const mapDispatchToProps = {
   removeAuthenticatedUser,
   handleProductSearchTerm,
   handleSelectedCategory,
+  getCart,
+  restGetCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

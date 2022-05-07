@@ -35,7 +35,7 @@ interface MapStateProps {
 
 type PropsType = MapDispatchProps & MapStateProps;
 
-function OrderPageComponent({
+function CheckoutPageComponent({
   addProductToCart,
   deleteItemFromCart,
   getCart,
@@ -121,9 +121,9 @@ function OrderPageComponent({
                 {cart.map((product: CartItemsTpe) => (
                   <div className="-mx-8 flex px-6 py-5  hover:bg-gray-100">
                     <div className="flex w-2/5">
-                      <div className="h-[105px] w-[150px] overflow-hidden rounded-md">
+                      <div>
                         <img
-                          className="mx-auto h-[100%] w-[100%]  "
+                          className="mx-auto h-[105px] w-[150px] overflow-hidden rounded-md"
                           src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productId.productImage}`}
                           alt={product.productId.name}
                         />
@@ -248,16 +248,12 @@ function OrderPageComponent({
                       />
                     </span>
                   </div>
-                  <Link href="/checkout">
-                    <a>
-                      <button
-                        type="button"
-                        className="w-full bg-indigo-500 py-3 text-sm font-semibold uppercase text-white hover:bg-indigo-600"
-                      >
-                        Checkout
-                      </button>
-                    </a>
-                  </Link>
+                  <button
+                    type="button"
+                    className="w-full bg-indigo-500 py-3 text-sm font-semibold uppercase text-white hover:bg-indigo-600"
+                  >
+                    Checkout
+                  </button>
                   <button
                     onClick={() => handleOpen()}
                     type="button"
@@ -297,4 +293,4 @@ const mapDispatchToProps = {
   clearCart,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderPageComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutPageComponent);

@@ -126,3 +126,94 @@ export const handleUpdatePageNumber = (payload: number) => async (dispatch: Disp
 export const updateProductSortBy = (payload: string) => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.UPDATE_PRODUCT_SORTBY, payload });
 };
+
+export const addProductToCart = (id: string, decrease?: boolean) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.ADD_PRODUCT_TO_CART_LOADING });
+
+  try {
+    const response = await apiRequests({
+      method: 'post',
+      url: `${getHostUrl()}/products/cart?decrease=${decrease || false}`,
+      data: { productId: id },
+    });
+    dispatch({
+      type: ProductsActionType.ADD_PRODUCT_TO_CART_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.ADD_PRODUCT_TO_CART_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restAddProductToCart = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.ADD_PRODUCT_TO_CART_REST });
+};
+
+export const deleteItemFromCart = (id: string) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_ITEM_FROM_CART_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'post',
+      url: `${getHostUrl()}/products/cart-delete-item`,
+      data: { productId: id },
+    });
+    dispatch({
+      type: ProductsActionType.DELETE_ITEM_FROM_CART_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.DELETE_ITEM_FROM_CART_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restDeleteItemFromCart = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_ITEM_FROM_CART_REST });
+};
+
+export const getCart = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.GET_CART_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'get',
+      url: `${getHostUrl()}/products/cart`,
+    });
+    dispatch({
+      type: ProductsActionType.GET_CART_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.GET_CART_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restGetCart = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.GET_CART_REST });
+};
+
+export const clearCart = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.CLEAR_CART_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl()}/products/clear-cart`,
+    });
+    dispatch({
+      type: ProductsActionType.CLEAR_CART_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.CLEAR_CART_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};

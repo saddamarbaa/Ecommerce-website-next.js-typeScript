@@ -14,6 +14,23 @@ export interface ProductType {
   user?: UserType;
 }
 
+export interface CartItemsTpe {
+  productId: {
+    _id: string;
+    name: string;
+    price: number;
+    description: string;
+    productImage: string;
+    category: string;
+    rating?: string;
+    count?: string;
+    stock?: string;
+    user?: UserType;
+  };
+  _id: string;
+  quantity: number;
+}
+
 export interface _productPrototypeReducerState {
   product: object;
   addProductIsLoading: boolean;
@@ -52,6 +69,27 @@ export interface _productPrototypeReducerState {
   updateProductIsSuccess: boolean;
   updateProductIsError: boolean;
   updateProductMessage: string;
+
+  cart: CartItemsTpe[];
+  getCartIsPending: boolean;
+  getCartIsSuccess: boolean;
+  getCartIsError: boolean;
+  getCartMessage: string;
+
+  AddToCartIsLoading: boolean;
+  AddToCartIsSuccess: boolean;
+  AddToCartIsError: boolean;
+  AddToCartMessage: string;
+
+  deleteItemFromCartIsLoading: boolean;
+  deleteItemFromCartIsSuccess: boolean;
+  deleteItemFromCartIsError: boolean;
+  deleteItemFromCartMessage: string;
+
+  clearCartIsLoading: boolean;
+  clearCartIsSuccess: boolean;
+  clearCartIsError: boolean;
+  clearCartMessage: string;
 }
 
 export interface ProductsResponseType {
@@ -72,6 +110,17 @@ export interface ProductsResponseType {
 export interface ProductResponseType {
   data: {
     product: ProductType;
+  };
+  success: string;
+  error: string;
+  message: string;
+  status: boolean;
+}
+
+export interface CartIResponseType {
+  data: {
+    products: CartItemsTpe[];
+    userId: string;
   };
   success: string;
   error: string;

@@ -42,6 +42,27 @@ const initialState: ProductReducerState = {
   updateProductIsSuccess: false,
   updateProductIsError: false,
   updateProductMessage: '',
+
+  cart: [],
+  getCartIsPending: false,
+  getCartIsSuccess: false,
+  getCartIsError: false,
+  getCartMessage: '',
+
+  AddToCartIsLoading: false,
+  AddToCartIsSuccess: false,
+  AddToCartIsError: false,
+  AddToCartMessage: '',
+
+  deleteItemFromCartIsLoading: false,
+  deleteItemFromCartIsSuccess: false,
+  deleteItemFromCartIsError: false,
+  deleteItemFromCartMessage: '',
+
+  clearCartIsLoading: false,
+  clearCartIsSuccess: false,
+  clearCartIsError: false,
+  clearCartMessage: '',
 };
 
 export function productReducer(
@@ -242,6 +263,135 @@ export function productReducer(
         updateProductIsSuccess: false,
         updateProductIsError: false,
         updateProductMessage: '',
+      };
+    case ProductsActionType.GET_CART_LOADING:
+      return {
+        ...state,
+        getCartIsPending: true,
+        getCartIsSuccess: false,
+        getCartIsError: false,
+        getCartMessage: '',
+      };
+    case ProductsActionType.GET_CART_SUCCESS:
+      return {
+        ...state,
+        cart: action.payload.data.products || [],
+        getCartIsPending: false,
+        getCartIsSuccess: true,
+        getCartIsError: false,
+        getCartMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.GET_CART_FAILED:
+      return {
+        ...state,
+        getCartIsPending: false,
+        getCartIsSuccess: false,
+        getCartIsError: true,
+        getCartMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.GET_CART_REST:
+      return {
+        ...state,
+        getCartIsPending: false,
+        getCartIsSuccess: false,
+        getCartIsError: false,
+        getCartMessage: '',
+      };
+    case ProductsActionType.ADD_PRODUCT_TO_CART_LOADING:
+      return {
+        ...state,
+        AddToCartIsLoading: true,
+        AddToCartIsSuccess: false,
+        AddToCartIsError: false,
+        AddToCartMessage: '',
+      };
+    case ProductsActionType.ADD_PRODUCT_TO_CART_SUCCESS:
+      return {
+        ...state,
+        AddToCartIsLoading: false,
+        AddToCartIsSuccess: true,
+        AddToCartIsError: false,
+        AddToCartMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.ADD_PRODUCT_TO_CART_FAILED:
+      return {
+        ...state,
+        AddToCartIsLoading: false,
+        AddToCartIsSuccess: false,
+        AddToCartIsError: true,
+        AddToCartMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.ADD_PRODUCT_TO_CART_REST:
+      return {
+        ...state,
+        AddToCartIsLoading: false,
+        AddToCartIsSuccess: false,
+        AddToCartIsError: false,
+        AddToCartMessage: '',
+      };
+    case ProductsActionType.DELETE_ITEM_FROM_CART_LOADING:
+      return {
+        ...state,
+        deleteItemFromCartIsLoading: true,
+        deleteItemFromCartIsSuccess: false,
+        deleteItemFromCartIsError: false,
+        deleteItemFromCartMessage: '',
+      };
+    case ProductsActionType.DELETE_ITEM_FROM_CART_SUCCESS:
+      return {
+        ...state,
+        deleteItemFromCartIsLoading: false,
+        deleteItemFromCartIsSuccess: true,
+        deleteItemFromCartIsError: false,
+        deleteItemFromCartMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.DELETE_ITEM_FROM_CART_FAILED:
+      return {
+        ...state,
+        deleteItemFromCartIsLoading: false,
+        deleteItemFromCartIsSuccess: false,
+        deleteItemFromCartIsError: true,
+        deleteItemFromCartMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.DELETE_ITEM_FROM_CART_REST:
+      return {
+        ...state,
+        deleteItemFromCartIsLoading: false,
+        deleteItemFromCartIsSuccess: false,
+        deleteItemFromCartIsError: false,
+        deleteItemFromCartMessage: '',
+      };
+    case ProductsActionType.CLEAR_CART_LOADING:
+      return {
+        ...state,
+        clearCartIsLoading: true,
+        clearCartIsSuccess: false,
+        clearCartIsError: false,
+        clearCartMessage: '',
+      };
+    case ProductsActionType.CLEAR_CART_SUCCESS:
+      return {
+        ...state,
+        clearCartIsLoading: false,
+        clearCartIsSuccess: true,
+        clearCartIsError: false,
+        clearCartMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.CLEAR_CART_FAILED:
+      return {
+        ...state,
+        clearCartIsLoading: false,
+        clearCartIsSuccess: false,
+        clearCartIsError: true,
+        clearCartMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.CLEAR_CART_REST:
+      return {
+        ...state,
+        clearCartIsLoading: false,
+        clearCartIsSuccess: false,
+        clearCartIsError: false,
+        clearCartMessage: '',
       };
 
     default:
