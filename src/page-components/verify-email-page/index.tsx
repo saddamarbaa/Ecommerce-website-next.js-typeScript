@@ -131,7 +131,6 @@ function VerfiyEmailPageComponent({
             </Alert>
           )}
 
-          {userId && token}
           <section>
             <div className="title   p-[1rem] text-center ">
               <div className="mt-[2rem]  flex justify-center">

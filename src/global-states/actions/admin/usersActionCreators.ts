@@ -70,36 +70,37 @@ export const restDeleteUser = () => async (dispatch: Dispatch) => {
   dispatch({ type: UsersActionType.DELETE_USER_REST });
 };
 
-export const getIndividualUser = (id: string | string[] | undefined) => async (dispatch: any) => {
-  dispatch({ type: UsersActionType.GET_INDIVIDUAL_USER_LOADING });
-  try {
-    const response = await apiRequests({
-      method: 'get',
-      url: `${getHostUrl()}/admin/users/${id}`,
-    });
-    dispatch({
-      type: UsersActionType.GET_INDIVIDUAL_USER_SUCCESS,
-      payload: response,
-    });
-  } catch (error: any) {
-    dispatch({
-      type: UsersActionType.GET_INDIVIDUAL_USER_FAILED,
-      payload: { error: error?.data?.message || error.statusText || error },
-    });
-  }
-};
+export const getIndividualUser =
+  (id: string | string[], isAdmin?: boolean) => async (dispatch: any) => {
+    dispatch({ type: UsersActionType.GET_INDIVIDUAL_USER_LOADING });
+    try {
+      const response = await apiRequests({
+        method: 'get',
+        url: isAdmin ? `${getHostUrl()}/admin/users/${id}` : `${getHostUrl()}/auth/me`,
+      });
+      dispatch({
+        type: UsersActionType.GET_INDIVIDUAL_USER_SUCCESS,
+        payload: response,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: UsersActionType.GET_INDIVIDUAL_USER_FAILED,
+        payload: { error: error?.data?.message || error.statusText || error },
+      });
+    }
+  };
 
 export const restGetIndividualUser = () => async (dispatch: Dispatch) => {
   dispatch({ type: UsersActionType.GET_INDIVIDUAL_USER_REST });
 };
 
 export const updateUser =
-  (user: UserType, id: string | string[] | undefined) => async (dispatch: Dispatch) => {
+  (user: UserType, id: string | string[], isAdmin?: boolean) => async (dispatch: Dispatch) => {
     dispatch({ type: UsersActionType.UPDATE_USER_LOADING });
     try {
       const response = await apiRequests({
         method: 'patch',
-        url: `${getHostUrl()}/admin/users/${id}`,
+        url: isAdmin ? `${getHostUrl()}/admin/users/${id}` : `${getHostUrl()}/auth/${id}`,
         data: user,
       });
       dispatch({

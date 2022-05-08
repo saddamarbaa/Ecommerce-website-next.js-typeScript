@@ -10,6 +10,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import getConfig from 'next/config';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
 import {
   getCart,
   handleProductSearchTerm,
@@ -17,14 +21,12 @@ import {
   ReducerType,
   removeAuthenticatedUser,
   restGetCart,
-} from 'global-states';
-import getConfig from 'next/config';
-import Link from 'next/link';
+} from '@/global-states';
 import {
   _authPrototypeReducerState as ReducerState,
   _productPrototypeReducerState as ReducerProductState,
-} from 'types';
-import { removedUserFromLocalStorage } from 'utils';
+} from '@/types';
+import { removedUserFromLocalStorage } from '@/utils';
 
 interface MapDispatchProps {
   removeAuthenticatedUser: () => void;
@@ -63,15 +65,21 @@ function Navbar({
   const { publicRuntimeConfig } = getConfig();
   const { isAuthenticated, isADmin, loginUser } = authState;
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const router = useRouter();
 
   const signedOutHandler = () => {
     removeAuthenticatedUser();
     removedUserFromLocalStorage();
   };
 
+  const userProfileHandler = () => {
+    router.push(`/profile/${loginUser?._id}`);
+  };
+
   const settings = [
     {
-      value: 'Profile',
+      value: 'Update Profile',
+      handleClick: userProfileHandler,
     },
     { value: 'Logout', handleClick: signedOutHandler },
   ];

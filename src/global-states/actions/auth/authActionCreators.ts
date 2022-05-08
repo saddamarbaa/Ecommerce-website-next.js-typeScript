@@ -30,16 +30,16 @@ export const signUp = (user: UserType) => async (dispatch: Dispatch) => {
 };
 
 export const verifyEmail = (data: VerifyEmailRequestType) => async (dispatch: Dispatch) => {
-  dispatch({ type: AuthenticationActionType.AUTH_REST_PASSWORD_LOADING });
+  dispatch({ type: AuthenticationActionType.AUTH_CONFIRM_EMAIL_LOADING });
   try {
     const response = await apiRequests({
       method: 'get',
       url: `${getHostUrl()}/auth/verify-email/${data.userId}/${data.token}`,
     });
-    dispatch({ type: AuthenticationActionType.AUTH_REST_PASSWORD_SUCCESS, payload: response });
+    dispatch({ type: AuthenticationActionType.AUTH_CONFIRM_EMAIL_SUCCESS, payload: response });
   } catch (error: any) {
     dispatch({
-      type: AuthenticationActionType.AUTH_REST_PASSWORD_FAILED,
+      type: AuthenticationActionType.AUTH_CONFIRM_EMAIL_FAILED,
       payload: { error: error?.data?.message || error.statusText || error },
     });
   }
@@ -121,4 +121,29 @@ export const restLoginState = () => async (dispatch: Dispatch) => {
 
 export const restSignUpState = () => async (dispatch: Dispatch) => {
   dispatch({ type: AuthenticationActionType.AUTH_SIGINUP_REST });
+};
+
+export const updateProfile =
+  (user: UserType, id: string | string[]) => async (dispatch: Dispatch) => {
+    dispatch({ type: AuthenticationActionType.AUTH_UPDATE_PROFILE_LOADING });
+    try {
+      const response = await apiRequests({
+        method: 'patch',
+        url: `${getHostUrl()}/auth/${id}`,
+        data: user,
+      });
+      dispatch({
+        type: AuthenticationActionType.AUTH_UPDATE_PROFILE_SUCCESS,
+        payload: response,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: AuthenticationActionType.AUTH_UPDATE_PROFILE_FAILED,
+        payload: { error: error?.data?.message || error.statusText || error },
+      });
+    }
+  };
+
+export const restUpdateProfile = () => async (dispatch: Dispatch) => {
+  dispatch({ type: AuthenticationActionType.AUTH_UPDATE_PROFILE_REST });
 };

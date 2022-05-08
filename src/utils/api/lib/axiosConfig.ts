@@ -1,13 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-let AUTH_TOKEN: any;
-
-if (typeof window !== 'undefined') {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  AUTH_TOKEN = `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`;
-}
-
 const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   if (process.env.NODE_ENV !== 'production') {
     console.info(`[===  Axios REQUEST ===>] [${JSON.stringify(config)}]`);
@@ -15,7 +7,7 @@ const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line no-param-reassign
-  config.headers.common.Authorization = AUTH_TOKEN;
+  config.headers.common.Authorization = `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`;
   return config;
 };
 

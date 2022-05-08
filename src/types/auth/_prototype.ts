@@ -88,6 +88,11 @@ export interface _authPrototypeReducerState {
   restPasswordIsSuccess: boolean;
   restPasswordIsError: boolean;
   restPasswordMessage: string;
+
+  updateProfileIsLoading: boolean;
+  updateProfileIsSuccess: boolean;
+  updateProfileIsError: boolean;
+  updateProfileMessage: string;
 }
 
 export interface AuthResponseType {

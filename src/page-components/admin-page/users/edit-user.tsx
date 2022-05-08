@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 
+import { days, months } from '@/constants';
 import {
   getIndividualUser,
   ReducerType,
@@ -28,8 +30,8 @@ interface OwnProps {
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
-  getIndividualUser: (userId: string | string[] | undefined) => void;
-  updateUser: (finalData: UserType, userId: string | string[] | undefined) => void;
+  getIndividualUser: (userId: string | string[], isAdmin?: boolean) => void;
+  updateUser: (finalData: any, userId: string | string[], isAdmin?: boolean) => void;
   restUpdateUser: () => void;
   restGetIndividualUser: () => void;
 }
@@ -66,6 +68,9 @@ export function AdminEditUser({
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
+  const splicedDate =
+    individualUser && individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
+
   const [userData, setUserData] = useState<any>({
     firstName: individualUser?.firstName,
     lastName: individualUser?.lastName,
@@ -73,9 +78,9 @@ export function AdminEditUser({
     dateOfBirth: individualUser?.dateOfBirth,
     gender: individualUser?.gender,
     role: individualUser?.role,
-    month: '01',
-    day: '01',
-    year: getCurrentYear(),
+    month: splicedDate ? splicedDate[0] : '01',
+    day: splicedDate ? splicedDate[1] : '01',
+    year: splicedDate ? splicedDate[2] : getCurrentYear(),
   });
 
   const {
@@ -104,16 +109,16 @@ export function AdminEditUser({
     restUpdateUser();
 
     if (userId) {
-      getIndividualUser(userId);
+      getIndividualUser(userId, true);
     }
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (updateUserIsSuccess) {
         setShowAlert(() => false);
+        restGetIndividualUser();
         restUpdateUser();
-        // router.push('/admin/users/users-ui');
         router.back();
       }
     }, 2000);
@@ -131,16 +136,21 @@ export function AdminEditUser({
         dateOfBirth: individualUser?.dateOfBirth,
         gender: individualUser?.gender,
         role: individualUser?.role,
-        month: splicedDate && splicedDate[0],
-        day: splicedDate && splicedDate[1],
-        year: splicedDate && splicedDate[2],
+        month: splicedDate ? splicedDate[0] : '01',
+        day: splicedDate ? splicedDate[1] : '01',
+        year: splicedDate ? splicedDate[2] : getCurrentYear(),
       }));
     }
 
     if (updateUserIsSuccess || updateUserIsError || getIndividualUserIsError) {
       setShowAlert(() => true);
     }
-  }, [updateUserIsSuccess, updateUserIsError, getIndividualUserIsError]);
+  }, [
+    getIndividualUserIsSuccess,
+    updateUserIsSuccess,
+    updateUserIsError,
+    getIndividualUserIsError,
+  ]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -155,21 +165,24 @@ export function AdminEditUser({
   }, [updateUserIsSuccess, updateUserIsError]);
 
   const onSubmit = (data: UserType) => {
-    const day = data?.day && data.day > 9 ? data.day : `0${data.day}`;
-    const finalData = {
-      firstName: data?.firstName,
-      lastName: data?.firstName,
-      email: data?.email,
-      password: data?.password,
-      confirmPassword: data?.confirmPassword,
-      gender: data?.gender,
-      role: data?.role,
-      dateOfBirth: `${data?.month}-${day}-${data?.year}`,
-      acceptTerms: data?.acceptTerms || true,
-    };
+    const formData = new FormData();
+    formData.append('firstName', data?.firstName);
+    formData.append('lastName', data?.lastName);
+    formData.append('email', data?.email);
+    formData.append('profileImage', data.profileImage[0]);
+    formData.append('password', data?.password);
+    formData.append('confirmPassword', data?.confirmPassword);
+    formData.append('gender', data?.gender);
+    formData.append('dateOfBirth', `${data?.month}-${data.day}-${data?.year}`);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    formData.append('acceptTerms', data?.acceptTerms || true);
+    if (data?.role) {
+      formData.append('role', data?.role);
+    }
 
     if (userId) {
-      updateUser(finalData, userId);
+      updateUser(formData, userId, true);
     }
   };
 
@@ -266,6 +279,40 @@ export function AdminEditUser({
                 </div>
 
                 <div className="control">
+                  {!errors.profileImage && (
+                    <label
+                      htmlFor="profileImage"
+                      className={` ${errors.profileImage ? 'is-invalid' : 'custom-input'}`}
+                      style={{
+                        color: 'gray',
+                        fontSize: '0.9rem',
+                      }}
+                    >
+                      Profile Image
+                    </label>
+                  )}
+                  <p className="error">{errors.profileImage?.message} </p>
+                  <label
+                    id={`${errors.profileImage ? 'is-invalid' : 'filePicker-label'}`}
+                    htmlFor="filePicker"
+                  >
+                    <AttachFileIcon
+                      style={{
+                        fontSize: '1.3rem',
+                        marginRight: '8px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </label>
+                  <input
+                    id="filePicker"
+                    style={{ visibility: 'hidden', display: 'none' }}
+                    type="file"
+                    {...register('profileImage')}
+                  />
+                </div>
+
+                <div className="control">
                   <p className="error">{errors.password?.message} </p>
                   <input
                     type="password"
@@ -334,26 +381,20 @@ export function AdminEditUser({
                       id="Month"
                       className="select-css-month"
                       {...register('month')}
-                      value={userData.Month}
-                      onChange={(e) => setUserData({ ...userData, Month: e.target.value })}
+                      value={userData.month}
+                      onChange={(e) => setUserData({ ...userData, month: e.target.value })}
                     >
-                      <option defaultValue={userData.Month} value="01">
-                        January
-                      </option>
-                      <option value="02">February</option>
-                      <option value="03">March</option>
-                      <option value="04">April</option>
-                      <option value="05">May</option>
-                      <option value="06">June</option>
-                      <option value="07">July</option>
-                      <option value="08">August</option>
-                      <option value="09">September </option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12"> December</option>
+                      {months.map((_month, index) => (
+                        <option
+                          key={uuidv4()}
+                          defaultValue={userData.month}
+                          value={months[index].value}
+                        >
+                          {months[index].label}
+                        </option>
+                      ))}
                     </select>
                   </div>
-
                   <div className="day-container select">
                     <select
                       id="day"
@@ -362,9 +403,13 @@ export function AdminEditUser({
                       value={userData.day}
                       onChange={(e) => setUserData({ ...userData, day: e.target.value })}
                     >
-                      {Array.from(Array(30).keys())?.map((_day, index) => (
-                        <option key={uuidv4()} defaultValue={userData.day} value={index + 1}>
-                          {index + 1}
+                      {days.map((_day, index) => (
+                        <option
+                          key={uuidv4()}
+                          defaultValue={userData.day}
+                          value={days[index].value}
+                        >
+                          {days[index].label}
                         </option>
                       ))}
                     </select>

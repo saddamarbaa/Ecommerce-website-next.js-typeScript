@@ -12,7 +12,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { ModalComponent as Modal, PaginationComponent as Pagination } from '@/components';
 import { useDebounce } from '@/components/custom-hooks';
 import { deleteUser, getUsers, ReducerType, restDeleteUser } from '@/global-states';
-import { _usersPrototypeReducerState as ReducerState, UserType } from '@/types';
+import {
+  _authPrototypeReducerState as AuthReducerState,
+  _usersPrototypeReducerState as ReducerState,
+  UserType,
+} from '@/types';
 import { format } from '@/utils';
 
 // props from connect mapDispatchToProps
@@ -25,11 +29,18 @@ interface MapDispatchProps {
 // props from connect mapStateToProps
 interface MapStateProps {
   listState: ReducerState;
+  authState: AuthReducerState;
 }
 
 type PropsType = MapDispatchProps & MapStateProps;
 
-export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listState }: PropsType) {
+export function AdminUsersUIPage({
+  getUsers,
+  restDeleteUser,
+  deleteUser,
+  listState,
+  authState,
+}: PropsType) {
   const {
     users,
     // list,
@@ -42,7 +53,10 @@ export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listSta
     deleteUserIsSuccess,
     deleteUserIsError,
     deleteUserMessage,
+    updateUserIsSuccess,
   } = listState;
+
+  const { updateProfileIsSuccess } = authState;
 
   const router = useRouter();
   const [addNewUser, setAddNewUser] = useState<boolean>(false);
@@ -68,7 +82,17 @@ export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listSta
       filteredUrl = `/admin/users?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=role&role=${filterBy}&search=${debouncedSearchTerm}`;
     }
     getUsers(filteredUrl);
-  }, [page, limit, sortBy, filterBy, sort, debouncedSearchTerm, deleteUserIsSuccess]);
+  }, [
+    page,
+    limit,
+    sortBy,
+    filterBy,
+    sort,
+    debouncedSearchTerm,
+    deleteUserIsSuccess,
+    updateProfileIsSuccess,
+    updateUserIsSuccess,
+  ]);
 
   useEffect(() => {
     if (deleteUserIsSuccess || deleteUserIsError) {
@@ -114,6 +138,24 @@ export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listSta
   return (
     <div>
       <div className="mx-auto mt-11 max-w-[1250px] p-5 text-[18px] ">
+        <div>
+          {!users.length && (
+            <div className="easy-in-out  container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
+              {listIsLoading && (
+                <div className=" flex items-center justify-center ">
+                  <CircularProgress color="secondary" />
+                </div>
+              )}
+              {!listIsError && !listIsLoading && <p className="p-4"> No user found</p>}
+              {listIsError && (
+                <Alert variant="filled" severity="error">
+                  {listMessage}
+                </Alert>
+              )}
+            </div>
+          )}
+        </div>
+
         {totalDocs > 0 && (
           <div>
             {showAlert && (
@@ -265,24 +307,6 @@ export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listSta
                     )}
                 </select>
               </div>
-            </div>
-
-            <div>
-              {!users.length && (
-                <div className="easy-in-out  container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
-                  {listIsLoading && (
-                    <div className=" flex items-center justify-center ">
-                      <CircularProgress color="secondary" />
-                    </div>
-                  )}
-                  {!listIsError && !listIsLoading && <p className="p-4"> No user found</p>}
-                  {listIsError && (
-                    <Alert variant="filled" severity="error">
-                      {listMessage}
-                    </Alert>
-                  )}
-                </div>
-              )}
             </div>
 
             <div className="mt-[4rem] flex flex-wrap justify-between gap-[4rem]">
@@ -465,6 +489,7 @@ export function AdminUsersUIPage({ getUsers, restDeleteUser, deleteUser, listSta
 
 const mapStateToProps = (state: ReducerType) => ({
   listState: state.users,
+  authState: state.auth,
 });
 
 const mapDispatchToProps = {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,7 +15,7 @@ import { getCurrentYear, getYearsIntBetween, signupSchemaValidation } from '@/ut
 
 interface MapDispatchProps {
   restSignUpState: () => void;
-  signUp: (data: UserType) => void;
+  signUp: (finalData: any) => void;
 }
 
 interface MapStateProps {
@@ -72,7 +73,7 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
     if (signUpUserIsSuccess) {
       const timer = setTimeout(() => {
         setLogIn(() => true);
-      }, 400);
+      }, 4000);
 
       return () => clearTimeout(timer);
     }
@@ -91,18 +92,24 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
 
   const onSubmit = (data: UserType) => {
     const day = data?.day && data.day > 9 ? data.day : `0${data.day}`;
-    const finalData = {
-      firstName: data?.firstName,
-      lastName: data?.firstName,
-      email: data?.email,
-      password: data?.password,
-      confirmPassword: data?.confirmPassword,
-      gender: data?.gender,
-      dateOfBirth: `${data?.month}-${day}-${data?.year}`,
-      acceptTerms: data?.acceptTerms,
-    };
 
-    signUp(finalData);
+    const formData = new FormData();
+    formData.append('firstName', data?.firstName);
+    formData.append('lastName', data?.lastName);
+    formData.append('email', data?.email);
+    formData.append('profileImage', data.profileImage[0]);
+    formData.append('password', data?.password);
+    formData.append('confirmPassword', data?.confirmPassword);
+    formData.append('gender', data?.gender);
+    formData.append('dateOfBirth', `${data?.month}-${day}-${data?.year}`);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    formData.append('acceptTerms', data?.acceptTerms || true);
+    if (data?.role) {
+      formData.append('role', data.role);
+    }
+
+    signUp(formData);
   };
 
   return (
@@ -173,6 +180,40 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
                   className={` ${errors.email ? 'is-invalid' : 'input custom-input'}`}
                   {...register('email')}
                   placeholder={errors.email ? '' : 'Email'}
+                />
+              </div>
+
+              <div className="control">
+                {!errors.profileImage && (
+                  <label
+                    htmlFor="profileImage"
+                    className={` ${errors.profileImage ? 'is-invalid' : 'custom-input'}`}
+                    style={{
+                      color: 'gray',
+                      fontSize: '0.9rem',
+                    }}
+                  >
+                    Profile Image
+                  </label>
+                )}
+                <p className="error">{errors.profileImage?.message} </p>
+                <label
+                  id={`${errors.profileImage ? 'is-invalid' : 'filePicker-label'}`}
+                  htmlFor="filePicker"
+                >
+                  <AttachFileIcon
+                    style={{
+                      fontSize: '1.3rem',
+                      marginRight: '8px',
+                      cursor: 'pointer',
+                    }}
+                  />
+                </label>
+                <input
+                  id="filePicker"
+                  style={{ visibility: 'hidden', display: 'none' }}
+                  type="file"
+                  {...register('profileImage')}
                 />
               </div>
 

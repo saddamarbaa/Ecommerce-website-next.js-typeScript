@@ -38,6 +38,11 @@ const initialState: AuthReducerState = {
   restPasswordIsSuccess: false,
   restPasswordIsError: false,
   restPasswordMessage: '',
+
+  updateProfileIsLoading: false,
+  updateProfileIsSuccess: false,
+  updateProfileIsError: false,
+  updateProfileMessage: '',
 };
 
 export function authReducer(
@@ -240,6 +245,40 @@ export function authReducer(
         forgetPasswordIsSuccess: false,
         forgetPasswordIsError: false,
         forgetPasswordMessage: '',
+      };
+    case AuthenticationActionType.AUTH_UPDATE_PROFILE_LOADING:
+      return {
+        ...state,
+
+        updateProfileIsLoading: true,
+        updateProfileIsSuccess: false,
+        updateProfileIsError: false,
+        updateProfileMessage: 'PENDING',
+      };
+    case AuthenticationActionType.AUTH_UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        updateProfileIsLoading: false,
+        updateProfileIsSuccess: true,
+        updateProfileIsError: false,
+        loginUser: action.payload.data.user || null,
+        updateProfileMessage: action.payload.message || 'Success',
+      };
+    case AuthenticationActionType.AUTH_UPDATE_PROFILE_FAILED:
+      return {
+        ...state,
+        updateProfileIsLoading: false,
+        updateProfileIsSuccess: false,
+        updateProfileIsError: true,
+        updateProfileMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case AuthenticationActionType.AUTH_UPDATE_PROFILE_REST:
+      return {
+        ...state,
+        updateProfileIsLoading: false,
+        updateProfileIsSuccess: false,
+        updateProfileIsError: false,
+        updateProfileMessage: '',
       };
     default:
       return state;

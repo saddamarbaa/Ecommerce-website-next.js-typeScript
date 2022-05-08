@@ -16,7 +16,8 @@ export const masterReducer = (state, action) => {
   if (action.type && action.type === HYDRATE) {
     // console.log('action.type', action.payload.products);
     const nextState = {
-      ...state,
+      ...state, // use previous state
+      ...action.payload, // apply delta from hydration
     };
     return nextState;
   }

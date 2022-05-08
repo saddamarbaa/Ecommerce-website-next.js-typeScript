@@ -35,17 +35,16 @@ export const signupSchemaValidation = Yup.object().shape({
   bio: Yup.string()
     .min(10, 'Bio must be at least 10 characters')
     .max(300, 'Bio must not exceed 100 characters'),
-
-  // profileImage: Yup.mixed()
-  //   .test('required', 'Image is required', (value: any) => value && value.length)
-  //   .test('fileSize', 'File Size is too large', (value) => {
-  //     const sizeInBytes = 1024 * 1024 * 10 // accept files up 10 mgb
-  //     return value && value[0] && value[0].size <= sizeInBytes
-  //   })
-  //   .test('type', 'We only support jpeg, jpg, png, webp', (value) => {
-  //     const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']
-  //     return value && value[0] && SUPPORTED_FORMATS.includes(value[0].type.toLowerCase())
-  //   }),
+  profileImage: Yup.mixed()
+    .test('required', 'Image is required', (value: any) => value && value.length)
+    .test('fileSize', 'File Size is too large', (value) => {
+      const sizeInBytes = 1024 * 1024 * 10; // accept files up 10 mgb
+      return value && value[0] && value[0].size <= sizeInBytes;
+    })
+    .test('type', 'We only support jpeg, jpg, png, webp', (value) => {
+      const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp'];
+      return value && value[0] && SUPPORTED_FORMATS.includes(value[0].type.toLowerCase());
+    }),
 });
 
 export const LoginSchemaValidation = Yup.object().shape({

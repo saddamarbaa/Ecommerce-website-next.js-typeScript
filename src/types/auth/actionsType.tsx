@@ -27,6 +27,10 @@ export enum AuthenticationActionType {
   REMOVE_AUTHENTICATED_USER = 'REMOVE_AUTHENTICATED_USER',
   IS_ADMIN = 'IS_ADMIN',
   HYDRATE = 'HYDRATE',
+  AUTH_UPDATE_PROFILE_LOADING = 'AUTH_UPDATE_PROFILE_LOADING ',
+  AUTH_UPDATE_PROFILE_SUCCESS = 'AUTH_UPDATE_PROFILE_SUCCESS',
+  AUTH_UPDATE_PROFILE_FAILED = 'AUTH_UPDATE_PROFILE_FAILED',
+  AUTH_UPDATE_PROFILE_REST = 'AUTH_UPDATE_PROFILE_REST',
 }
 
 export interface actionAuthLoginIsPending extends Action {
@@ -47,6 +51,23 @@ export interface actionAuthLoginIsRest extends Action {
   type: AuthenticationActionType.AUTH_LOGIN_REST;
 }
 
+export interface actionAuthUpdateProfileIsPending extends Action {
+  type: AuthenticationActionType.AUTH_UPDATE_PROFILE_LOADING;
+}
+
+export interface actionAuthUpdateProfileIsSuccess extends Action {
+  type: AuthenticationActionType.AUTH_UPDATE_PROFILE_SUCCESS;
+  payload: AuthResponseType;
+}
+
+export interface actionAuthUpdateProfileIsError extends Action {
+  type: AuthenticationActionType.AUTH_UPDATE_PROFILE_FAILED;
+  payload: AuthResponseType;
+}
+
+export interface actionAuthUpdateProfileIsRest extends Action {
+  type: AuthenticationActionType.AUTH_UPDATE_PROFILE_REST;
+}
 export interface actionForgotPasswordIsPending extends Action {
   type: AuthenticationActionType.AUTH_FORGET_PASSWORD_LOADING;
 }
@@ -155,4 +176,8 @@ export type AuthenticationAction =
   | actionSignUpIsRest
   | actionIsAuthenticatedSuccess
   | actionIsADmin
-  | actionRemoveAuthenticatedUser;
+  | actionRemoveAuthenticatedUser
+  | actionAuthUpdateProfileIsRest
+  | actionAuthUpdateProfileIsError
+  | actionAuthUpdateProfileIsSuccess
+  | actionAuthUpdateProfileIsPending;
