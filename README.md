@@ -1,23 +1,24 @@
-# Front-End Mentor Rest Countries API Challenge
 
-Building Front-End Mentor Rest Countries API Challenge with React Js, Next Js, TypeScript, Tailwind CSS,
-Heroicons, Vercel Hosting (a mobile-friendly) Made with developer experience first ESLint + Prettier + Lint-Staged + VSCode setup .
+# Saddam-ecommerce
+
+Building ecommerce website with React Js + Next Js + TypeScript + Node Js + Express + MongoDB + Material-UI + Tailwind-CSS
+⚡️ Made with developer experience first ESLint + Prettier + VSCode setup with complete user authentication (a mobile-friendly).
 
 # Table of contents
 
-- [Author](#Author)
-- [Demo](#Demo)
-- [Technologies](#Technologies)
-- [Optimizations](#Optimizations)
-- [Contributing](#Contributing)
-- [Status](#status)
-- [Features](#Features)
-- [Inspiration](#inspiration)
-- [Related Projects](#Related_Projects)
-- [Support](#Support)
-- [Feedback](#Feedback)
-- [Run Locally](#Run_Locally)
-- [Screenshots](#Screenshots)
+-  [Author](#Author)
+-  [Demo](#Demo)
+-  [Technologies](#Technologies)
+-  [Optimizations](#Optimizations)
+-  [Contributing](#Contributing)
+-  [Status](#status)
+-  [Features](#Features)
+-  [Inspiration](#inspiration)
+-  [Related Projects](#Related_Projects)
+-  [Support](#Support)
+-  [Feedback](#Feedback)
+-  [Run Locally](#Run_Locally)
+-  [Screenshots](#Screenshots)
 
 # Author
 
@@ -25,44 +26,90 @@ Heroicons, Vercel Hosting (a mobile-friendly) Made with developer experience fir
 
 # Technologies
 
-- React Js
-- Next Js
-- TypeScript
-- Tailwind CSS
-- Heroicons
-- Vercel Hosting
+**Client:**
+
+-  React Js
+-  Next Js
+-  TypeScript
+-  Redux
+-  Tailwind CSS
+-  Material-UI 
+-  Material-UI 
+-  Vercel Hosting
+
+**Server:**
+
+-  Node.js
+-  Express
+-  MongoDB
+-  JSON Web Token (JWT)
+-  bcryptjs
+-  Heroku Hosting
+
+
 
 # Demo
+###  <a href="https://saddam-next-ecommerce.vercel.app/">Live Demo </a>
+###  <a href="https://github.com/saddamarbaa/node-express-rest-api"> Back-End API REPO</a>
+###  <a href="https://saddam-rest-api.herokuapp.com">LIVE API Demo</a>
+####   Testing Email:      testverstion@gmail.com
+####   Testing Password:    12345test
 
-## <a href="https://rest-countries-app-two.vercel.app/">LIVE DEMO</a>
 
 # Optimizations
 
-- Next' Js Image component
-- Next' Js file-system based router
-- Next' Js Server-side rendering
-- Memoization (useMemo, Memo)
-- Advanced Debouncing (custom Hook)
-- Function components
-- React hooks
-- React useEffect cleanup
-- TypeScript
+-  Next' Js Image component
+-  Next' Js file-system based router
+-  Next' Js Server-side rendering
+-  Memoization (useMemo, Memo)
+-  Function components
+-  React hooks
+-  React useEffect cleanup
+-  TypeScript
 
 # Features
 
-- View all countries
-- Search for Single Country
-- Filter countries by Region
-- Toggle Dark/Light Mode
-- Toggle Dark/Light Mode
-- Google Map with zoom Focus to the country captical city
-- View on real google map link
+##### (Users)
+-  Complete user authentication 
+-  Users can sign in
+-  Users can  sign out
+-  Users can verify email
+-  Users can Change Password
+-  View all products
+-  View products detail
+-  Filter products by category
+-  Search for products 
+-  Add products to their basket
+-  Checkout total payment
+-  Checkout order page
+-  Products pagination
+-  Stripe Checkout/Payments (TODO)
+
+##### (Admin)
+-  Complete Admin Authorization
+-  Add products
+-  Update products
+-  Delete products
+-  Limit Products
+-  Add Users 
+-  Update Users 
+-  Delete Users 
+-  Update User Role 
+
 
 # Contributing
 
 Contributions are always welcome!
 
 # Related_Projects
+
+
+### Amazon Clone App built with React Js + Redux + Styled Components
+
+### <a href="https://github.com/saddamarbaa/amazon-clone-app"> Github Repo </a>
+
+### <a href="https://amazoon-clone-app.web.app/">LIVE DEMO</a>
+
 
 ### Facebook Clone App built with React Js + Next Js + TypeScript + Redux + Styled Components
 
@@ -88,11 +135,7 @@ Contributions are always welcome!
 
 ### <a href="https://airbnb-clone-app-nex-js.vercel.app/">LIVE DEMO</a>
 
-### Amazon Clone App built with React Js + Redux + Styled Components
 
-### <a href="https://github.com/saddamarbaa/amazon-clone-app"> Github Repo </a>
-
-### <a href="https://amazoon-clone-app.web.app/">LIVE DEMO</a>
 
 # Support
 
@@ -117,18 +160,19 @@ https://www.instagram.com/saddam.dev/
 Facebook
 https://www.facebook.com/saddam.arbaa
 
+
 # Run_Locally
 
 Clone the project
 
 ```bash
-https://github.com/saddamarbaa/rest-countries-app-nextjs-typescript
+https://github.com/saddamarbaa/Ecommerce-website-next.js-typeScript
 ```
 
 Go to the project directory
 
 ```bash
-  cd rest-countries-app-nextjs-typescript
+  cd Ecommerce-website-next.js-typeScript
 ```
 
 Install dependencies
@@ -164,104 +208,130 @@ yarn test-all
 # or if You're using npm you can use npm instead of yarn for all the above ESLint + Prettier + Lint-Staged Check steps
 ```
 
+
 # Status
 
-Project is now complete in (React js + Next js + TypeScript + Tailwind CSS) so my next step I would love to converted to (React Native + TypeScript)
+Project is: in progress I'm working on it in my free time
 
 # Inspiration
 
-Build By Saddam Arbaa Project inspired by [ Frontend Mentor] https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca
+Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
+
 
 # Screenshots
 
-## Responsive on large screens - Home Page
+## Signup Page
+![image](https://user-images.githubusercontent.com/51326421/168418001-ddf09448-6f3a-4d0c-9ce8-1e691666dd13.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163710516-534c0b3e-53e4-4294-86b8-ec0f86b1298c.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163710494-a7bd623d-0392-47d6-bf23-89dca97ac6c8.png)
 
-## Responsive on tablet screens
+## LogIn Page
 
-![image](https://user-images.githubusercontent.com/51326421/163710002-66c763d0-3d7b-417c-8f5f-cca106f111e9.png)
+![image](https://user-images.githubusercontent.com/51326421/168417978-8ad90e22-44e0-4961-aa1d-6a3ad8d235d4.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163709990-61457b33-c90e-45e7-a863-c1331aa5c9ad.png)
 
-## Responsive on mobile screens
+## Forgot Password Page
 
-![image](https://user-images.githubusercontent.com/51326421/163709952-cc07c0e2-3cfd-4e53-9c6b-f03c55c8073f.png)
+![image](https://user-images.githubusercontent.com/51326421/168418030-7e87c64b-55ed-4c89-a899-0e9434b147bc.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163709965-9621fe84-1bc0-4cf1-a275-89e6a9058b28.png)
+![image](https://user-images.githubusercontent.com/51326421/168418079-ec2ca89d-2997-4e44-af34-4bbe2a06bf29.png)
 
-## Single Country Page
+##  Reset Password email Link 
+![image](https://user-images.githubusercontent.com/51326421/168418151-aaf3a8d4-03b5-4011-aff2-7b42e53a4425.png)
 
-![image](https://user-images.githubusercontent.com/51326421/164975596-0f0f97ab-bba3-4cee-81da-f299f761f01b.png)
 
-![image](https://user-images.githubusercontent.com/51326421/164975626-ee755fb4-3ebe-427f-9da8-c27648162106.png)
+## Reset Password Page
 
-![image](https://user-images.githubusercontent.com/51326421/164975684-db9564c8-c5f1-4af1-9557-275439627dd9.png)
+![image](https://user-images.githubusercontent.com/51326421/168418261-2c4cb6cb-42b6-44b3-8b98-b91da31f2252.png)
 
-## 404 Not Found Page
 
-![image](https://user-images.githubusercontent.com/51326421/163708746-a1de272f-8c7d-4393-a422-c553f60755ca.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163708764-f5e58743-31ea-4b49-b1c8-27f102c50720.png)
+## Admin Products Page  
+![image](https://user-images.githubusercontent.com/51326421/168417651-8ea633e1-13c6-4707-8127-69e6e133ff58.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163708804-14feeb06-6a63-471d-b8fa-9f0db5e39a93.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163708790-1c83d12b-bcd1-42e4-8937-575ba9aa8819.png)
 
-## Search Page
+## Admin Users Page  
+![image](https://user-images.githubusercontent.com/51326421/168417796-0140add5-abf7-490a-9aee-094bd86754d3.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163709205-778b90f5-82d8-4b92-9122-a4996789369c.png)
+## Admin Users Table Page  
+![image](https://user-images.githubusercontent.com/51326421/168417814-c7e859f3-6a79-48df-8560-0bb2de53bfc4.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163709248-42c5ce8f-9d7d-4f91-bc1a-230d8368c14f.png)
 
-## Filter countries by Region
 
-### Filter countries by Region (America)
 
-![image](https://user-images.githubusercontent.com/51326421/163710037-53450929-07e8-4e3c-9c5e-37815be262d4.png)
+## Admin Add Product Page 
+![image](https://user-images.githubusercontent.com/51326421/168417851-4396ddbd-d7cb-4d50-bb78-df36b4583c8e.png)
 
-### Filter countries by Region (Africa)
 
-![image](https://user-images.githubusercontent.com/51326421/163710107-cea352d2-102c-4253-8169-d49fde66b975.png)
+## Admin Update Product Page 
 
-### Filter countries by Region (Asia)
+![image](https://user-images.githubusercontent.com/51326421/168417887-ff0a9660-4955-474f-a87f-4f0aaeebc2e8.png)
 
-![image](https://user-images.githubusercontent.com/51326421/163710133-466d13f8-2c9c-4f21-81b9-802f2fd04ab6.png)
 
-### Filter countries by Region (Europe)
 
-![image](https://user-images.githubusercontent.com/51326421/163710184-b0a37141-76c2-4268-abb8-48d4124dd6c7.png)
+## Admin Add User Page 
+![image](https://user-images.githubusercontent.com/51326421/168417951-0f454bc3-fb59-42cb-b764-2059135a6043.png)
 
-### Filter countries by Region (Oceania)
 
-![image](https://user-images.githubusercontent.com/51326421/163710230-b0981530-8cf2-48a3-b6b2-8a8537f943f4.png)
 
-# Next.js + Tailwind CSS Example
+## Admin Update User Page 
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+![image](https://user-images.githubusercontent.com/51326421/168417927-567f47b6-748e-4fc1-9ea0-a45d71f5c660.png)
 
-## Preview
 
-Preview the example live on [StackBlitz](http://stackblitz.com/):
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+## Home Page
 
-## Deploy your own
+![image](https://user-images.githubusercontent.com/51326421/168419207-cf99c8c8-3032-4441-bbc9-2aecb7b6df78.png)
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+## Home Page (Search by category(Bookks))
 
-## How to use
+![image](https://user-images.githubusercontent.com/51326421/168419224-aa093745-8923-4c01-95b3-54897b275fde.png)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
 
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-# or
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+## Home Page (Search by category(Sports))
+
+![image](https://user-images.githubusercontent.com/51326421/168419258-dc20e307-92f0-4be6-903d-8312bc6ae6b2.png)
+
+
+
+## Home Page (Search by category(Toys))
+![image](https://user-images.githubusercontent.com/51326421/168419286-d0912456-8aac-4d70-8693-a9923fc3af48.png)
+
+
+
+
+
+## Home Page (Search by category(Men's clothing))
+![image](https://user-images.githubusercontent.com/51326421/168419300-bed584b1-db33-457e-bd91-c24a8e416473.png)
+
+
+
+
+## Product Detail Page 
+
+![image](https://user-images.githubusercontent.com/51326421/168417430-4be9f4e9-2f3c-468d-a587-21ea0e0edafe.png)
+
+
+
+
+## Shopping Cart Page  
+![image](https://user-images.githubusercontent.com/51326421/168417498-f5ab4afa-e964-43f9-81ac-87ead9c9852d.png)
+
+
+
+## Orders Page  
+![image](https://user-images.githubusercontent.com/51326421/168417573-f9358b57-ba05-4ae9-a613-a034ec5230bc.png)
+
+
+
+
+
+
+
+
+
+
