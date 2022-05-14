@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
+import { Alert } from '@mui/material';
 import getConfig from 'next/config';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { ModalComponent as Modal } from '@/components';
 import {
+  addOrders,
   addProductToCart,
   clearCart,
   deleteItemFromCart,
   getCart,
   ReducerType,
+  restAddOrders,
   restDeleteItemFromCart,
 } from '@/global-states';
 import {
-  _authPrototypeReducerState as ReducerState,
+  // _authPrototypeReducerState as ReducerState,
   _productPrototypeReducerState as ReducerProductState,
   CartItemsTpe,
 } from '@/types';
@@ -25,11 +28,12 @@ interface MapDispatchProps {
   restDeleteItemFromCart: () => void;
   deleteItemFromCart: (payload: string) => void;
   addProductToCart: (payload: string, doDecrease?: boolean) => void;
-  clearCart: () => void;
+  restAddOrders: () => void;
+  addOrders: () => void;
 }
 
 interface MapStateProps {
-  authState: ReducerState;
+  // authState: ReducerState;
   listState: ReducerProductState;
 }
 
@@ -41,8 +45,9 @@ function CheckoutPageComponent({
   getCart,
   restDeleteItemFromCart,
   listState,
-  clearCart,
-  authState,
+  // authState,
+  restAddOrders,
+  addOrders,
 }: PropsType) {
   const {
     cart,
@@ -53,12 +58,16 @@ function CheckoutPageComponent({
     deleteItemFromCartIsSuccess,
     AddToCartIsSuccess,
     clearCartIsSuccess,
-    clearCartIsLoading,
+
+    addOrderIsSuccess,
+    addOrderIsError,
+    addOrderMessage,
   } = listState;
 
-  const { loginUser } = authState;
+  // const { loginUser } = authState;
   const { publicRuntimeConfig } = getConfig();
-  const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const getTotalItems = () =>
     cart.reduce(
@@ -75,28 +84,53 @@ function CheckoutPageComponent({
 
   useEffect(() => {
     restDeleteItemFromCart();
+    restAddOrders();
     getCart();
   }, [AddToCartIsSuccess, clearCartIsSuccess, deleteItemFromCartIsSuccess]);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  useEffect(() => {
+    if (addOrderIsSuccess || addOrderIsError) {
+      setShowAlert(() => true);
 
-  const handleDelete = () => {
-    clearCart();
-    setOpen(() => false);
-  };
+      const timer = setTimeout(() => {
+        setShowAlert(() => false);
+        restAddOrders();
+      }, 8000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [addOrderIsSuccess, addOrderIsError]);
+
+  useEffect(() => {
+    if (addOrderIsSuccess) {
+      const timer = setTimeout(() => {
+        setShowAlert(() => false);
+        restAddOrders();
+        router.push('/order');
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [addOrderIsSuccess]);
 
   return (
     <div>
-      <Modal
-        handleClose={handleClose}
-        open={open}
-        handleSubmit={handleDelete}
-        handlePending={clearCartIsLoading}
-        message="cart (all the cart will be cleared)"
-      />
-      <div>
+      <div className="pt-[2rem]">
         <div className="container mx-auto mt-10">
+          {showAlert && (
+            <div
+              className="mt-[2rem] w-full  rounded-[6px]"
+              style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
+            >
+              <Alert
+                variant="filled"
+                severity={addOrderIsError ? 'error' : 'success'}
+                onClose={() => setShowAlert(false)}
+              >
+                {addOrderMessage}
+              </Alert>
+            </div>
+          )}
           {cart.length > 0 && (
             <div className="my-10 flex shadow-md">
               <div className="w-3/4 bg-white px-10 py-10">
@@ -249,31 +283,24 @@ function CheckoutPageComponent({
                     </span>
                   </div>
                   <button
+                    onClick={addOrders}
                     type="button"
                     className="w-full bg-indigo-500 py-3 text-sm font-semibold uppercase text-white hover:bg-indigo-600"
                   >
-                    Checkout
-                  </button>
-                  <button
-                    onClick={() => handleOpen()}
-                    type="button"
-                    id="custom-button"
-                    className="mt-[2rem] inline-flex h-12 w-full items-center justify-center  px-6 text-[1.1rem] font-medium tracking-wide  transition duration-200 focus:shadow-outline  focus:outline-none"
-                  >
-                    Clear Cart
+                    Order Now
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="my-10 mt-24 flex shadow-md">
-            {cart.length === 0 && (
+          {/* <div className="my-10 mt-24 flex shadow-md">
+            {cart.length === 0 && !showAlert && !addOrderIsSuccess && (
               <div className="w-3/4 bg-white px-10 py-10 text-2xl font-semibold text-[#f08804]">
                 Hello <span className="capitalize">{loginUser?.firstName}</span> your cart is empty
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -291,6 +318,8 @@ const mapDispatchToProps = {
   getCart,
   restDeleteItemFromCart,
   clearCart,
+  restAddOrders,
+  addOrders,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckoutPageComponent);

@@ -217,3 +217,69 @@ export const clearCart = () => async (dispatch: Dispatch) => {
     });
   }
 };
+
+export const getOrders = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.GET_ORDER_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'get',
+      url: `${getHostUrl()}/orders`,
+    });
+    dispatch({
+      type: ProductsActionType.GET_ORDER_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.GET_ORDER_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restGetOrders = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.GET_ORDER_REST });
+};
+
+export const addOrders = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.ADD_ORDER_LOADING });
+
+  try {
+    const response = await apiRequests({
+      method: 'post',
+      url: `${getHostUrl()}/orders`,
+    });
+    dispatch({
+      type: ProductsActionType.ADD_ORDER_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.ADD_ORDER_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restAddOrders = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.ADD_ORDER_REST });
+};
+
+export const clearOrders = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.CLEAR_ORDER_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl()}/orders/clear-orders`,
+    });
+    dispatch({
+      type: ProductsActionType.CLEAR_ORDER_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.CLEAR_ORDER_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};

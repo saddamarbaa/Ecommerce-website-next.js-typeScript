@@ -63,6 +63,22 @@ const initialState: ProductReducerState = {
   clearCartIsSuccess: false,
   clearCartIsError: false,
   clearCartMessage: '',
+
+  orders: [],
+  getOrderIsPending: false,
+  getOrderIsSuccess: false,
+  getOrderIsError: false,
+  getOrderMessage: '',
+
+  addOrderIsLoading: false,
+  addOrderIsSuccess: false,
+  addOrderIsError: false,
+  addOrderMessage: '',
+
+  clearOrderIsLoading: false,
+  clearOrderIsSuccess: false,
+  clearOrderIsError: false,
+  clearOrderMessage: '',
 };
 
 export function productReducer(
@@ -392,6 +408,104 @@ export function productReducer(
         clearCartIsSuccess: false,
         clearCartIsError: false,
         clearCartMessage: '',
+      };
+    case ProductsActionType.ADD_ORDER_LOADING:
+      return {
+        ...state,
+        addOrderIsLoading: true,
+        addOrderIsSuccess: false,
+        addOrderIsError: false,
+        addOrderMessage: '',
+      };
+    case ProductsActionType.ADD_ORDER_SUCCESS:
+      return {
+        ...state,
+        addOrderIsLoading: false,
+        addOrderIsSuccess: true,
+        addOrderIsError: false,
+        addOrderMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.ADD_ORDER_FAILED:
+      return {
+        ...state,
+        addOrderIsLoading: false,
+        addOrderIsSuccess: false,
+        addOrderIsError: true,
+        addOrderMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.ADD_ORDER_REST:
+      return {
+        ...state,
+        addOrderIsLoading: false,
+        addOrderIsSuccess: false,
+        addOrderIsError: false,
+        addOrderMessage: '',
+      };
+    case ProductsActionType.GET_ORDER_LOADING:
+      return {
+        ...state,
+        getOrderIsPending: true,
+        getOrderIsSuccess: false,
+        getOrderIsError: false,
+        getOrderMessage: '',
+      };
+    case ProductsActionType.GET_ORDER_SUCCESS:
+      return {
+        ...state,
+        orders: action.payload.data.products || [],
+        getOrderIsPending: false,
+        getOrderIsSuccess: true,
+        getOrderIsError: false,
+        getOrderMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.GET_ORDER_FAILED:
+      return {
+        ...state,
+        getOrderIsPending: false,
+        getOrderIsSuccess: false,
+        getOrderIsError: true,
+        getOrderMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.GET_ORDER_REST:
+      return {
+        ...state,
+        clearOrderIsLoading: false,
+        clearOrderIsSuccess: false,
+        clearOrderIsError: false,
+        clearOrderMessage: '',
+      };
+    case ProductsActionType.CLEAR_ORDER_LOADING:
+      return {
+        ...state,
+        clearOrderIsLoading: true,
+        clearOrderIsSuccess: false,
+        clearOrderIsError: false,
+        clearOrderMessage: '',
+      };
+    case ProductsActionType.CLEAR_ORDER_SUCCESS:
+      return {
+        ...state,
+        orders: action.payload.data.products || [],
+        clearOrderIsLoading: false,
+        clearOrderIsSuccess: false,
+        clearOrderIsError: false,
+        clearOrderMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.CLEAR_ORDER_FAILED:
+      return {
+        ...state,
+        clearOrderIsLoading: false,
+        clearOrderIsSuccess: false,
+        clearOrderIsError: true,
+        clearOrderMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.CLEAR_ORDER_REST:
+      return {
+        ...state,
+        clearOrderIsLoading: false,
+        clearOrderIsSuccess: false,
+        clearOrderIsError: false,
+        clearOrderMessage: '',
       };
 
     default:

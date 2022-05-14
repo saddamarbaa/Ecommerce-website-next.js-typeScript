@@ -90,6 +90,22 @@ export interface _productPrototypeReducerState {
   clearCartIsSuccess: boolean;
   clearCartIsError: boolean;
   clearCartMessage: string;
+
+  orders: CartItemsTpe[];
+  getOrderIsPending: boolean;
+  getOrderIsSuccess: boolean;
+  getOrderIsError: boolean;
+  getOrderMessage: string;
+
+  addOrderIsLoading: boolean;
+  addOrderIsSuccess: boolean;
+  addOrderIsError: boolean;
+  addOrderMessage: string;
+
+  clearOrderIsLoading: boolean;
+  clearOrderIsSuccess: boolean;
+  clearOrderIsError: boolean;
+  clearOrderMessage: string;
 }
 
 export interface ProductsResponseType {

@@ -55,6 +55,20 @@ export enum ProductsActionType {
   CLEAR_CART_SUCCESS = 'GET_CART_SUCCESS',
   CLEAR_CART_FAILED = 'GET_CART_FAILED',
   CLEAR_CART_REST = 'GET_CART_REST',
+
+  ADD_ORDER_LOADING = 'ADD_ORDER_LOADING',
+  ADD_ORDER_SUCCESS = 'ADD_ORDER_SUCCESS',
+  ADD_ORDER_FAILED = 'ADD_ORDER_FAILED',
+  ADD_ORDER_REST = 'ADD_ORDER_REST',
+  GET_ORDER_LOADING = 'GET_ORDER_LOADING',
+  GET_ORDER_SUCCESS = 'GET_ORDER_SUCCESS',
+  GET_ORDER_FAILED = 'GET_ORDER_FAILED',
+  GET_ORDER_REST = 'GET_ORDER_REST',
+
+  CLEAR_ORDER_LOADING = 'CLEAR_ORDER_LOADING',
+  CLEAR_ORDER_SUCCESS = 'CLEAR_ORDER_SUCCESS',
+  CLEAR_ORDER_FAILED = 'CLEAR_ORDER_FAILED',
+  CLEAR_ORDER_REST = 'CLEAR_ORDER_REST',
 }
 
 export interface actionAddProductIsPending extends Action {
@@ -242,6 +256,60 @@ export interface actionClearCartIsError extends Action {
   payload: CartIResponseType;
 }
 
+export interface actionAddOrderIsPending extends Action {
+  type: ProductsActionType.ADD_ORDER_LOADING;
+}
+
+export interface actionAddOrderIsSuccess extends Action {
+  type: ProductsActionType.ADD_ORDER_SUCCESS;
+  payload: CartIResponseType;
+}
+
+export interface actionAddOrderIsError extends Action {
+  type: ProductsActionType.ADD_ORDER_FAILED;
+  payload: CartIResponseType;
+}
+
+export interface actionAddOrderRest extends Action {
+  type: ProductsActionType.ADD_ORDER_REST;
+}
+
+export interface actionGetOrderIsPending extends Action {
+  type: ProductsActionType.GET_ORDER_LOADING;
+}
+
+export interface actionGetOrderIsSuccess extends Action {
+  type: ProductsActionType.GET_ORDER_SUCCESS;
+  payload: CartIResponseType;
+}
+
+export interface actionGetOrderIsError extends Action {
+  type: ProductsActionType.GET_ORDER_FAILED;
+  payload: CartIResponseType;
+}
+
+export interface actionGetOrderRest extends Action {
+  type: ProductsActionType.GET_ORDER_REST;
+}
+
+export interface actionClearOrderIsPending extends Action {
+  type: ProductsActionType.CLEAR_ORDER_LOADING;
+}
+
+export interface actionClearOrderIsSuccess extends Action {
+  type: ProductsActionType.CLEAR_ORDER_SUCCESS;
+  payload: CartIResponseType;
+}
+
+export interface actionClearOrderIsError extends Action {
+  type: ProductsActionType.CLEAR_ORDER_FAILED;
+  payload: CartIResponseType;
+}
+
+export interface actionClearOrderRest extends Action {
+  type: ProductsActionType.CLEAR_ORDER_REST;
+}
+
 export type ProductsAction =
   | actionAddProductIsPending
   | actionAddProductIsSuccess
@@ -281,4 +349,16 @@ export type ProductsAction =
   | actionDeleteItemFromCartRest
   | actionClearCartIsPending
   | actionClearCartIsSuccess
-  | actionClearCartIsError;
+  | actionClearCartIsError
+  | actionAddOrderIsPending
+  | actionAddOrderIsError
+  | actionAddOrderRest
+  | actionAddOrderIsSuccess
+  | actionGetOrderIsPending
+  | actionGetOrderIsError
+  | actionGetOrderIsSuccess
+  | actionGetOrderRest
+  | actionClearOrderIsPending
+  | actionClearOrderIsSuccess
+  | actionClearOrderIsError
+  | actionClearOrderRest;

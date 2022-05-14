@@ -61,6 +61,7 @@ function Navbar({
     // getCartMessage,
     AddToCartIsSuccess,
     clearCartIsSuccess,
+    addOrderIsSuccess,
   } = listState;
   const { publicRuntimeConfig } = getConfig();
   const { isAuthenticated, isADmin, loginUser } = authState;
@@ -100,7 +101,7 @@ function Navbar({
 
   useEffect(() => {
     getCart();
-  }, [AddToCartIsSuccess, clearCartIsSuccess]);
+  }, [AddToCartIsSuccess, clearCartIsSuccess, addOrderIsSuccess]);
 
   return (
     <header className="sticky top-0 z-50 overflow-hidden bg-[#00695c] ">
@@ -166,9 +167,9 @@ function Navbar({
         <div className="hidden items-center space-x-12 sm:flex">
           {isAuthenticated && (
             <>
-              <Link href="/order">
+              {/* <Link href="/order">
                 <a className="customlink ml-5">Contact Us </a>
-              </Link>
+              </Link> */}
               <Link href="/order">
                 <a className="customlink">Your order</a>
               </Link>

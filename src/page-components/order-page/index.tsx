@@ -8,10 +8,13 @@ import { ModalComponent as Modal } from '@/components';
 import {
   addProductToCart,
   clearCart,
+  clearOrders,
   deleteItemFromCart,
   getCart,
+  getOrders,
   ReducerType,
   restDeleteItemFromCart,
+  restGetOrders,
 } from '@/global-states';
 import {
   _authPrototypeReducerState as ReducerState,
@@ -23,9 +26,9 @@ import { truncate } from '@/utils';
 interface MapDispatchProps {
   getCart: () => void;
   restDeleteItemFromCart: () => void;
-  deleteItemFromCart: (payload: string) => void;
-  addProductToCart: (payload: string, doDecrease?: boolean) => void;
-  clearCart: () => void;
+  restGetOrders: () => void;
+  getOrders: () => void;
+  clearOrders: () => void;
 }
 
 interface MapStateProps {
@@ -36,24 +39,21 @@ interface MapStateProps {
 type PropsType = MapDispatchProps & MapStateProps;
 
 function OrderPageComponent({
-  addProductToCart,
-  deleteItemFromCart,
   getCart,
   restDeleteItemFromCart,
   listState,
-  clearCart,
   authState,
+  getOrders,
+  restGetOrders,
+  clearOrders,
 }: PropsType) {
   const {
-    cart,
-    // getCartIsPending,
-    // getCartIsSuccess,
-    // getCartIsError,
-    // getCartMessage,
     deleteItemFromCartIsSuccess,
     AddToCartIsSuccess,
     clearCartIsSuccess,
-    clearCartIsLoading,
+    orders,
+    clearOrderIsLoading,
+    // clearOrderIsSuccess,
   } = listState;
 
   const { loginUser } = authState;
@@ -61,13 +61,13 @@ function OrderPageComponent({
   const [open, setOpen] = useState<boolean>(false);
 
   const getTotalItems = () =>
-    cart.reduce(
+    orders.reduce(
       (accumulator, currentValue: CartItemsTpe) => accumulator + currentValue.quantity,
       0
     );
 
   const getTotalPrice = () =>
-    cart.reduce(
+    orders.reduce(
       (accumulator, currentValue: CartItemsTpe) =>
         accumulator + currentValue.productId.price * currentValue.quantity,
       0
@@ -75,34 +75,37 @@ function OrderPageComponent({
 
   useEffect(() => {
     restDeleteItemFromCart();
+    restGetOrders();
     getCart();
+    getOrders();
   }, [AddToCartIsSuccess, clearCartIsSuccess, deleteItemFromCartIsSuccess]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleDelete = () => {
-    clearCart();
     setOpen(() => false);
+    clearOrders();
   };
 
   return (
-    <div>
+    <div className="pt-[2rem]">
       <Modal
         handleClose={handleClose}
         open={open}
         handleSubmit={handleDelete}
-        handlePending={clearCartIsLoading}
-        message="cart (all the cart will be cleared)"
+        handlePending={clearOrderIsLoading}
+        message="list (all items in your order list will be cleared)"
       />
+
       <div>
         <div className="container mx-auto mt-10">
-          {cart.length > 0 && (
+          {orders.length > 0 && (
             <div className="my-10 flex shadow-md">
               <div className="w-3/4 bg-white px-10 py-10">
                 <div className="flex justify-between border-b pb-8">
-                  <h1 className="text-2xl font-semibold">Shopping Cart</h1>
-                  <h2 className="text-2xl font-semibold">3 Items</h2>
+                  <h1 className="text-2xl font-semibold">Your Orders</h1>
+                  <h2 className="text-2xl font-semibold">{getTotalItems()} Items</h2>
                 </div>
                 <div className="mt-10 mb-5 flex">
                   <h3 className="w-2/5 text-xs font-semibold uppercase text-gray-600">
@@ -118,12 +121,12 @@ function OrderPageComponent({
                     Total
                   </h3>
                 </div>
-                {cart.map((product: CartItemsTpe) => (
+                {orders.map((product: CartItemsTpe) => (
                   <div className="-mx-8 flex px-6 py-5  hover:bg-gray-100">
                     <div className="flex w-2/5">
-                      <div className="h-[105px] w-[150px] overflow-hidden rounded-md">
+                      <div>
                         <img
-                          className="mx-auto h-[100%] w-[100%]  "
+                          className="mx-auto h-[105px] w-[150px] overflow-hidden rounded-md"
                           src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productId.productImage}`}
                           alt={product.productId.name}
                         />
@@ -133,41 +136,10 @@ function OrderPageComponent({
                           {truncate(product.productId.name, 25)}
                         </span>
                         <span className=" text-red-500">{product.productId.category}</span>
-                        <span
-                          id="custom-button"
-                          className="max-w-fit cursor-pointer rounded-md px-3  py-2"
-                          onClick={() => {
-                            if (product.productId._id) {
-                              deleteItemFromCart(product.productId._id);
-                            }
-                          }}
-                        >
-                          Remove From Basket
-                        </span>
                       </div>
                     </div>
                     <div className="flex w-1/5 justify-center space-x-4">
-                      <span
-                        onClick={() => {
-                          if (product.productId._id) {
-                            addProductToCart(product.productId._id, true);
-                          }
-                        }}
-                        className="cursor-pointer text-[1.7rem] font-bold"
-                      >
-                        -
-                      </span>
                       <span className="pt-3 text-sm font-semibold">{product.quantity}</span>
-                      <span
-                        onClick={() => {
-                          if (product.productId._id) {
-                            addProductToCart(product.productId._id);
-                          }
-                        }}
-                        className="cursor-pointer text-[1.7rem]  font-bold"
-                      >
-                        +
-                      </span>
                     </div>
                     <span className="w-1/5 pt-4 text-center text-sm font-semibold">
                       {' '}
@@ -218,23 +190,6 @@ function OrderPageComponent({
                     <option>Standard shipping - $10.00</option>
                   </select>
                 </div>
-                <div className="py-10">
-                  <label className="mb-3 inline-block text-sm font-semibold uppercase">
-                    Promo Code
-                  </label>
-                  <input
-                    type="text"
-                    id="promo"
-                    placeholder="Enter your code"
-                    className="w-full p-2 text-sm"
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="bg-red-500 px-5 py-2 text-sm uppercase text-white hover:bg-red-600"
-                >
-                  Apply
-                </button>
                 <div className="mt-8 border-t">
                   <div className="flex justify-between py-6 text-sm font-semibold uppercase">
                     <span>Total cost</span>
@@ -248,23 +203,13 @@ function OrderPageComponent({
                       />
                     </span>
                   </div>
-                  <Link href="/checkout">
-                    <a>
-                      <button
-                        type="button"
-                        className="w-full bg-indigo-500 py-3 text-sm font-semibold uppercase text-white hover:bg-indigo-600"
-                      >
-                        Checkout
-                      </button>
-                    </a>
-                  </Link>
                   <button
                     onClick={() => handleOpen()}
                     type="button"
                     id="custom-button"
                     className="mt-[2rem] inline-flex h-12 w-full items-center justify-center  px-6 text-[1.1rem] font-medium tracking-wide  transition duration-200 focus:shadow-outline  focus:outline-none"
                   >
-                    Clear Cart
+                    Clear Order List
                   </button>
                 </div>
               </div>
@@ -272,9 +217,10 @@ function OrderPageComponent({
           )}
 
           <div className="my-10 mt-24 flex shadow-md">
-            {cart.length === 0 && (
+            {orders.length === 0 && (
               <div className="w-3/4 bg-white px-10 py-10 text-2xl font-semibold text-[#f08804]">
-                Hello <span className="capitalize">{loginUser?.firstName}</span> your cart is empty
+                Hello <span className="capitalize">{loginUser?.firstName}</span> your order list is
+                empty
               </div>
             )}
           </div>
@@ -295,6 +241,9 @@ const mapDispatchToProps = {
   getCart,
   restDeleteItemFromCart,
   clearCart,
+  getOrders,
+  restGetOrders,
+  clearOrders,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPageComponent);

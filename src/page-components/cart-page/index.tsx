@@ -87,7 +87,7 @@ function CartPageComponent({
   };
 
   return (
-    <div>
+    <div className="pt-[2rem]">
       <Modal
         handleClose={handleClose}
         open={open}
