@@ -19,6 +19,12 @@ module.exports = () => ({
     CONSOLE_BACKEND_IMG_ENDPOIN: process.env.CONSOLE_BACKEND_IMG_ENDPOIN,
   },
   images: {
-    domains: ['localhost', 'lh3.googleusercontent.com', 'flagcdn.com', 'upload.wikimedia.org'],
+    domains: [
+      'saddam-rest-api.herokuapp.com',
+      'localhost',
+      'lh3.googleusercontent.com',
+      'flagcdn.com',
+      'upload.wikimedia.org',
+    ],
   },
 });
