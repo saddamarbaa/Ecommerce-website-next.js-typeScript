@@ -224,15 +224,25 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 ![image](https://user-images.githubusercontent.com/51326421/168418001-ddf09448-6f3a-4d0c-9ce8-1e691666dd13.png)
 
 
+![image](https://user-images.githubusercontent.com/51326421/168420032-1339ad80-24e0-4f06-bb90-630256ae2973.png)
+
+
+
 
 ## LogIn Page
 
 ![image](https://user-images.githubusercontent.com/51326421/168417978-8ad90e22-44e0-4961-aa1d-6a3ad8d235d4.png)
 
+![image](https://user-images.githubusercontent.com/51326421/168419975-7eee5c8a-d3cb-4e1f-a50f-0f01f6d85650.png)
+
+
 
 ## Forgot Password Page
 
 ![image](https://user-images.githubusercontent.com/51326421/168418030-7e87c64b-55ed-4c89-a899-0e9434b147bc.png)
+
+![image](https://user-images.githubusercontent.com/51326421/168419992-59d97525-031a-41d7-ba31-53ab1a75c1e6.png)
+
 
 ![image](https://user-images.githubusercontent.com/51326421/168418079-ec2ca89d-2997-4e44-af34-4bbe2a06bf29.png)
 
@@ -245,6 +255,12 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 ![image](https://user-images.githubusercontent.com/51326421/168418261-2c4cb6cb-42b6-44b3-8b98-b91da31f2252.png)
 
 
+![image](https://user-images.githubusercontent.com/51326421/168420074-88a7ff38-e9cc-421c-917f-3070223021fb.png)
+
+
+
+## Update Profile Page
+![image](https://user-images.githubusercontent.com/51326421/168419955-ca2231ab-457f-4d48-8188-025e2a931d45.png)
 
 
 
@@ -270,11 +286,8 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 
 
 
-
-
 ## Home Page (Filter by category(Men's clothing))
 ![image](https://user-images.githubusercontent.com/51326421/168419300-bed584b1-db33-457e-bd91-c24a8e416473.png)
-
 
 
 
@@ -300,8 +313,6 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 
 
 
-
-
 ## Admin Products Page  
 ![image](https://user-images.githubusercontent.com/51326421/168417651-8ea633e1-13c6-4707-8127-69e6e133ff58.png)
 
@@ -320,6 +331,10 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 ![image](https://user-images.githubusercontent.com/51326421/168417851-4396ddbd-d7cb-4d50-bb78-df36b4583c8e.png)
 
 
+![image](https://user-images.githubusercontent.com/51326421/168419929-81f17f43-dbbd-4d80-b7fb-2d614e88b607.png)
+
+
+
 ## Admin Update Product Page 
 
 ![image](https://user-images.githubusercontent.com/51326421/168417887-ff0a9660-4955-474f-a87f-4f0aaeebc2e8.png)
@@ -328,6 +343,9 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 
 ## Admin Add User Page 
 ![image](https://user-images.githubusercontent.com/51326421/168417951-0f454bc3-fb59-42cb-b764-2059135a6043.png)
+
+
+![image](https://user-images.githubusercontent.com/51326421/168419886-f8be1530-7131-4625-b044-292fbc6ed3c3.png)
 
 
 
