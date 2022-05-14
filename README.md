@@ -246,6 +246,62 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 
 
 
+
+
+## Home Page
+
+![image](https://user-images.githubusercontent.com/51326421/168419207-cf99c8c8-3032-4441-bbc9-2aecb7b6df78.png)
+
+
+## Home Page (Filter by category(Bookks))
+
+![image](https://user-images.githubusercontent.com/51326421/168419224-aa093745-8923-4c01-95b3-54897b275fde.png)
+
+
+
+## Home Page (Filter by category(Sports))
+
+![image](https://user-images.githubusercontent.com/51326421/168419258-dc20e307-92f0-4be6-903d-8312bc6ae6b2.png)
+
+
+
+## Home Page (Filter by category(Toys))
+![image](https://user-images.githubusercontent.com/51326421/168419286-d0912456-8aac-4d70-8693-a9923fc3af48.png)
+
+
+
+
+
+## Home Page (Filter by category(Men's clothing))
+![image](https://user-images.githubusercontent.com/51326421/168419300-bed584b1-db33-457e-bd91-c24a8e416473.png)
+
+
+
+
+## Home Page (Search Product (Jewelery))
+![image](https://user-images.githubusercontent.com/51326421/168419621-b392a53a-cbc4-4173-ac75-1500b68ad356.png)
+
+
+## Product Detail Page 
+
+![image](https://user-images.githubusercontent.com/51326421/168417430-4be9f4e9-2f3c-468d-a587-21ea0e0edafe.png)
+
+
+
+
+## Shopping Cart Page  
+![image](https://user-images.githubusercontent.com/51326421/168417498-f5ab4afa-e964-43f9-81ac-87ead9c9852d.png)
+
+
+
+## Orders Page  
+![image](https://user-images.githubusercontent.com/51326421/168417573-f9358b57-ba05-4ae9-a613-a034ec5230bc.png)
+
+
+
+
+
+
 ## Admin Products Page  
 ![image](https://user-images.githubusercontent.com/51326421/168417651-8ea633e1-13c6-4707-8127-69e6e133ff58.png)
 
@@ -278,60 +334,3 @@ Build By Saddam Arbaa Project inspired by [Amazon]  https://www.amazon.com
 ## Admin Update User Page 
 
 ![image](https://user-images.githubusercontent.com/51326421/168417927-567f47b6-748e-4fc1-9ea0-a45d71f5c660.png)
-
-
-
-## Home Page
-
-![image](https://user-images.githubusercontent.com/51326421/168419207-cf99c8c8-3032-4441-bbc9-2aecb7b6df78.png)
-
-
-## Home Page (Search by category(Bookks))
-
-![image](https://user-images.githubusercontent.com/51326421/168419224-aa093745-8923-4c01-95b3-54897b275fde.png)
-
-
-
-## Home Page (Search by category(Sports))
-
-![image](https://user-images.githubusercontent.com/51326421/168419258-dc20e307-92f0-4be6-903d-8312bc6ae6b2.png)
-
-
-
-## Home Page (Search by category(Toys))
-![image](https://user-images.githubusercontent.com/51326421/168419286-d0912456-8aac-4d70-8693-a9923fc3af48.png)
-
-
-
-
-
-## Home Page (Search by category(Men's clothing))
-![image](https://user-images.githubusercontent.com/51326421/168419300-bed584b1-db33-457e-bd91-c24a8e416473.png)
-
-
-
-
-## Product Detail Page 
-
-![image](https://user-images.githubusercontent.com/51326421/168417430-4be9f4e9-2f3c-468d-a587-21ea0e0edafe.png)
-
-
-
-
-## Shopping Cart Page  
-![image](https://user-images.githubusercontent.com/51326421/168417498-f5ab4afa-e964-43f9-81ac-87ead9c9852d.png)
-
-
-
-## Orders Page  
-![image](https://user-images.githubusercontent.com/51326421/168417573-f9358b57-ba05-4ae9-a613-a034ec5230bc.png)
-
-
-
-
-
-
-
-
-
-
