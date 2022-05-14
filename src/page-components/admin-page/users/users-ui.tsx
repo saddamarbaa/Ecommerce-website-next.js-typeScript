@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import moment from 'moment';
+import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +19,8 @@ import {
   UserType,
 } from '@/types';
 import { format } from '@/utils';
+
+const { publicRuntimeConfig } = getConfig();
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
@@ -329,9 +332,13 @@ export function AdminUsersUIPage({
                     <div className="-mt-12 flex justify-start px-5 ">
                       <span className="relative block h-32 w-32">
                         <img
-                          src={`http://localhost:5000${user.profileImage}`}
                           alt="Profile Img"
                           className="mx-auto h-24 w-24 rounded-full bg-white object-cover p-1"
+                          src={
+                            user.profileImage
+                              ? `${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${user.profileImage}`
+                              : '/avatar/tem3.png'
+                          }
                         />
                       </span>
                     </div>
