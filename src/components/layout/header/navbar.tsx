@@ -93,7 +93,7 @@ function Navbar({
     setAnchorElUser(null);
   };
 
-  const getTotalItems = () => cart.reduce((acc, obj) => acc + obj.quantity, 0);
+  const getTotalItems = () => cart?.reduce((acc, obj) => acc + obj.quantity, 0);
 
   useEffect(() => {
     restGetCart();

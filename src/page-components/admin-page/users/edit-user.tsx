@@ -190,7 +190,7 @@ export function AdminEditUser({
     formData.append('firstName', data?.firstName);
     formData.append('lastName', data?.lastName);
     formData.append('email', data?.email);
-    formData.append('profileImage', data.profileImage[0]);
+    formData.append('productImage', data.profileImage[0]);
     formData.append('password', data?.password);
     formData.append('confirmPassword', data?.confirmPassword);
     formData.append('gender', data?.gender);
