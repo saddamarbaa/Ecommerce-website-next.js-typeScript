@@ -43,6 +43,17 @@ interface MapStateProps {
 
 type PropsType = OwnProps & MapDispatchProps & MapStateProps;
 
+export const defaultValues: UserType = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  role: '',
+  acceptTerms: true,
+  gender: '',
+};
+
 export function AdminEditUser({
   getIndividualUser,
   restGetIndividualUser,
@@ -89,6 +100,7 @@ export function AdminEditUser({
     reset,
     formState: { errors },
   } = useForm<UserType>({
+    defaultValues,
     resolver: yupResolver(validationSchema),
   });
 
@@ -127,8 +139,17 @@ export function AdminEditUser({
   }, [userId, updateUserIsSuccess]);
 
   useEffect(() => {
-    if (getIndividualUserIsSuccess) {
+    if (getIndividualUserIsSuccess && individualUser) {
       const splicedDate = individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
+      reset({
+        firstName: individualUser?.firstName,
+        lastName: individualUser?.lastName,
+        email: individualUser?.email,
+        dateOfBirth: individualUser?.dateOfBirth,
+        gender: individualUser?.gender,
+        role: individualUser?.role,
+      });
+
       setUserData(() => ({
         firstName: individualUser?.firstName,
         lastName: individualUser?.lastName,
