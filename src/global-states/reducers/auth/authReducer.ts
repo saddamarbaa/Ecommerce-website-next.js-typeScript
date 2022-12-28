@@ -117,7 +117,7 @@ export function authReducer(
         loginMessage: 'PENDING',
       };
     case AuthenticationActionType.AUTH_LOGIN_SUCCESS:
-      saveUserInLocalStorage(action.payload.data?.user?.token || '');
+      saveUserInLocalStorage(action.payload.data?.accessToken || '');
       return {
         ...state,
         isADmin: action.payload.data?.user?.role || false,

@@ -18,10 +18,11 @@ const initialState: ProductReducerState = {
   listIsError: false,
   listMessage: '',
   totalDocs: 0,
+  lastPage: 0,
 
   productSearchTerm: '',
   selectedCategory: 'All Products',
-  limit: 99,
+  limit: 10,
   page: 1,
   sortBy: 'createdAt',
   sort: 'desc',
@@ -79,6 +80,11 @@ const initialState: ProductReducerState = {
   clearOrderIsSuccess: false,
   clearOrderIsError: false,
   clearOrderMessage: '',
+
+  deleteReviewIsLoading: false,
+  deleteReviewIsSuccess: false,
+  deleteReviewIsError: false,
+  deleteReviewMessage: '',
 };
 
 export function productReducer(
@@ -100,6 +106,7 @@ export function productReducer(
         ...state,
         products: action.payload.data.products || [],
         totalDocs: action.payload.data.totalDocs || 0,
+        lastPage: action.payload.data.lastPage || 0,
         list: action.payload || {},
         listIsLoading: false,
         listIsSuccess: true,
@@ -452,7 +459,7 @@ export function productReducer(
     case ProductsActionType.GET_ORDER_SUCCESS:
       return {
         ...state,
-        orders: action.payload.data.products || [],
+        orders: action.payload.data?.orders || [],
         getOrderIsPending: false,
         getOrderIsSuccess: true,
         getOrderIsError: false,
@@ -485,9 +492,9 @@ export function productReducer(
     case ProductsActionType.CLEAR_ORDER_SUCCESS:
       return {
         ...state,
-        orders: action.payload.data.products || [],
+        orders: action?.payload?.data?.products || [],
         clearOrderIsLoading: false,
-        clearOrderIsSuccess: false,
+        clearOrderIsSuccess: true,
         clearOrderIsError: false,
         clearOrderMessage: action.payload.message || 'Success',
       };
@@ -506,6 +513,40 @@ export function productReducer(
         clearOrderIsSuccess: false,
         clearOrderIsError: false,
         clearOrderMessage: '',
+      };
+
+    case ProductsActionType.DELETE_REVIEW_LOADING:
+      return {
+        ...state,
+        deleteReviewIsLoading: true,
+        deleteReviewIsSuccess: false,
+        deleteReviewIsError: false,
+        deleteReviewMessage: '',
+      };
+    case ProductsActionType.DELETE_REVIEW_SUCCESS:
+      return {
+        ...state,
+        product: action?.payload?.data?.products || [],
+        deleteReviewIsLoading: false,
+        deleteReviewIsSuccess: true,
+        deleteReviewIsError: false,
+        deleteReviewMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.DELETE_REVIEW_FAILED:
+      return {
+        ...state,
+        deleteReviewIsLoading: false,
+        deleteReviewIsSuccess: false,
+        deleteReviewIsError: true,
+        deleteReviewMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.DELETE_REVIEW_REST:
+      return {
+        ...state,
+        deleteReviewIsLoading: false,
+        deleteReviewIsSuccess: false,
+        deleteReviewIsError: false,
+        deleteReviewMessage: '',
       };
 
     default:

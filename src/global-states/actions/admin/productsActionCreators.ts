@@ -27,7 +27,7 @@ export const addProduct = (product: ProductType) => async (dispatch: Dispatch) =
   try {
     const response = await apiRequests({
       method: 'post',
-      url: `${getHostUrl()}/admin/products`,
+      url: `${getHostUrl()}/admin/products/add`,
       data: product,
     });
     dispatch({
@@ -51,7 +51,7 @@ export const deleteProduct = (id: string) => async (dispatch: Dispatch) => {
   try {
     const response = await apiRequests({
       method: 'delete',
-      url: `${getHostUrl()}/admin/products/${id}`,
+      url: `${getHostUrl()}/admin/products/delete/${id}`,
     });
     dispatch({ type: ProductsActionType.DELETE_PRODUCT_SUCCESS, payload: response });
   } catch (error: any) {
@@ -71,10 +71,11 @@ export const updateProduct =
     dispatch({ type: ProductsActionType.UPDATE_PRODUCT_LOADING });
     try {
       const response = await apiRequests({
-        method: 'patch',
-        url: `${getHostUrl()}/admin/products/${id}`,
+        method: 'put',
+        url: `${getHostUrl()}/admin/products/update/${id}`,
         data: _product,
       });
+
       dispatch({ type: ProductsActionType.UPDATE_PRODUCT_SUCCESS, payload: response });
     } catch (error: any) {
       dispatch({
@@ -133,7 +134,7 @@ export const addProductToCart = (id: string, decrease?: boolean) => async (dispa
   try {
     const response = await apiRequests({
       method: 'post',
-      url: `${getHostUrl()}/products/cart?decrease=${decrease || false}`,
+      url: `${getHostUrl()}/cart?decrease=${decrease || false}`,
       data: { productId: id },
     });
     dispatch({
@@ -157,7 +158,7 @@ export const deleteItemFromCart = (id: string) => async (dispatch: Dispatch) => 
   try {
     const response = await apiRequests({
       method: 'post',
-      url: `${getHostUrl()}/products/cart-delete-item`,
+      url: `${getHostUrl()}/cart/delete-item`,
       data: { productId: id },
     });
     dispatch({
@@ -181,7 +182,7 @@ export const getCart = () => async (dispatch: Dispatch) => {
   try {
     const response = await apiRequests({
       method: 'get',
-      url: `${getHostUrl()}/products/cart`,
+      url: `${getHostUrl()}/cart`,
     });
     dispatch({
       type: ProductsActionType.GET_CART_SUCCESS,
@@ -204,7 +205,7 @@ export const clearCart = () => async (dispatch: Dispatch) => {
   try {
     const response = await apiRequests({
       method: 'delete',
-      url: `${getHostUrl()}/products/clear-cart`,
+      url: `${getHostUrl()}/cart/clear-cart`,
     });
     dispatch({
       type: ProductsActionType.CLEAR_CART_SUCCESS,
@@ -282,4 +283,27 @@ export const clearOrders = () => async (dispatch: Dispatch) => {
       payload: { error: error?.data?.message || error.statusText || error },
     });
   }
+};
+
+export const deleteReview = (id: string | string[]) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_REVIEW_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl()}/products/reviews/${id}`,
+    });
+    dispatch({
+      type: ProductsActionType.DELETE_REVIEW_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.DELETE_REVIEW_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restDeleteReview = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.DELETE_REVIEW_REST });
 };

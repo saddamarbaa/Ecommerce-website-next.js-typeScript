@@ -25,7 +25,8 @@ const makeStore = () => {
   // If it's on client side, create a store which will persist
   const persistConfig = {
     key: 'nextjs',
-    whitelist: ['list-test', 'auth', 'users', 'products'], // only these reducers will be persisted, add other reducers if needed and please make sure it does not clash with server keys
+    // whitelist: ['list-test', 'auth', 'users', 'products'],
+    whitelist: ['list-test', 'auth'], // only these reducers will be persisted, add other reducers if needed and please make sure it does not clash with server keys
     storage, // if needed, use a safer storage
   };
 
