@@ -126,6 +126,11 @@ export interface _productPrototypeReducerState {
   clearOrderIsError: boolean;
   clearOrderMessage: string;
 
+  clearSingleOrderIsLoading: boolean;
+  clearSingleIsSuccess: boolean;
+  clearSingleIsError: boolean;
+  clearSingleMessage: string;
+
   deleteReviewIsLoading: boolean;
   deleteReviewIsSuccess: boolean;
   deleteReviewIsError: boolean;

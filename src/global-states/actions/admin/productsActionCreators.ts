@@ -285,6 +285,29 @@ export const clearOrders = () => async (dispatch: Dispatch) => {
   }
 };
 
+export const clearSingleOrder = (id: string) => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.CLEAR_SINGLE_ORDER_LOADING });
+  try {
+    const response = await apiRequests({
+      method: 'delete',
+      url: `${getHostUrl()}/orders/${id}`,
+    });
+    dispatch({
+      type: ProductsActionType.CLEAR_SINGLE_ORDER_SUCCESS,
+      payload: response,
+    });
+  } catch (error: any) {
+    dispatch({
+      type: ProductsActionType.CLEAR_SINGLE_ORDER_FAILED,
+      payload: { error: error?.data?.message || error.statusText || error },
+    });
+  }
+};
+
+export const restClearSingleOrder = () => async (dispatch: Dispatch) => {
+  dispatch({ type: ProductsActionType.CLEAR_SINGLE_ORDER_REST });
+};
+
 export const deleteReview = (id: string | string[]) => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.DELETE_REVIEW_LOADING });
   try {

@@ -81,6 +81,11 @@ const initialState: ProductReducerState = {
   clearOrderIsError: false,
   clearOrderMessage: '',
 
+  clearSingleOrderIsLoading: false,
+  clearSingleIsSuccess: false,
+  clearSingleIsError: false,
+  clearSingleMessage: '',
+
   deleteReviewIsLoading: false,
   deleteReviewIsSuccess: false,
   deleteReviewIsError: false,
@@ -514,7 +519,38 @@ export function productReducer(
         clearOrderIsError: false,
         clearOrderMessage: '',
       };
-
+    case ProductsActionType.CLEAR_SINGLE_ORDER_LOADING:
+      return {
+        ...state,
+        clearSingleOrderIsLoading: true,
+        clearSingleIsSuccess: false,
+        clearSingleIsError: false,
+        clearSingleMessage: '',
+      };
+    case ProductsActionType.CLEAR_SINGLE_ORDER_SUCCESS:
+      return {
+        ...state,
+        clearSingleOrderIsLoading: false,
+        clearSingleIsSuccess: true,
+        clearSingleIsError: false,
+        clearSingleMessage: action.payload.message || 'Success',
+      };
+    case ProductsActionType.CLEAR_SINGLE_ORDER_FAILED:
+      return {
+        ...state,
+        clearSingleOrderIsLoading: false,
+        clearSingleIsSuccess: false,
+        clearSingleIsError: true,
+        clearSingleMessage: action.payload.message || action.payload.error || 'Error',
+      };
+    case ProductsActionType.CLEAR_SINGLE_ORDER_REST:
+      return {
+        ...state,
+        clearSingleOrderIsLoading: false,
+        clearSingleIsSuccess: false,
+        clearSingleIsError: false,
+        clearSingleMessage: '',
+      };
     case ProductsActionType.DELETE_REVIEW_LOADING:
       return {
         ...state,

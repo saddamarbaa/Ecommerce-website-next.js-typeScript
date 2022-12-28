@@ -69,7 +69,12 @@ export enum ProductsActionType {
   CLEAR_ORDER_LOADING = 'CLEAR_ORDER_LOADING',
   CLEAR_ORDER_SUCCESS = 'CLEAR_ORDER_SUCCESS',
   CLEAR_ORDER_FAILED = 'CLEAR_ORDER_FAILED',
-  CLEAR_ORDER_REST = ' CLEAR_ORDER_REST',
+  CLEAR_ORDER_REST = 'CLEAR_ORDER_REST',
+
+  CLEAR_SINGLE_ORDER_LOADING = 'CLEAR_SINGLE_ORDER_LOADING',
+  CLEAR_SINGLE_ORDER_SUCCESS = 'CLEAR_SINGLE_ORDER_SUCCESS',
+  CLEAR_SINGLE_ORDER_FAILED = 'CLEAR_SINGLE_ORDER_FAILED',
+  CLEAR_SINGLE_ORDER_REST = 'CLEAR_SINGLE_ORDER_REST',
 
   DELETE_REVIEW_LOADING = 'DELETE_REVIEW_LOADING',
   DELETE_REVIEW_SUCCESS = 'DELETE_REVIEW_SUCCESS',
@@ -316,6 +321,24 @@ export interface actionClearOrderRest extends Action {
   type: ProductsActionType.CLEAR_ORDER_REST;
 }
 
+export interface actionClearSingleOrderIsPending extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_LOADING;
+}
+
+export interface actionClearSingleOrderIsSuccess extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_SUCCESS;
+  payload: OrderResponseType;
+}
+
+export interface actionClearSingleOrderIsError extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_FAILED;
+  payload: OrderResponseType;
+}
+
+export interface actionClearSingleOrderRest extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_REST;
+}
+
 export interface actionDeleteReviewIsPending extends Action {
   type: ProductsActionType.DELETE_REVIEW_LOADING;
 }
@@ -386,6 +409,10 @@ export type ProductsAction =
   | actionClearOrderIsSuccess
   | actionClearOrderIsError
   | actionClearOrderRest
+  | actionClearSingleOrderIsPending
+  | actionClearSingleOrderIsSuccess
+  | actionClearSingleOrderIsError
+  | actionClearSingleOrderRest
   | actionDeleteReviewIsPending
   | actionDeleteReviewIsSuccess
   | actionDeleteReviewIsError
