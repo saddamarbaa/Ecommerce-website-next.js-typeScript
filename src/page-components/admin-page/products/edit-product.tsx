@@ -16,7 +16,7 @@ import {
   updateProduct,
 } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
-import { addProductSchemaValidation } from '@/utils';
+import { updateProductSchemaValidation } from '@/utils';
 
 // props passed in to the component
 interface OwnProps {
@@ -70,7 +70,7 @@ export function ProductDetailPageComponent({
     formState: { errors },
   } = useForm<ProductType>({
     defaultValues,
-    resolver: yupResolver(addProductSchemaValidation),
+    resolver: yupResolver(updateProductSchemaValidation),
   });
 
   useEffect(() => {
@@ -91,7 +91,6 @@ export function ProductDetailPageComponent({
         restGetIndividualProduct();
         restUpdateProduct();
         router.push('/admin/products');
-        // router.back();
       }
     }, 2000);
 
@@ -99,19 +98,14 @@ export function ProductDetailPageComponent({
   }, [productId, updateProductIsSuccess]);
 
   useEffect(() => {
-    if (
-      getIndividualProductIsSuccess &&
-      individualProduct &&
-      individualProduct.stock &&
-      individualProduct.count
-    ) {
+    if (getIndividualProductIsSuccess && individualProduct && individualProduct.stock) {
       reset({
         name: individualProduct.name,
         price: individualProduct.price,
         description: individualProduct.description,
         category: individualProduct.category,
         stock: individualProduct.stock,
-        count: individualProduct.count,
+        brand: individualProduct.brand,
       });
     }
 
@@ -145,18 +139,11 @@ export function ProductDetailPageComponent({
     formData.append('description', data.description);
     formData.append('productImage', data.productImage[0]);
     formData.append('category', data.category);
+    if (data.brand) formData.append('brand', data.brand);
 
-    if (data.count) {
-      formData.append('count', data.count as string);
-    }
+    if (data.stock) formData.append('stock', data.stock);
 
-    if (data.stock) {
-      formData.append('stock', data.stock);
-    }
-
-    if (productId) {
-      updateProduct(formData, productId);
-    }
+    if (productId) updateProduct(formData, productId);
   };
 
   return (
@@ -207,17 +194,39 @@ export function ProductDetailPageComponent({
                 Edit product with ID <span className="text-blue-500">{productId}</span>
               </h1>
             </div>
-            <div className="min-h-[10rem] w-full rounded-[6px] p-5  py-[2rem]">
+            <div className="min-h-[10rem] w-full rounded-[6px] p-5 py-[2rem]  pb-0">
               <section>
                 <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                   <div className="control">
-                    {!errors.name && <label htmlFor="name">Title</label>}
+                    {!errors.name && <label htmlFor="name">Name</label>}
                     {errors.name && <p className="error">{errors.name?.message} </p>}
                     <input
                       type="text"
                       id="name"
                       className={` ${errors.name ? 'is-invalid' : 'input custom-input'}`}
                       {...register('name')}
+                    />
+                  </div>
+                  <div className="control">
+                    {!errors.brand && <label htmlFor="name">Brand</label>}
+                    {errors.brand && <p className="error">{errors.brand?.message} </p>}
+
+                    <input
+                      type="text"
+                      id="brand"
+                      className={` ${errors.brand ? 'is-invalid' : 'input custom-input'}`}
+                      {...register('brand')}
+                    />
+                  </div>
+
+                  <div className="control ">
+                    {!errors.price && <label htmlFor="price">Price</label>}
+                    <p className="error">{errors.price?.message} </p>
+                    <input
+                      type="text"
+                      id="price"
+                      className={` ${errors.price ? 'is-invalid' : 'custom-input'}`}
+                      {...register('price')}
                     />
                   </div>
                   <div className="control">
@@ -247,26 +256,6 @@ export function ProductDetailPageComponent({
                       style={{ visibility: 'hidden', display: 'none' }}
                       type="file"
                       {...register('productImage')}
-                    />
-                  </div>
-                  <div className="control ">
-                    {!errors.price && <label htmlFor="price">Price</label>}
-                    <p className="error">{errors.price?.message} </p>
-                    <input
-                      type="text"
-                      id="price"
-                      className={` ${errors.price ? 'is-invalid' : 'custom-input'}`}
-                      {...register('price')}
-                    />
-                  </div>
-                  <div className="control ">
-                    {!errors.count && <label htmlFor="count">Total Count</label>}
-                    <p className="error">{errors.count?.message} </p>
-                    <input
-                      type="text"
-                      id="count"
-                      className={` ${errors.count ? 'is-invalid' : 'custom-input'}`}
-                      {...register('count')}
                     />
                   </div>
                   <div className="control">
@@ -322,7 +311,7 @@ export function ProductDetailPageComponent({
                       {...register('description')}
                     />
                   </div>
-                  <div className="mt-[-2rem] flex  flex-col justify-between lg:flex-row lg:items-center lg:justify-between  lg:space-x-5 ">
+                  <div className="mt-[-2rem] flex  flex-col justify-between lg:flex-row lg:items-center lg:justify-around  lg:space-x-5 ">
                     <div>
                       <button
                         disabled={updateProductIsPending}

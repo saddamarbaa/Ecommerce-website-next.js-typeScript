@@ -46,13 +46,13 @@ export type ResetPasswordRequestType = {
   password: string;
   confirmPassword: string;
   acceptTerms?: boolean;
-  userId?: string;
-  token?: string;
+  userId?: string | string[];
+  token?: string | string[];
 };
 
 export type VerifyEmailRequestType = {
-  userId?: string;
-  token?: string;
+  userId?: string | string[];
+  token?: string | string[];
 };
 
 export interface _authPrototypeReducerState {

@@ -17,11 +17,7 @@ import {
   updateUser,
 } from '@/global-states';
 import { _usersPrototypeReducerState as ReducerState, UserType } from '@/types';
-import {
-  getCurrentYear,
-  getYearsIntBetween,
-  signupSchemaValidation as validationSchema,
-} from '@/utils';
+import { getCurrentYear, getYearsIntBetween, updateUserSchemaValidation } from '@/utils';
 
 // props passed in to the component
 interface OwnProps {
@@ -44,11 +40,9 @@ interface MapStateProps {
 type PropsType = OwnProps & MapDispatchProps & MapStateProps;
 
 export const defaultValues: UserType = {
-  firstName: '',
-  lastName: '',
+  surname: '',
+  name: '',
   email: '',
-  password: '',
-  confirmPassword: '',
   role: '',
   acceptTerms: true,
   gender: '',
@@ -83,8 +77,8 @@ export function AdminEditUser({
     individualUser && individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
 
   const [userData, setUserData] = useState<any>({
-    firstName: individualUser?.firstName,
-    lastName: individualUser?.lastName,
+    name: individualUser?.name,
+    surname: individualUser?.surname,
     email: individualUser?.email,
     dateOfBirth: individualUser?.dateOfBirth,
     gender: individualUser?.gender,
@@ -101,7 +95,7 @@ export function AdminEditUser({
     formState: { errors },
   } = useForm<UserType>({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(updateUserSchemaValidation),
   });
 
   // Auto Scroll functionality
@@ -142,8 +136,8 @@ export function AdminEditUser({
     if (getIndividualUserIsSuccess && individualUser) {
       const splicedDate = individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
       reset({
-        firstName: individualUser?.firstName,
-        lastName: individualUser?.lastName,
+        name: individualUser?.name,
+        surname: individualUser?.surname,
         email: individualUser?.email,
         dateOfBirth: individualUser?.dateOfBirth,
         gender: individualUser?.gender,
@@ -151,8 +145,8 @@ export function AdminEditUser({
       });
 
       setUserData(() => ({
-        firstName: individualUser?.firstName,
-        lastName: individualUser?.lastName,
+        name: individualUser?.name,
+        surname: individualUser?.surname,
         email: individualUser?.email,
         dateOfBirth: individualUser?.dateOfBirth,
         gender: individualUser?.gender,
@@ -187,24 +181,19 @@ export function AdminEditUser({
 
   const onSubmit = (data: UserType) => {
     const formData = new FormData();
-    formData.append('firstName', data?.firstName);
-    formData.append('lastName', data?.lastName);
+    formData.append('name', data?.name);
+    formData.append('surname', data?.surname);
     formData.append('email', data?.email);
-    formData.append('profileImage', data.profileImage[0]);
-    formData.append('password', data?.password);
-    formData.append('confirmPassword', data?.confirmPassword);
     formData.append('gender', data?.gender);
     formData.append('dateOfBirth', `${data?.month}-${data.day}-${data?.year}`);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     formData.append('acceptTerms', data?.acceptTerms || true);
-    if (data?.role) {
-      formData.append('role', data?.role);
-    }
+    if (data?.role) formData.append('role', data?.role);
 
-    if (userId) {
-      updateUser(formData, userId, true);
-    }
+    if (data.profileImage) formData.append('profileImage', data.profileImage[0]);
+
+    if (userId) updateUser(formData, userId, true);
   };
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,23 +252,23 @@ export function AdminEditUser({
               <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="mt-8 px-[2rem]">
                 <div className="justify-between md:flex md:items-center md:space-x-[1.3rem]">
                   <div className="control ">
-                    {errors.firstName && <p className="error">{errors.firstName?.message}</p>}
+                    {errors.name && <p className="error">{errors.name?.message}</p>}
                     <input
                       id="firstName"
-                      className={` ${errors.firstName ? 'is-invalid' : 'input custom-input'}`}
-                      placeholder={errors.firstName ? '' : 'First name'}
-                      {...register('firstName')}
+                      className={` ${errors.name ? 'is-invalid' : 'input custom-input'}`}
+                      placeholder={errors.name ? '' : 'Name'}
+                      {...register('name')}
                       value={userData.firstName}
                       onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
                     />
                   </div>
                   <div className="control">
-                    {errors.lastName && <p className="error">{errors.lastName?.message}</p>}
+                    {errors.surname && <p className="error">{errors.surname?.message}</p>}
                     <input
-                      id="lastName"
-                      {...register('lastName')}
-                      placeholder={errors.lastName ? '' : 'Surname'}
-                      className={` ${errors.lastName ? 'is-invalid' : 'input custom-input'}`}
+                      id="surname"
+                      {...register('surname')}
+                      placeholder={errors.surname ? '' : 'Surname'}
+                      className={` ${errors.surname ? 'is-invalid' : 'input custom-input'}`}
                       value={userData.lastName}
                       onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
                     />
@@ -333,28 +322,6 @@ export function AdminEditUser({
                   />
                 </div>
 
-                <div className="control">
-                  <p className="error">{errors.password?.message} </p>
-                  <input
-                    type="password"
-                    id="password"
-                    className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
-                    {...register('password')}
-                    placeholder={errors.password ? '' : 'New Password Or the Old one '}
-                  />
-                </div>
-
-                <div className="control">
-                  <p className="error">{errors.confirmPassword?.message} </p>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
-                    {...register('confirmPassword')}
-                    placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
-                  />
-                </div>
-
                 <div
                   style={{
                     marginBottom: '1rem',
@@ -382,6 +349,10 @@ export function AdminEditUser({
                         </option>
                         <option value="guide">Guide</option>
                         <option value="admin">Admin</option>
+                        <option value="manger">Manger</option>
+                        <option value="moderator">Moderator</option>
+                        <option value="supervisor">Supervisor</option>
+                        <option value="client">Client</option>
                       </select>
                     </div>
                   </div>

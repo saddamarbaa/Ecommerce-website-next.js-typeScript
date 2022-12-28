@@ -492,7 +492,7 @@ export function productReducer(
     case ProductsActionType.CLEAR_ORDER_SUCCESS:
       return {
         ...state,
-        orders: action?.payload?.data?.products || [],
+        orders: action.payload.data?.orders || [],
         clearOrderIsLoading: false,
         clearOrderIsSuccess: true,
         clearOrderIsError: false,

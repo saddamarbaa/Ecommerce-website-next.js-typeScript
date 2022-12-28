@@ -94,12 +94,12 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
     const day = data?.day && data.day > 9 ? data.day : `0${data.day}`;
 
     const formData = new FormData();
-    formData.append('firstName', data?.firstName);
-    formData.append('lastName', data?.lastName);
+    formData.append('name', data?.name);
+    formData.append('surname', data?.surname);
     formData.append('email', data?.email);
     formData.append('profileImage', data.profileImage[0]);
-    formData.append('password', data?.password);
-    formData.append('confirmPassword', data?.confirmPassword);
+    formData.append('password', data?.password || '');
+    formData.append('confirmPassword', data?.confirmPassword || '');
     formData.append('gender', data?.gender);
     formData.append('dateOfBirth', `${data?.month}-${day}-${data?.year}`);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -152,22 +152,22 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
             <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="mt-8 px-[2rem]">
               <div className="justify-between md:flex md:items-center md:space-x-[1.3rem]">
                 <div className="control ">
-                  {errors.firstName && <p className="error">{errors.firstName.message}</p>}
+                  {errors.name && <p className="error">{errors.name.message}</p>}
                   <input
-                    id="firstName"
-                    className={` ${errors.firstName ? 'is-invalid' : 'input custom-input'}`}
-                    placeholder={errors.firstName ? '' : 'First name'}
-                    {...register('firstName')}
+                    id="name"
+                    className={` ${errors.name ? 'is-invalid' : 'input custom-input'}`}
+                    placeholder={errors.name ? '' : 'Name'}
+                    {...register('name')}
                   />
                 </div>
 
                 <div className="control">
-                  {errors.lastName && <p className="error">{errors.lastName?.message}</p>}
+                  {errors.surname && <p className="error">{errors.surname?.message}</p>}
                   <input
                     id="lastName"
-                    {...register('lastName')}
-                    placeholder={errors.lastName ? '' : 'Surname'}
-                    className={` ${errors.lastName ? 'is-invalid' : 'input custom-input'}`}
+                    {...register('surname')}
+                    placeholder={errors.surname ? '' : 'Surname'}
+                    className={` ${errors.surname ? 'is-invalid' : 'input custom-input'}`}
                   />
                 </div>
               </div>

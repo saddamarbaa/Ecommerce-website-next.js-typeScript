@@ -20,7 +20,7 @@ export interface ProductType {
   stock?: string;
   user?: UserType;
   numberOfReviews?: number;
-  reviews: ReviewsT[];
+  reviews?: ReviewsT[];
   ratings?: number;
   createdAt?: string;
   updatedAt?: string;

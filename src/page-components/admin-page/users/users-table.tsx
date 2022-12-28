@@ -37,7 +37,8 @@ export function AdminUserSTablePage({
   const {
     users,
     // list,
-    totalDocs,
+    // totalDocs,
+    lastPage,
     listIsLoading,
     // listIsSuccess,
     listIsError,
@@ -55,7 +56,7 @@ export function AdminUserSTablePage({
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
   useEffect(() => {
-    const filteredUrl = `/admin/users?page=${page}&limit=100`;
+    const filteredUrl = `/admin/users?page=${page}&limit=10`;
     getUsers(filteredUrl);
   }, [page, deleteUserIsSuccess]);
 
@@ -153,12 +154,8 @@ export function AdminUserSTablePage({
                       >
                         <span>Add New User</span>
                       </button>
-                      {totalDocs > 0 && (
-                        <Pagination
-                          handleChange={handleChange}
-                          page={page}
-                          totalPages={totalDocs}
-                        />
+                      {lastPage > 0 && (
+                        <Pagination handleChange={handleChange} page={page} totalPages={lastPage} />
                       )}
                     </div>
                     <div />
@@ -236,10 +233,10 @@ export function AdminUserSTablePage({
                               </td>
 
                               <td className="whitespace-nowrap py-4 px-6 text-sm font-medium text-gray-900 dark:text-white">
-                                {user.firstName}
+                                {user.name}
                               </td>
                               <td className="whitespace-nowrap py-4 px-6 text-sm text-gray-500 dark:text-gray-400">
-                                {user.lastName}
+                                {user.surname}
                               </td>
                               <td className="whitespace-nowrap py-4 px-6 text-sm text-gray-500 dark:text-gray-400">
                                 {truncate(user.email, 20)}

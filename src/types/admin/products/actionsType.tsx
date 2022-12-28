@@ -291,7 +291,7 @@ export interface actionGetOrderIsSuccess extends Action {
 
 export interface actionGetOrderIsError extends Action {
   type: ProductsActionType.GET_ORDER_FAILED;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionGetOrderRest extends Action {
@@ -304,12 +304,12 @@ export interface actionClearOrderIsPending extends Action {
 
 export interface actionClearOrderIsSuccess extends Action {
   type: ProductsActionType.CLEAR_ORDER_SUCCESS;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionClearOrderIsError extends Action {
   type: ProductsActionType.CLEAR_ORDER_FAILED;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionClearOrderRest extends Action {
