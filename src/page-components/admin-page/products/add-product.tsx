@@ -105,12 +105,9 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     formData.append('description', data.description);
     formData.append('productImage', data.productImage[0]);
     formData.append('category', data.category);
-
+    formData.append('brand', data.brand || '');
     if (data.stock) {
       formData.append('stock', data.stock);
-    }
-    if (data.count) {
-      formData.append('count', data.count);
     }
 
     addProduct(formData);
@@ -156,7 +153,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
             <section>
               <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                 <div className="control">
-                  {!errors.name && <label htmlFor="name">Title</label>}
+                  {!errors.name && <label htmlFor="name">Name</label>}
 
                   {errors.name && <p className="error">{errors.name?.message} </p>}
 
@@ -168,6 +165,27 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                   />
                 </div>
 
+                <div className="control">
+                  {!errors.brand && <label htmlFor="name">Brand</label>}
+                  {errors.brand && <p className="error">{errors.brand?.message} </p>}
+
+                  <input
+                    type="text"
+                    id="brand"
+                    className={` ${errors.brand ? 'is-invalid' : 'input custom-input'}`}
+                    {...register('brand')}
+                  />
+                </div>
+                <div className="control ">
+                  {!errors.price && <label htmlFor="price">Price</label>}
+                  <p className="error">{errors.price?.message} </p>
+                  <input
+                    type="text"
+                    id="price"
+                    className={` ${errors.price ? 'is-invalid' : 'custom-input'}`}
+                    {...register('price')}
+                  />
+                </div>
                 <div className="control">
                   {!errors.productImage && (
                     <label
@@ -195,28 +213,6 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                     style={{ visibility: 'hidden', display: 'none' }}
                     type="file"
                     {...register('productImage')}
-                  />
-                </div>
-
-                <div className="control ">
-                  {!errors.price && <label htmlFor="price">Price</label>}
-                  <p className="error">{errors.price?.message} </p>
-                  <input
-                    type="text"
-                    id="price"
-                    className={` ${errors.price ? 'is-invalid' : 'custom-input'}`}
-                    {...register('price')}
-                  />
-                </div>
-
-                <div className="control ">
-                  {!errors.count && <label htmlFor="count">Total Count</label>}
-                  <p className="error">{errors.count?.message} </p>
-                  <input
-                    type="text"
-                    id="count"
-                    className={` ${errors.count ? 'is-invalid' : 'custom-input'}`}
-                    {...register('count')}
                   />
                 </div>
 
@@ -284,7 +280,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                   />
                 </div>
 
-                <div className="mt-[-2rem] flex  flex-col justify-between lg:flex-row lg:items-center lg:justify-between  lg:space-x-5 ">
+                <div className="mt-[-2rem] flex  flex-col justify-between lg:flex-row lg:items-center lg:justify-around  lg:space-x-5 ">
                   <div>
                     <button
                       type="submit"

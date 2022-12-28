@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import getConfig from 'next/config';
+import Image from 'next/image';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,7 +18,7 @@ import {
   ReducerType,
 } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
-import { getRandomIntNumberBetween, truncate } from '@/utils/functions/helpers';
+import { truncate } from '@/utils/functions/helpers';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -50,7 +51,8 @@ export function HomePageComponent({
     // listIsSuccess,
     listIsError,
     listMessage,
-    totalDocs,
+    // totalDocs,
+    lastPage,
     products,
     productSearchTerm,
     selectedCategory,
@@ -89,9 +91,9 @@ export function HomePageComponent({
 
   return (
     <div className="mx-auto mt-11 max-w-[1150px] p-5 text-[18px]">
-      {totalDocs > 0 && (
+      {lastPage > 0 && (
         <div className="mb-4">
-          <Pagination handleChange={handleChange} page={page} totalPages={totalDocs} />
+          <Pagination handleChange={handleChange} page={page} totalPages={lastPage} />
         </div>
       )}
       <div>
@@ -102,7 +104,12 @@ export function HomePageComponent({
                 <CircularProgress color="secondary" />
               </div>
             )}
-            {!listIsError && !listIsLoading && <p className="p-4"> No Products found</p>}
+            {!listIsError && !listIsLoading && (
+              <p className="mt-28 p-12 text-center text-2xl font-semibold text-[#f08804]">
+                {' '}
+                No Products found
+              </p>
+            )}
             {listIsError && (
               <Alert variant="filled" severity="error">
                 {listMessage}
@@ -123,32 +130,44 @@ export function HomePageComponent({
                   <div className="-mt-[10px] flex justify-end text-base  capitalize text-[#007185] ">
                     {product.category}
                   </div>
-                  <div className="overflow-hidden">
-                    <img
-                      className="mx-auto h-[200px] w-[200px] object-contain"
+                  <div className="relative h-[200px]">
+                    <Image
                       src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                      layout="fill"
+                      objectFit="contain"
+                      className="overflow-hidden rounded"
                       alt={product.name}
                     />
                   </div>
+
                   <div className="my-5 text-[19px] capitalize  text-[#007185]">
                     <h2> {truncate(product.name, 30)}</h2>
                   </div>
                   <div className="flex items-center">
-                    {product.rating &&
-                      Array(parseInt(product.rating, 10) || 4)
-                        .fill(product.rating)
-                        .map(() => (
-                          <span className="text-[1.6rem]  font-bold text-yellow-300" key={uuidv4()}>
-                            ✶
+                    {product.ratings ? (
+                      <div>
+                        {product.ratings &&
+                          Array(Math.ceil(product.ratings))
+                            .fill(product.ratings)
+                            .map(() => (
+                              <span
+                                className="text-[1.6rem]  font-bold text-yellow-300"
+                                key={uuidv4()}
+                              >
+                                ✶
+                              </span>
+                            ))}{' '}
+                        <p className="inline text-base font-semibold text-[#007185]">
+                          {'  '}
+                          <span className="mr-2 ml-3 rounded bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-200 dark:text-blue-800">
+                            {product.ratings}
                           </span>
-                        ))}{' '}
-                    <p className="inline text-base font-semibold text-[#007185]">
-                      {'  '}
-                      <span className="mr-2 ml-3 rounded bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-200 dark:text-blue-800">
-                        5.0
-                      </span>
-                      {getRandomIntNumberBetween(1000, 7000)}
-                    </p>
+                          {product.numberOfReviews}
+                        </p>
+                      </div>
+                    ) : (
+                      <div>-</div>
+                    )}
                   </div>
                   <div className="h-20 overflow-hidden text-[1rem] capitalize  hover:text-[#c45500]">
                     {truncate(product.description, 119)}
@@ -192,9 +211,9 @@ export function HomePageComponent({
             </div>
           ))}
       </div>
-      {totalDocs > 0 && (
+      {lastPage > 0 && (
         <div className="mb-4">
-          <Pagination handleChange={handleChange} page={page} totalPages={totalDocs} />
+          <Pagination handleChange={handleChange} page={page} totalPages={lastPage} />
         </div>
       )}
     </div>

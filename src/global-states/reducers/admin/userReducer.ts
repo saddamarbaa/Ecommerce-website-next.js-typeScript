@@ -12,6 +12,7 @@ const initialState: UsersReducerState = {
   listIsError: false,
   listMessage: '',
   totalDocs: 0,
+  lastPage: 0,
 
   emailVerificationLinkToken: '',
   token: '',
@@ -55,6 +56,7 @@ export function userReducer(state = initialState, action: UsersAction) {
         ...state,
         users: action.payload.data.users || [],
         totalDocs: action.payload.data.totalDocs || 0,
+        lastPage: action.payload.data.lastPage || 0,
         list: action.payload || {},
         listIsLoading: false,
         listIsSuccess: true,

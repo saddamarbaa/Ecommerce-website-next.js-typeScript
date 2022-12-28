@@ -1,10 +1,17 @@
 import { UserType } from '../../auth';
 
+export interface ReviewsT {
+  user: string;
+  name: string;
+  rating?: number;
+  comment: string;
+}
 export interface ProductType {
   id?: string;
   _id?: string;
   name: string;
   price: string;
+  brand?: string;
   description: string;
   productImage: any;
   category: string;
@@ -12,10 +19,15 @@ export interface ProductType {
   count?: string;
   stock?: string;
   user?: UserType;
+  numberOfReviews?: number;
+  reviews?: ReviewsT[];
+  ratings?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CartItemsTpe {
-  productId: {
+  product: {
     _id: string;
     name: string;
     price: number;
@@ -31,6 +43,12 @@ export interface CartItemsTpe {
   quantity: number;
 }
 
+export interface OrderResTpe {
+  user: UserType;
+  _id: string;
+  products: CartItemsTpe[];
+}
+
 export interface _productPrototypeReducerState {
   product: object;
   addProductIsLoading: boolean;
@@ -44,6 +62,7 @@ export interface _productPrototypeReducerState {
   listIsError: boolean;
   listMessage: string;
   totalDocs: number;
+  lastPage: number;
   products: ProductType[];
 
   productSearchTerm: string;
@@ -91,7 +110,7 @@ export interface _productPrototypeReducerState {
   clearCartIsError: boolean;
   clearCartMessage: string;
 
-  orders: CartItemsTpe[];
+  orders: OrderResTpe[];
   getOrderIsPending: boolean;
   getOrderIsSuccess: boolean;
   getOrderIsError: boolean;
@@ -106,6 +125,16 @@ export interface _productPrototypeReducerState {
   clearOrderIsSuccess: boolean;
   clearOrderIsError: boolean;
   clearOrderMessage: string;
+
+  clearSingleOrderIsLoading: boolean;
+  clearSingleIsSuccess: boolean;
+  clearSingleIsError: boolean;
+  clearSingleMessage: string;
+
+  deleteReviewIsLoading: boolean;
+  deleteReviewIsSuccess: boolean;
+  deleteReviewIsError: boolean;
+  deleteReviewMessage: string;
 }
 
 export interface ProductsResponseType {
@@ -136,6 +165,17 @@ export interface ProductResponseType {
 export interface CartIResponseType {
   data: {
     products: CartItemsTpe[];
+    userId: string;
+  };
+  success: string;
+  error: string;
+  message: string;
+  status: boolean;
+}
+
+export interface OrderResponseType {
+  data: {
+    orders: OrderResTpe[];
     userId: string;
   };
   success: string;

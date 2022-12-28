@@ -20,11 +20,7 @@ import {
   _usersPrototypeReducerState as ReducerState,
   UserType,
 } from '@/types';
-import {
-  getCurrentYear,
-  getYearsIntBetween,
-  signupSchemaValidation as validationSchema,
-} from '@/utils';
+import { getCurrentYear, getYearsIntBetween, updateUserSchemaValidation } from '@/utils';
 
 // props passed in to the component
 interface OwnProps {
@@ -69,8 +65,8 @@ export function UpdateProfilePageComponent({
   const splicedDate = loginUser?.dateOfBirth && loginUser?.dateOfBirth.split('-');
 
   const [userData, setUserData] = useState<any>({
-    firstName: loginUser?.firstName,
-    lastName: loginUser?.lastName,
+    name: loginUser?.name,
+    surname: loginUser?.surname,
     email: loginUser?.email,
     dateOfBirth: loginUser?.dateOfBirth,
     gender: loginUser?.gender,
@@ -86,7 +82,7 @@ export function UpdateProfilePageComponent({
     reset,
     formState: { errors },
   } = useForm<UserType>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(updateUserSchemaValidation),
   });
 
   // Auto Scroll functionality
@@ -127,21 +123,20 @@ export function UpdateProfilePageComponent({
 
   const onSubmit = (data: UserType) => {
     const formData = new FormData();
-    formData.append('firstName', data?.firstName);
-    formData.append('lastName', data?.lastName);
+    formData.append('name', data?.name);
+    formData.append('surname', data?.surname);
     formData.append('email', data?.email);
-    formData.append('profileImage', data.profileImage[0]);
-    formData.append('password', data?.password);
-    formData.append('confirmPassword', data?.confirmPassword);
+    formData.append('password', data?.password || '');
+    formData.append('confirmPassword', data?.confirmPassword || '');
     formData.append('gender', data?.gender);
     formData.append('dateOfBirth', `${data?.month}-${data.day}-${data?.year}`);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     formData.append('acceptTerms', data?.acceptTerms || true);
 
-    if (userId) {
-      updateProfile(formData, userId);
-    }
+    if (data.profileImage && data.profileImage[0])
+      formData.append('profileImage', data.profileImage[0]);
+    if (userId) updateProfile(formData, userId);
   };
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,25 +177,25 @@ export function UpdateProfilePageComponent({
             <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="mt-8 px-[2rem]">
               <div className="justify-between md:flex md:items-center md:space-x-[1.3rem]">
                 <div className="control ">
-                  {errors.firstName && <p className="error">{errors.firstName?.message}</p>}
+                  {errors.name && <p className="error">{errors.name?.message}</p>}
                   <input
-                    id="firstName"
-                    className={` ${errors.firstName ? 'is-invalid' : 'input custom-input'}`}
-                    placeholder={errors.firstName ? '' : 'First name'}
-                    {...register('firstName')}
-                    value={userData.firstName}
-                    onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
+                    id="name"
+                    className={` ${errors.name ? 'is-invalid' : 'input custom-input'}`}
+                    placeholder={errors.name ? '' : 'Name'}
+                    {...register('name')}
+                    value={userData.name}
+                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                   />
                 </div>
                 <div className="control">
-                  {errors.lastName && <p className="error">{errors.lastName?.message}</p>}
+                  {errors.surname && <p className="error">{errors.surname?.message}</p>}
                   <input
-                    id="lastName"
-                    {...register('lastName')}
-                    placeholder={errors.lastName ? '' : 'Surname'}
-                    className={` ${errors.lastName ? 'is-invalid' : 'input custom-input'}`}
-                    value={userData.lastName}
-                    onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+                    id="surname"
+                    {...register('surname')}
+                    placeholder={errors.surname ? '' : 'Surname'}
+                    className={` ${errors.surname ? 'is-invalid' : 'input custom-input'}`}
+                    value={userData.surname}
+                    onChange={(e) => setUserData({ ...userData, surname: e.target.value })}
                   />
                 </div>
               </div>

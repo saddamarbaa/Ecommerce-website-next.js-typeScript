@@ -8,6 +8,7 @@ export interface _usersPrototypeReducerState {
   listMessage: string;
   users: UserType[];
   totalDocs: number;
+  lastPage: number;
 
   emailVerificationLinkToken: string;
   token?: string;

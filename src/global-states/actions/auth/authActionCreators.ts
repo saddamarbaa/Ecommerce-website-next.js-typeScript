@@ -129,7 +129,7 @@ export const updateProfile =
     try {
       const response = await apiRequests({
         method: 'patch',
-        url: `${getHostUrl()}/auth/${id}`,
+        url: `${getHostUrl()}/auth/update/${id}`,
         data: user,
       });
       dispatch({

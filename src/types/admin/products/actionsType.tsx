@@ -4,6 +4,7 @@ import { Action } from 'redux';
 
 import {
   CartIResponseType,
+  OrderResponseType,
   ProductResponseType,
   ProductsResponseType,
   ProductType,
@@ -69,6 +70,16 @@ export enum ProductsActionType {
   CLEAR_ORDER_SUCCESS = 'CLEAR_ORDER_SUCCESS',
   CLEAR_ORDER_FAILED = 'CLEAR_ORDER_FAILED',
   CLEAR_ORDER_REST = 'CLEAR_ORDER_REST',
+
+  CLEAR_SINGLE_ORDER_LOADING = 'CLEAR_SINGLE_ORDER_LOADING',
+  CLEAR_SINGLE_ORDER_SUCCESS = 'CLEAR_SINGLE_ORDER_SUCCESS',
+  CLEAR_SINGLE_ORDER_FAILED = 'CLEAR_SINGLE_ORDER_FAILED',
+  CLEAR_SINGLE_ORDER_REST = 'CLEAR_SINGLE_ORDER_REST',
+
+  DELETE_REVIEW_LOADING = 'DELETE_REVIEW_LOADING',
+  DELETE_REVIEW_SUCCESS = 'DELETE_REVIEW_SUCCESS',
+  DELETE_REVIEW_FAILED = 'DELETE_REVIEW_FAILED',
+  DELETE_REVIEW_REST = 'DELETE_REVIEW_REST',
 }
 
 export interface actionAddProductIsPending extends Action {
@@ -280,12 +291,12 @@ export interface actionGetOrderIsPending extends Action {
 
 export interface actionGetOrderIsSuccess extends Action {
   type: ProductsActionType.GET_ORDER_SUCCESS;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionGetOrderIsError extends Action {
   type: ProductsActionType.GET_ORDER_FAILED;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionGetOrderRest extends Action {
@@ -298,16 +309,52 @@ export interface actionClearOrderIsPending extends Action {
 
 export interface actionClearOrderIsSuccess extends Action {
   type: ProductsActionType.CLEAR_ORDER_SUCCESS;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionClearOrderIsError extends Action {
   type: ProductsActionType.CLEAR_ORDER_FAILED;
-  payload: CartIResponseType;
+  payload: OrderResponseType;
 }
 
 export interface actionClearOrderRest extends Action {
   type: ProductsActionType.CLEAR_ORDER_REST;
+}
+
+export interface actionClearSingleOrderIsPending extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_LOADING;
+}
+
+export interface actionClearSingleOrderIsSuccess extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_SUCCESS;
+  payload: OrderResponseType;
+}
+
+export interface actionClearSingleOrderIsError extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_FAILED;
+  payload: OrderResponseType;
+}
+
+export interface actionClearSingleOrderRest extends Action {
+  type: ProductsActionType.CLEAR_SINGLE_ORDER_REST;
+}
+
+export interface actionDeleteReviewIsPending extends Action {
+  type: ProductsActionType.DELETE_REVIEW_LOADING;
+}
+
+export interface actionDeleteReviewIsSuccess extends Action {
+  type: ProductsActionType.DELETE_REVIEW_SUCCESS;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteReviewIsError extends Action {
+  type: ProductsActionType.DELETE_REVIEW_FAILED;
+  payload: ProductsResponseType;
+}
+
+export interface actionDeleteReviewRest extends Action {
+  type: ProductsActionType.DELETE_REVIEW_REST;
 }
 
 export type ProductsAction =
@@ -361,4 +408,12 @@ export type ProductsAction =
   | actionClearOrderIsPending
   | actionClearOrderIsSuccess
   | actionClearOrderIsError
-  | actionClearOrderRest;
+  | actionClearOrderRest
+  | actionClearSingleOrderIsPending
+  | actionClearSingleOrderIsSuccess
+  | actionClearSingleOrderIsError
+  | actionClearSingleOrderRest
+  | actionDeleteReviewIsPending
+  | actionDeleteReviewIsSuccess
+  | actionDeleteReviewIsError
+  | actionDeleteReviewRest;

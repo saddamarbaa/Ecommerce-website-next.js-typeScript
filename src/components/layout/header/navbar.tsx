@@ -64,7 +64,9 @@ function Navbar({
     addOrderIsSuccess,
   } = listState;
   const { publicRuntimeConfig } = getConfig();
+
   const { isAuthenticated, isADmin, loginUser } = authState;
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const router = useRouter();
 

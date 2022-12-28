@@ -31,7 +31,7 @@ export const createUser = (user: UserType) => async (dispatch: Dispatch) => {
   try {
     const response = await apiRequests({
       method: 'post',
-      url: `${getHostUrl()}/admin/users`,
+      url: `${getHostUrl()}/admin/users/add`,
       data: user,
     });
     dispatch({
@@ -55,8 +55,9 @@ export const deleteUser = (id: string) => async (dispatch: Dispatch) => {
   try {
     const response = await apiRequests({
       method: 'delete',
-      url: `${getHostUrl()}/admin/users/${id}`,
+      url: `${getHostUrl()}/admin/users/remove/${id}`,
     });
+
     dispatch({ type: UsersActionType.DELETE_USER_SUCCESS, payload: response });
   } catch (error: any) {
     dispatch({
@@ -99,8 +100,8 @@ export const updateUser =
     dispatch({ type: UsersActionType.UPDATE_USER_LOADING });
     try {
       const response = await apiRequests({
-        method: 'patch',
-        url: isAdmin ? `${getHostUrl()}/admin/users/${id}` : `${getHostUrl()}/auth/${id}`,
+        method: 'put',
+        url: isAdmin ? `${getHostUrl()}/admin/users/update/${id}` : `${getHostUrl()}/auth/${id}`,
         data: user,
       });
       dispatch({

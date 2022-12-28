@@ -15,8 +15,8 @@ import {
 import { updatePasswordSchemaValidation } from '@/utils';
 
 interface OwnProps {
-  userId: string | undefined;
-  token: string | undefined;
+  userId: string | string[] | undefined;
+  token: string | string[] | undefined;
 }
 
 interface MapDispatchProps {
@@ -97,15 +97,17 @@ function ChangePasswordPageComponent({
   }
 
   const onSubmit = (data: ResetPasswordType) => {
-    const finalData = {
-      email: data.email,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-      userId,
-      token,
-    };
+    if (data.email && data.password && data.confirmPassword && userId && token) {
+      const finalData = {
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        userId,
+        token,
+      };
 
-    restPassword(finalData);
+      restPassword(finalData);
+    }
   };
 
   return (

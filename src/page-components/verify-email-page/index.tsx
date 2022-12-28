@@ -12,8 +12,8 @@ import {
 } from '@/types';
 
 interface OwnProps {
-  userId: string | undefined;
-  token: string | undefined;
+  userId: string | string[] | undefined;
+  token: string | string[] | undefined;
 }
 
 interface MapDispatchProps {
