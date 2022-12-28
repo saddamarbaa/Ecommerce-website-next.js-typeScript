@@ -1,10 +1,10 @@
 export type UserType = {
   _id?: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  surname: string;
   email: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   role?: string;
   acceptTerms: boolean;
   gender: string;
@@ -97,6 +97,8 @@ export interface _authPrototypeReducerState {
 
 export interface AuthResponseType {
   data: {
+    accessToken: string;
+    refreshToken: string;
     user: UserType;
   };
   success: string;
