@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
 import getConfig from 'next/config';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ModalComponent as Modal } from '@/components';
@@ -69,7 +70,7 @@ function CartPageComponent({
   const getTotalPrice = () =>
     cart.reduce(
       (accumulator, currentValue: CartItemsTpe) =>
-        accumulator + currentValue.productId.price * currentValue.quantity,
+        accumulator + currentValue.product.price * currentValue.quantity,
       0
     );
 
@@ -118,27 +119,31 @@ function CartPageComponent({
                     Total
                   </h3>
                 </div>
-                {cart.map((product: CartItemsTpe) => (
+                {cart.map(({ product, quantity }: CartItemsTpe) => (
                   <div className="-mx-8 flex px-6 py-5  hover:bg-gray-100">
                     <div className="flex w-2/5">
                       <div>
-                        <img
+                        <Image
+                          src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                          alt={product.name}
+                          objectFit="contain"
                           className="mx-auto h-[105px] w-[150px] overflow-hidden rounded-md"
-                          src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productId.productImage}`}
-                          alt={product.productId.name}
+                          width={150}
+                          height={105}
                         />
                       </div>
+
                       <div className="ml-4 flex flex-grow flex-col space-y-3">
                         <span className="font-bold  capitalize text-[#007185]">
-                          {truncate(product.productId.name, 25)}
+                          {truncate(product.name, 25)}
                         </span>
-                        <span className=" text-red-500">{product.productId.category}</span>
+                        <span className=" text-red-500">{product.category}</span>
                         <span
                           id="custom-button"
                           className="max-w-fit cursor-pointer rounded-md px-3  py-2"
                           onClick={() => {
-                            if (product.productId._id) {
-                              deleteItemFromCart(product.productId._id);
+                            if (product._id) {
+                              deleteItemFromCart(product._id);
                             }
                           }}
                         >
@@ -149,19 +154,19 @@ function CartPageComponent({
                     <div className="flex w-1/5 justify-center space-x-4">
                       <span
                         onClick={() => {
-                          if (product.productId._id) {
-                            addProductToCart(product.productId._id, true);
+                          if (product._id) {
+                            addProductToCart(product._id, true);
                           }
                         }}
                         className="cursor-pointer text-[1.7rem] font-bold"
                       >
                         -
                       </span>
-                      <span className="pt-3 text-sm font-semibold">{product.quantity}</span>
+                      <span className="pt-3 text-sm font-semibold">{quantity}</span>
                       <span
                         onClick={() => {
-                          if (product.productId._id) {
-                            addProductToCart(product.productId._id);
+                          if (product._id) {
+                            addProductToCart(product._id);
                           }
                         }}
                         className="cursor-pointer text-[1.7rem]  font-bold"
@@ -171,12 +176,12 @@ function CartPageComponent({
                     </div>
                     <span className="w-1/5 pt-4 text-center text-sm font-semibold">
                       {' '}
-                      ${product.productId.price}
+                      ${product.price}
                     </span>
                     <span className="w-1/5 pt-4 text-center text-sm font-semibold">
                       {' '}
                       <NumberFormat
-                        value={product.quantity * product.productId.price}
+                        value={quantity * product.price}
                         displayType="text"
                         thousandSeparator
                         prefix="$"
@@ -271,13 +276,13 @@ function CartPageComponent({
             </div>
           )}
 
-          <div className="my-10 mt-24 flex shadow-md">
-            {cart.length === 0 && (
-              <div className="w-3/4 bg-white px-10 py-10 text-2xl font-semibold text-[#f08804]">
-                Hello <span className="capitalize">{loginUser?.firstName}</span> your cart is empty
+          {!cart.length ? (
+            <div className="mx-auto mt-28  flex max-w-[1150px] p-5 text-[18px] shadow-md">
+              <div className="w-3/4 bg-white p-12 text-center text-2xl font-semibold text-[#f08804]">
+                Hello <span className="capitalize">{loginUser?.name}</span> your cart is empty
               </div>
-            )}
-          </div>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
