@@ -104,7 +104,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     formData.append('price', data.price);
     formData.append('description', data.description);
     formData.append('productImage', data.productImage[0]);
-    formData.append('category', data.category);
+    formData.append('category', data.category.toLocaleLowerCase());
     formData.append('brand', data.brand || '');
     if (data.stock) {
       formData.append('stock', data.stock);
@@ -236,20 +236,20 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                         setValue('category', e.target.value, { shouldValidate: true })
                       }
                     >
-                      <option defaultValue="All Products" value="All Products">
+                      <option defaultValue="all products" value="All Products">
                         All Products
                       </option>
-                      <option value="Sports">Sports</option>
+                      <option value="sports">Sports</option>
                       <option value="Football">Football</option>
-                      <option value="Books">Books</option>
-                      <option value="Electronics">Electronics</option>
-                      <option value="Personal Computers">Computers</option>
-                      <option value="Women's clothing">Women&apos;s clothing</option>
-                      <option value="Women's Shoes">Women&apos;s Shoes</option>
-                      <option value="Jewelery">Jewelery</option>
-                      <option value="Men's clothing">Men&apos;s clothing</option>
-                      <option value="Men's Shoes">Men&apos;s Shoes</option>
-                      <option value="Toys">Toys</option>
+                      <option value="books">Books</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="personal computers">Computers</option>
+                      <option value="women's clothing">Women&apos;s clothing</option>
+                      <option value="women's shoes">Women&apos;s Shoes</option>
+                      <option value="jewelery">Jewelery</option>
+                      <option value="men's clothing">Men&apos;s clothing</option>
+                      <option value="men's shoes">Men&apos;s Shoes</option>
+                      <option value="toys">Toys</option>
                     </select>
                   </div>
                 </div>

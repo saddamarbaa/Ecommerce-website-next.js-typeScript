@@ -76,12 +76,14 @@ export function HomePageComponent({
   }, []);
 
   useEffect(() => {
-    let filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}`;
-
+    let filteredUrl = `/products?page=${page}&limit=${limit}`;
     if (debouncedSearchTerm) {
-      filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}&search=${debouncedSearchTerm}`;
+      // filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}&search=${debouncedSearchTerm}`;
+      filteredUrl = `/products?limit=${limit}&search=${debouncedSearchTerm}`;
     }
-
+    if (selectedCategory && selectedCategory.toLocaleLowerCase() !== 'all products') {
+      filteredUrl = `/products?limit=${limit}&search=${debouncedSearchTerm}&category=${selectedCategory}`;
+    }
     getProducts(filteredUrl);
   }, [page, limit, sortBy, sort, debouncedSearchTerm, selectedCategory]);
 

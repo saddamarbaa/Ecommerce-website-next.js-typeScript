@@ -193,7 +193,7 @@ function OrderPageComponent({
                         Order <span className="text-indigo-600"> {order._id}</span>
                       </h1>
                       <h2 className="text-2xl font-semibold">
-                        {getTotalItems(order?.products)} Items
+                        {getTotalItems(order?.orderItems)} Items
                       </h2>
                     </div>
                     <div className="mt-10 mb-5 flex">
@@ -210,7 +210,7 @@ function OrderPageComponent({
                         Total
                       </h3>
                     </div>
-                    {order?.products?.map(({ product, quantity }: CartItemsTpe) => (
+                    {order?.orderItems?.map(({ product, quantity }: CartItemsTpe) => (
                       <div className="-mx-8 flex px-6 py-5  hover:bg-gray-100">
                         <div className="flex w-2/5">
                           <div>
@@ -266,11 +266,11 @@ function OrderPageComponent({
                     <h1 className="border-b pb-8 text-2xl font-semibold">Summary</h1>
                     <div className="mt-10 mb-5 flex justify-between">
                       <span className="text-sm font-semibold uppercase">
-                        Items {getTotalItems(order?.products)}
+                        Items {getTotalItems(order?.orderItems)}
                       </span>
                       <span className="text-sm font-semibold">
                         <NumberFormat
-                          value={getTotalPrice(order?.products)}
+                          value={getTotalPrice(order?.orderItems)}
                           displayType="text"
                           thousandSeparator
                           prefix="$"
@@ -291,7 +291,7 @@ function OrderPageComponent({
                         <span>Total cost</span>
                         <span>
                           <NumberFormat
-                            value={getTotalPrice(order?.products)}
+                            value={getTotalPrice(order?.orderItems)}
                             displayType="text"
                             thousandSeparator
                             prefix="$"
