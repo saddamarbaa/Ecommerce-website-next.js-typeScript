@@ -57,6 +57,7 @@ function OrderPageComponent({
     AddToCartIsSuccess,
     clearCartIsSuccess,
     orders,
+    getOrderIsPending,
     clearOrderIsLoading,
     clearOrderIsSuccess,
     clearSingleIsSuccess,
@@ -330,7 +331,7 @@ function OrderPageComponent({
           ))}
       </div>
 
-      {!orders.length ? (
+      {!orders.length && !getOrderIsPending ? (
         <div className="mx-auto mt-28  flex max-w-[1150px] p-5 text-[18px] shadow-md">
           <div className="w-3/4 bg-white p-12 text-center text-2xl font-semibold text-[#f08804]">
             Hello <span className="capitalize">{loginUser?.name}</span> your order list is empty

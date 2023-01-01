@@ -242,13 +242,14 @@ export const restGetOrders = () => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.GET_ORDER_REST });
 };
 
-export const addOrders = () => async (dispatch: Dispatch) => {
+export const addOrders = (data: any) => async (dispatch: Dispatch) => {
   dispatch({ type: ProductsActionType.ADD_ORDER_LOADING });
 
   try {
     const response = await apiRequests({
       method: 'post',
       url: `${getHostUrl()}/orders`,
+      data,
     });
     dispatch({
       type: ProductsActionType.ADD_ORDER_SUCCESS,
