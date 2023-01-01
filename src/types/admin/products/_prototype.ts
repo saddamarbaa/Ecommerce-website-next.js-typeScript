@@ -46,7 +46,7 @@ export interface CartItemsTpe {
 export interface OrderResTpe {
   user: UserType;
   _id: string;
-  products: CartItemsTpe[];
+  orderItems: CartItemsTpe[];
 }
 
 export interface _productPrototypeReducerState {

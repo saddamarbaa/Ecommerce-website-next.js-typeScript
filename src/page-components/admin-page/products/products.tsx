@@ -92,11 +92,7 @@ PropsType) {
   }, []);
 
   useEffect(() => {
-    let filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}`;
-
-    if (debouncedSearchTerm) {
-      filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}&search=${debouncedSearchTerm}`;
-    }
+    const filteredUrl = `/products?page=${page}&limit=${limit}`;
 
     getProducts(filteredUrl);
   }, [page, limit, sortBy, sort, debouncedSearchTerm, selectedCategory, deleteProductIsSuccess]);

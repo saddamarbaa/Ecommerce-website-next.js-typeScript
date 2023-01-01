@@ -22,7 +22,7 @@ const initialState: ProductReducerState = {
 
   productSearchTerm: '',
   selectedCategory: 'All Products',
-  limit: 10,
+  limit: 9,
   page: 1,
   sortBy: 'createdAt',
   sort: 'desc',

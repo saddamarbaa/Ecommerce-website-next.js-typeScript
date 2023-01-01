@@ -22,7 +22,7 @@ import {
   _productPrototypeReducerState as ReducerProductState,
   CartItemsTpe,
 } from '@/types';
-import { truncate } from '@/utils';
+import { getHostUrl, truncate } from '@/utils';
 
 interface MapDispatchProps {
   getCart: () => void;
@@ -30,7 +30,7 @@ interface MapDispatchProps {
   deleteItemFromCart: (payload: string) => void;
   addProductToCart: (payload: string, doDecrease?: boolean) => void;
   restAddOrders: () => void;
-  addOrders: () => void;
+  // addOrders: () => void;
 }
 
 interface MapStateProps {
@@ -48,8 +48,8 @@ function CheckoutPageComponent({
   listState,
   // authState,
   restAddOrders,
-  addOrders,
-}: PropsType) {
+}: // addOrders,
+PropsType) {
   const {
     cart,
     // getCartIsPending,
@@ -113,6 +113,38 @@ function CheckoutPageComponent({
       return () => clearTimeout(timer);
     }
   }, [addOrderIsSuccess]);
+
+  const handleCheckout = () => {
+    fetch(`${getHostUrl()}/payment/create-stripe-checkout-session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // eslint-disable-next-line no-param-reassign
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`,
+      },
+      body: JSON.stringify({
+        cartItems: cart,
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success && result.status === 200 && result?.data?.url) {
+          // router.push({
+          //   pathname: result?.data?.url,
+          // });
+          window.location.href = result?.data?.url;
+        }
+        // setIsAddCommentApiSuccess(true);
+        // setComment(' ');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        // setIsAddCommentApiSuccess(false);
+      });
+  };
 
   return (
     <div>
@@ -287,7 +319,7 @@ function CheckoutPageComponent({
                     </span>
                   </div>
                   <button
-                    onClick={addOrders}
+                    onClick={handleCheckout}
                     type="button"
                     className="w-full bg-indigo-500 py-3 text-sm font-semibold uppercase text-white hover:bg-indigo-600"
                   >

@@ -76,12 +76,14 @@ export function HomePageComponent({
   }, []);
 
   useEffect(() => {
-    let filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}`;
-
+    let filteredUrl = `/products?page=${page}&limit=${limit}`;
     if (debouncedSearchTerm) {
-      filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}&search=${debouncedSearchTerm}`;
+      // filteredUrl = `/products?page=${page}&limit=${limit}&sortBy=${sortBy}&OrderBy=${sort}&filterBy=category&category=${selectedCategory}&search=${debouncedSearchTerm}`;
+      filteredUrl = `/products?limit=${limit}&search=${debouncedSearchTerm}`;
     }
-
+    if (selectedCategory && selectedCategory.toLocaleLowerCase() !== 'all products') {
+      filteredUrl = `/products?limit=${limit}&search=${debouncedSearchTerm}&category=${selectedCategory}`;
+    }
     getProducts(filteredUrl);
   }, [page, limit, sortBy, sort, debouncedSearchTerm, selectedCategory]);
 
@@ -91,11 +93,11 @@ export function HomePageComponent({
 
   return (
     <div className="mx-auto mt-11 max-w-[1150px] p-5 text-[18px]">
-      {lastPage > 0 && (
+      {lastPage > 0 ? (
         <div className="mb-4">
           <Pagination handleChange={handleChange} page={page} totalPages={lastPage} />
         </div>
-      )}
+      ) : null}
       <div>
         {!products.length && (
           <div className="easy-in-out container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
