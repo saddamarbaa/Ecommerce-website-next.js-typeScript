@@ -25,6 +25,7 @@ module.exports = () => ({
       'lh3.googleusercontent.com',
       'flagcdn.com',
       'upload.wikimedia.org',
+      'res.cloudinary.com',
     ],
   },
 });
