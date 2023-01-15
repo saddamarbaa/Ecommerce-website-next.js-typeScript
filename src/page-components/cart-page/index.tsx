@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -58,7 +57,7 @@ function CartPageComponent({
   } = listState;
 
   const { loginUser } = authState;
-  const { publicRuntimeConfig } = getConfig();
+
   const [open, setOpen] = useState<boolean>(false);
 
   const getTotalItems = () =>
@@ -70,7 +69,7 @@ function CartPageComponent({
   const getTotalPrice = () =>
     cart.reduce(
       (accumulator, currentValue: CartItemsTpe) =>
-        accumulator + currentValue.product.price * currentValue.quantity,
+        accumulator + Number(currentValue.product.price) * currentValue.quantity,
       0
     );
 
@@ -124,7 +123,7 @@ function CartPageComponent({
                     <div className="flex w-2/5">
                       <div>
                         <Image
-                          src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                          src={`${product?.productImages && product?.productImages[0]?.url}`}
                           alt={product.name}
                           objectFit="contain"
                           className="mx-auto h-[105px] w-[150px] overflow-hidden rounded-md"
@@ -181,7 +180,7 @@ function CartPageComponent({
                     <span className="w-1/5 pt-4 text-center text-sm font-semibold">
                       {' '}
                       <NumberFormat
-                        value={quantity * product.price}
+                        value={quantity * Number(product.price)}
                         displayType="text"
                         thousandSeparator
                         prefix="$"

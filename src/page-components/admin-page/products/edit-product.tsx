@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 
-import { defaultValues } from '@/constants';
+import { defaultValues, productCategory } from '@/constants';
 import {
   getIndividualProduct,
   ReducerType,
@@ -60,6 +61,7 @@ export function ProductDetailPageComponent({
   } = listState;
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [files, setFiles] = useState<any>([]);
 
   const router = useRouter();
 
@@ -137,13 +139,43 @@ export function ProductDetailPageComponent({
     formData.append('name', data.name);
     formData.append('price', data.price);
     formData.append('description', data.description);
-    formData.append('productImage', data.productImage[0]);
+    // formData.append('productImage', data.productImage[0]);
     formData.append('category', data.category);
     if (data.brand) formData.append('brand', data.brand);
 
     if (data.stock) formData.append('stock', data.stock);
 
+    // eslint-disable-next-line array-callback-return
+    files.map((file: { file: string | Blob }) => {
+      formData.append('productImages', file.file);
+    });
+
     if (productId) updateProduct(formData, productId);
+  };
+
+  const TransformFileData = (file: Blob) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles((prev: any) => [...prev, { file, img: reader.result }]);
+      };
+    }
+  };
+
+  const handleUploadFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files) {
+      const file = event?.target?.files && event?.target?.files[0];
+      TransformFileData(file);
+    }
+  };
+
+  const removeFileHandler = (img: any) => {
+    setFiles(() => {
+      const v = files.filter((value: any) => value.img !== img);
+      return [...v];
+    });
   };
 
   return (
@@ -165,22 +197,20 @@ export function ProductDetailPageComponent({
             </Alert>
           </div>
         )}
-        {!getIndividualProductIsError &&
-          showAlert &&
-          (updateProductIsSuccess || updateProductIsError) && (
-            <div
-              className="mt-[2rem] w-full  rounded-[6px]"
-              style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
+        {showAlert && (updateProductIsSuccess || updateProductIsError) && (
+          <div
+            className="mt-[2rem] w-full  rounded-[6px]"
+            style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)' }}
+          >
+            <Alert
+              variant="filled"
+              severity={getIndividualProductIsError || updateProductIsError ? 'error' : 'success'}
+              onClose={() => setShowAlert(false)}
             >
-              <Alert
-                variant="filled"
-                severity={getIndividualProductIsError || updateProductIsError ? 'error' : 'success'}
-                onClose={() => setShowAlert(false)}
-              >
-                {updateProductMessage}
-              </Alert>
-            </div>
-          )}
+              {updateProductMessage}
+            </Alert>
+          </div>
+        )}
 
         {getIndividualProductIsSuccess && (
           <div
@@ -252,11 +282,40 @@ export function ProductDetailPageComponent({
                       />
                     </label>
                     <input
+                      className="form-control"
+                      onChange={handleUploadFileHandler}
                       id="filePicker"
                       style={{ visibility: 'hidden', display: 'none' }}
                       type="file"
-                      {...register('productImage')}
+                      accept="image/*"
+                      name="image"
+                      multiple
                     />
+                    <div className=" flex  flex-wrap space-y-2 space-x-2">
+                      {files.length > 0 &&
+                        files?.map((e: any) => (
+                          <div className="shadow-none transition-shadow duration-300 ease-in-out hover:shadow-sm ">
+                            <img
+                              className="h-36 w-36 rounded object-contain"
+                              src={e.img}
+                              alt="error!"
+                            />
+                            <div className="mt-1 text-center">
+                              <DeleteIcon
+                                style={{
+                                  fontSize: '20px',
+                                  color: 'red',
+                                  margin: 'auto',
+                                  cursor: 'pointer',
+                                }}
+                                onClick={() => {
+                                  removeFileHandler(e.img);
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                   <div className="control">
                     {errors.category && <p className="error">{errors.category.message}</p>}
@@ -273,18 +332,9 @@ export function ProductDetailPageComponent({
                         className={` ${errors.category ? 'select is-invalid' : 'select'}`}
                         {...register('category')}
                       >
-                        <option value="All Products">All Products</option>
-                        <option value="Sports">Sports</option>
-                        <option value="Football">Football</option>
-                        <option value="Books">Books</option>
-                        <option value="Electronics">Electronics</option>
-                        <option value="Personal Computers">Computers</option>
-                        <option value="Women's clothing">Women&apos;s clothing</option>
-                        <option value="Women's Shoes">Women&apos;s Shoes</option>
-                        <option value="Jewelery">Jewelery</option>
-                        <option value="Men's clothing">Men&apos;s clothing</option>
-                        <option value="Men's Shoes">Men&apos;s Shoes</option>
-                        <option value="Toys">Toys</option>
+                        {productCategory.map((item: any) => (
+                          <option value={item.value}>{item.label}</option>
+                        ))}
                       </select>
                     </div>
                   </div>

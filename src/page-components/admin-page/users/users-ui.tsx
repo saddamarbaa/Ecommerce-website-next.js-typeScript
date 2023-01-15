@@ -312,7 +312,7 @@ export function AdminUsersUIPage({
                   <div className="-mt-12 flex justify-start px-5 ">
                     <span className="relative block h-32 w-32">
                       <Image
-                        src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${user.profileImage}`}
+                        src={`${user.profileImage}`}
                         className="mx-auto rounded-full bg-white object-cover p-1"
                         alt="Profile Img"
                         width={96}

@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 
+import { authorizationRoles, months } from '@/constants';
 import { createUser, ReducerType, resGetUserList, restCreateUser } from '@/global-states';
 import { _usersPrototypeReducerState as ReducerState, UserType } from '@/types';
 import { getCurrentYear, getYearsIntBetween, signupSchemaValidation } from '@/utils';
@@ -27,6 +29,7 @@ type PropsType = MapDispatchProps & MapStateProps;
 
 export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listState }: PropsType) {
   const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
+  const [files, setFiles] = useState<any>([]);
   const { postUserIsPending, postUserIsSuccess, postUserIsError, postUserMessage } = listState;
   const router = useRouter();
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -35,6 +38,7 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<UserType>({
     resolver: yupResolver(signupSchemaValidation),
@@ -98,6 +102,29 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
     createUser(formData);
   };
 
+  const TransformFileData = (file: Blob) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles(() => [{ file, img: reader.result }]);
+      };
+    }
+  };
+
+  const handleUploadFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files) {
+      const file = event?.target?.files && event?.target?.files[0];
+      TransformFileData(file);
+    }
+  };
+
+  const removeFileHandler = () => {
+    setValue('profileImage', null, { shouldValidate: true });
+    setFiles(() => []);
+  };
+
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
       <div className=" md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
@@ -158,6 +185,28 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
               </div>
 
               <div className="control">
+                <p className="error">{errors.password?.message} </p>
+                <input
+                  type="password"
+                  id="password"
+                  className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
+                  {...register('password')}
+                  placeholder={errors.password ? '' : 'New Password'}
+                />
+              </div>
+
+              <div className="control">
+                <p className="error">{errors.confirmPassword?.message} </p>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
+                  {...register('confirmPassword')}
+                  placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
+                />
+              </div>
+
+              <div className="control">
                 {!errors.profileImage && (
                   <label
                     htmlFor="profileImage"
@@ -184,34 +233,42 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
                   />
                 </label>
                 <input
+                  className="form-control"
+                  // onChange={handleUploadFileHandler}
                   id="filePicker"
                   style={{ visibility: 'hidden', display: 'none' }}
                   type="file"
-                  {...register('profileImage')}
+                  accept="image/*"
+                  {...register('profileImage', {
+                    onChange: handleUploadFileHandler,
+                    // onBlur: (e) => {},
+                  })}
+                  // multiple
                 />
+                <div className=" flex  flex-wrap space-y-2 space-x-2">
+                  {files.length > 0 &&
+                    files?.map((e: any) => (
+                      <div className="shadow-none transition-shadow duration-300 ease-in-out hover:shadow-sm ">
+                        <img
+                          className="h-36 w-36 rounded object-contain"
+                          src={e.img}
+                          alt="error!"
+                        />
+                        <div className="mt-1 text-center">
+                          <DeleteIcon
+                            style={{
+                              fontSize: '20px',
+                              color: 'red',
+                              margin: 'auto',
+                              cursor: 'pointer',
+                            }}
+                            onClick={removeFileHandler}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
-              <div className="control">
-                <p className="error">{errors.password?.message} </p>
-                <input
-                  type="password"
-                  id="password"
-                  className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
-                  {...register('password')}
-                  placeholder={errors.password ? '' : 'New Password'}
-                />
-              </div>
-
-              <div className="control">
-                <p className="error">{errors.confirmPassword?.message} </p>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
-                  {...register('confirmPassword')}
-                  placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
-                />
-              </div>
-
               <div style={{ marginBottom: '1rem' }}>
                 <div
                   style={{
@@ -224,15 +281,11 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
                 <div className="flex items-center justify-between space-x-[1.3rem]">
                   <div className="month-container select">
                     <select id="Month" className="select-css-month" {...register('role')}>
-                      <option defaultValue="user" value="user">
-                        User
-                      </option>
-                      <option value="guide">Guide</option>
-                      <option value="admin">Admin</option>
-                      <option value="manger">Manger</option>
-                      <option value="moderator">Moderator</option>
-                      <option value="supervisor">Supervisor</option>
-                      <option value="client">Client</option>
+                      {authorizationRoles.map((item: any, index: number) => (
+                        <option selected={index === 0} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -250,20 +303,11 @@ export function AdminAddUser({ restCreateUser, createUser, resGetUserList, listS
               <div className="flex items-center justify-between space-x-[1.3rem]">
                 <div className="month-container select">
                   <select id="Month" className="select-css-month" {...register('month')}>
-                    <option defaultValue="01" value="01">
-                      January
-                    </option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September </option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12"> December</option>
+                    {months.map((_month, index) => (
+                      <option key={uuidv4()} value={months[index].value} selected={index === 0}>
+                        {months[index].label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

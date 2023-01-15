@@ -24,21 +24,15 @@ export interface ProductType {
   ratings?: number;
   createdAt?: string;
   updatedAt?: string;
+  productImages?: {
+    url: string;
+    cloudinary_id: string;
+    _id: string;
+  }[];
 }
 
 export interface CartItemsTpe {
-  product: {
-    _id: string;
-    name: string;
-    price: number;
-    description: string;
-    productImage: string;
-    category: string;
-    rating?: string;
-    count?: string;
-    stock?: string;
-    user?: UserType;
-  };
+  product: ProductType;
   _id: string;
   quantity: number;
 }

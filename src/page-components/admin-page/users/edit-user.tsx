@@ -3,12 +3,13 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 
-import { days, months } from '@/constants';
+import { authorizationRoles, days, months } from '@/constants';
 import {
   getIndividualUser,
   ReducerType,
@@ -72,7 +73,7 @@ export function AdminEditUser({
   } = listState;
 
   const [showAlert, setShowAlert] = useState<boolean>(false);
-
+  const [files, setFiles] = useState<any>([]);
   const splicedDate =
     individualUser && individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
 
@@ -92,6 +93,7 @@ export function AdminEditUser({
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<UserType>({
     defaultValues,
@@ -133,6 +135,7 @@ export function AdminEditUser({
   }, [userId, updateUserIsSuccess]);
 
   useEffect(() => {
+    // profileImage
     if (getIndividualUserIsSuccess && individualUser) {
       const splicedDate = individualUser?.dateOfBirth && individualUser?.dateOfBirth.split('-');
       reset({
@@ -155,6 +158,8 @@ export function AdminEditUser({
         day: splicedDate ? splicedDate[1] : '01',
         year: splicedDate ? splicedDate[2] : getCurrentYear(),
       }));
+
+      setFiles(() => [{ img: individualUser.profileImage }]);
     }
 
     if (updateUserIsSuccess || updateUserIsError || getIndividualUserIsError) {
@@ -198,6 +203,29 @@ export function AdminEditUser({
 
   const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prevState: UserType) => ({ ...prevState, gender: e.target.value }));
+  };
+
+  const TransformFileData = (file: Blob) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles(() => [{ file, img: reader.result }]);
+      };
+    }
+  };
+
+  const handleUploadFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files) {
+      const file = event?.target?.files && event?.target?.files[0];
+      TransformFileData(file);
+    }
+  };
+
+  const removeFileHandler = () => {
+    setValue('profileImage', null, { shouldValidate: true });
+    setFiles(() => []);
   };
 
   return (
@@ -315,13 +343,42 @@ export function AdminEditUser({
                     />
                   </label>
                   <input
+                    className="form-control"
+                    // onChange={handleUploadFileHandler}
                     id="filePicker"
                     style={{ visibility: 'hidden', display: 'none' }}
                     type="file"
-                    {...register('profileImage')}
+                    accept="image/*"
+                    {...register('profileImage', {
+                      onChange: handleUploadFileHandler,
+                      // onBlur: (e) => {},
+                    })}
+                    // multiple
                   />
+                  <div className=" flex  flex-wrap space-y-2 space-x-2">
+                    {files.length > 0 &&
+                      files?.map((e: any) => (
+                        <div className="shadow-none transition-shadow duration-300 ease-in-out hover:shadow-sm ">
+                          <img
+                            className="h-36 w-36 rounded object-contain"
+                            src={e.img}
+                            alt="error!"
+                          />
+                          <div className="mt-1 text-center">
+                            <DeleteIcon
+                              style={{
+                                fontSize: '20px',
+                                color: 'red',
+                                margin: 'auto',
+                                cursor: 'pointer',
+                              }}
+                              onClick={removeFileHandler}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-
                 <div
                   style={{
                     marginBottom: '1rem',
@@ -344,15 +401,11 @@ export function AdminEditUser({
                         value={userData.role}
                         onChange={(e) => setUserData({ ...userData, role: e.target.value })}
                       >
-                        <option defaultValue={userData.role} value="user">
-                          User
-                        </option>
-                        <option value="guide">Guide</option>
-                        <option value="admin">Admin</option>
-                        <option value="manger">Manger</option>
-                        <option value="moderator">Moderator</option>
-                        <option value="supervisor">Supervisor</option>
-                        <option value="client">Client</option>
+                        {authorizationRoles.map((item: any, index: number) => (
+                          <option selected={index === 0} value={item.value}>
+                            {item.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>

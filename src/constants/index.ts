@@ -58,3 +58,26 @@ export const days = [
   { value: '30', label: '30' },
   { value: '31', label: '31' },
 ];
+
+export const productCategory = [
+  { value: 'all products', label: 'All Products' },
+  { value: 'books', label: 'Books' },
+  { value: 'sports', label: 'Sports' },
+  { value: 'football', label: 'Football' },
+  { value: 'personal computers', label: 'Computers' },
+  { value: "women's clothing", label: "women's clothing" },
+  { value: "women's shoes", label: "women's shoes" },
+  { value: "men's clothing", label: "men's clothing" },
+  { value: "men's shoes", label: "men's shoes" },
+  { value: 'toys', label: 'Toys' },
+];
+
+export const authorizationRoles = [
+  { value: 'user', label: 'User' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'manger', label: 'Manger' },
+  { value: 'moderator', label: 'Moderator' },
+  { value: 'supervisor', label: 'Supervisor' },
+  { value: 'client', label: 'Client' },
+  { value: 'guide', label: 'Guide' },
+];

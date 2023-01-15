@@ -133,13 +133,15 @@ export function HomePageComponent({
                     {product.category}
                   </div>
                   <div className="relative h-[200px]">
-                    <Image
-                      src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
-                      layout="fill"
-                      objectFit="contain"
-                      className="overflow-hidden rounded"
-                      alt={product.name}
-                    />
+                    {product?.productImages && product?.productImages?.length > 0 ? (
+                      <Image
+                        src={`${product?.productImages && product?.productImages[0]?.url}`}
+                        layout="fill"
+                        objectFit="contain"
+                        className="overflow-hidden rounded"
+                        alt={product.name}
+                      />
+                    ) : null}
                   </div>
 
                   <div className="my-5 text-[19px] capitalize  text-[#007185]">
