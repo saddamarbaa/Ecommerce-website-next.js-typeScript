@@ -10,10 +10,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { productCategory } from '@/constants';
 import {
   getCart,
   handleProductSearchTerm,
@@ -63,7 +63,6 @@ function Navbar({
     clearCartIsSuccess,
     addOrderIsSuccess,
   } = listState;
-  const { publicRuntimeConfig } = getConfig();
 
   const { isAuthenticated, isADmin, loginUser } = authState;
 
@@ -119,18 +118,11 @@ function Navbar({
                   className="select select-bordered  border-0  py-3 "
                   onChange={(event) => handleSelectedCategory(event.target.value)}
                 >
-                  <option value="All Products">All Products</option>
-                  <option value="Sports">Sports</option>
-                  <option value="Football">Football</option>
-                  <option value="Books">Books</option>
-                  <option value="Electronics">Electronics</option>
-                  <option value="Personal Computers">Computers</option>
-                  <option value="Women's clothing">Women&apos;s clothing</option>
-                  <option value="Women's Shoes">Women&apos;s Shoes</option>
-                  <option value="Jewelery">Jewelery</option>
-                  <option value="Men's clothing">Men&apos;s clothing</option>
-                  <option value="Men's Shoes">Men&apos;s Shoes</option>
-                  <option value="Toys">Toys</option>
+                  {productCategory.map((item: any, index: number) => (
+                    <option selected={index === 0} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <input
@@ -194,11 +186,7 @@ function Navbar({
                     <Avatar
                       alt="User Image"
                       className="h-[50px] w-[50px] rounded-full"
-                      src={
-                        loginUser
-                          ? `${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${loginUser?.profileImage}`
-                          : '/avatar/tem3.png'
-                      }
+                      src={loginUser ? `${loginUser.profileImage}` : '/avatar/tem3.png'}
                     />
                   </IconButton>
                 </Tooltip>

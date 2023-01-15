@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { v4 as uuidv4 } from 'uuid';
 
+import { months } from '@/constants';
 import { ReducerType } from '@/global-states';
 import { restSignUpState, signUp } from '@/global-states/actions';
 import LogInComponent from '@/pages/login';
@@ -28,7 +30,7 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
   const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
   const [logIn, setLogIn] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
-
+  const [files, setFiles] = useState<any>([]);
   const { signUpUserIsLoading, signUpUserIsSuccess, signUpUserIsError, signUpUserMessage } =
     authState;
 
@@ -36,6 +38,7 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<UserType>({
     resolver: yupResolver(signupSchemaValidation),
@@ -112,6 +115,29 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
     signUp(formData);
   };
 
+  const TransformFileData = (file: Blob) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles(() => [{ file, img: reader.result }]);
+      };
+    }
+  };
+
+  const handleUploadFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files) {
+      const file = event?.target?.files && event?.target?.files[0];
+      TransformFileData(file);
+    }
+  };
+
+  const removeFileHandler = () => {
+    setValue('profileImage', null, { shouldValidate: true });
+    setFiles(() => []);
+  };
+
   return (
     <div className="flex items-center justify-center py-[3rem]  ">
       <div className=" md:min-w[32rem] mx-auto  w-[90%] md:max-w-[35rem]">
@@ -184,6 +210,28 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
               </div>
 
               <div className="control">
+                <p className="error">{errors.password?.message} </p>
+                <input
+                  type="password"
+                  id="password"
+                  className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
+                  {...register('password')}
+                  placeholder={errors.password ? '' : 'New Password'}
+                />
+              </div>
+
+              <div className="control">
+                <p className="error">{errors.confirmPassword?.message} </p>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
+                  {...register('confirmPassword')}
+                  placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
+                />
+              </div>
+
+              <div className="control">
                 {!errors.profileImage && (
                   <label
                     htmlFor="profileImage"
@@ -210,33 +258,41 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
                   />
                 </label>
                 <input
+                  className="form-control"
+                  // onChange={handleUploadFileHandler}
                   id="filePicker"
                   style={{ visibility: 'hidden', display: 'none' }}
                   type="file"
-                  {...register('profileImage')}
+                  accept="image/*"
+                  {...register('profileImage', {
+                    onChange: handleUploadFileHandler,
+                    // onBlur: (e) => {},
+                  })}
+                  // multiple
                 />
-              </div>
-
-              <div className="control">
-                <p className="error">{errors.password?.message} </p>
-                <input
-                  type="password"
-                  id="password"
-                  className={` ${errors.password ? 'is-invalid' : 'custom-input'}`}
-                  {...register('password')}
-                  placeholder={errors.password ? '' : 'New Password'}
-                />
-              </div>
-
-              <div className="control">
-                <p className="error">{errors.confirmPassword?.message} </p>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  className={` ${errors.confirmPassword ? 'is-invalid' : 'custom-input'}`}
-                  {...register('confirmPassword')}
-                  placeholder={errors.confirmPassword ? '' : 'Confirm Password'}
-                />
+                <div className=" flex  flex-wrap space-y-2 space-x-2">
+                  {files.length > 0 &&
+                    files?.map((e: any) => (
+                      <div className="shadow-none transition-shadow duration-300 ease-in-out hover:shadow-sm ">
+                        <img
+                          className="h-36 w-36 rounded object-contain"
+                          src={e.img}
+                          alt="error!"
+                        />
+                        <div className="mt-1 text-center">
+                          <DeleteIcon
+                            style={{
+                              fontSize: '20px',
+                              color: 'red',
+                              margin: 'auto',
+                              cursor: 'pointer',
+                            }}
+                            onClick={removeFileHandler}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
 
               <div
@@ -251,20 +307,11 @@ export function SignUpPageComponent({ signUp, restSignUpState, authState }: Prop
               <div className="flex items-center justify-between space-x-[1.3rem]">
                 <div className="month-container select">
                   <select id="Month" className="select-css-month" {...register('month')}>
-                    <option defaultValue="01" value="01">
-                      January
-                    </option>
-                    <option value="02">February</option>
-                    <option value="03">March</option>
-                    <option value="04">April</option>
-                    <option value="05">May</option>
-                    <option value="06">June</option>
-                    <option value="07">July</option>
-                    <option value="08">August</option>
-                    <option value="09">September </option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12"> December</option>
+                    {months.map((_month, index) => (
+                      <option key={uuidv4()} value={months[index].value} selected={index === 0}>
+                        {months[index].label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 

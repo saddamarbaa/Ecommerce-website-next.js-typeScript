@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 
-import { defaultValues } from '@/constants';
+import { defaultValues, productCategory } from '@/constants';
 import { addProduct, ReducerType, restAddProduct } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
 import { addProductSchemaValidation } from '@/utils';
@@ -29,6 +30,7 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
   const autoScrollToBottomRef = useRef<HTMLDivElement>(null);
   const [isHomePage, setIsHomePage] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [files, setFiles] = useState<any>([]);
   const router = useRouter();
   const { addProductIsLoading, addProductIsSuccess, addProductIsError, addProductMessage } =
     productsState;
@@ -103,14 +105,45 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
     formData.append('name', data.name);
     formData.append('price', data.price);
     formData.append('description', data.description);
-    formData.append('productImage', data.productImage[0]);
     formData.append('category', data.category.toLocaleLowerCase());
     formData.append('brand', data.brand || '');
+
     if (data.stock) {
       formData.append('stock', data.stock);
     }
 
+    formData.append('files', files);
+
+    // eslint-disable-next-line array-callback-return
+    files.map((file: { file: string | Blob }) => {
+      formData.append('productImages', file.file);
+    });
     addProduct(formData);
+  };
+
+  const TransformFileData = (file: Blob) => {
+    const reader = new FileReader();
+
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setFiles((prev: any) => [...prev, { file, img: reader.result }]);
+      };
+    }
+  };
+
+  const handleUploadFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event?.target?.files) {
+      const file = event?.target?.files && event?.target?.files[0];
+      TransformFileData(file);
+    }
+  };
+
+  const removeFileHandler = (img: any) => {
+    setFiles(() => {
+      const v = files.filter((value: any) => value.img !== img);
+      return [...v];
+    });
   };
 
   return (
@@ -209,11 +242,40 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                     />
                   </label>
                   <input
+                    className="form-control"
+                    onChange={handleUploadFileHandler}
                     id="filePicker"
                     style={{ visibility: 'hidden', display: 'none' }}
                     type="file"
-                    {...register('productImage')}
+                    accept="image/*"
+                    name="image"
+                    multiple
                   />
+                  <div className=" flex  flex-wrap space-y-2 space-x-2">
+                    {files.length > 0 &&
+                      files?.map((e: any) => (
+                        <div className="shadow-none transition-shadow duration-300 ease-in-out hover:shadow-sm ">
+                          <img
+                            className="h-36 w-36 rounded object-contain"
+                            src={e.img}
+                            alt="error!"
+                          />
+                          <div className="mt-1 text-center">
+                            <DeleteIcon
+                              style={{
+                                fontSize: '20px',
+                                color: 'red',
+                                margin: 'auto',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() => {
+                                removeFileHandler(e.img);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
 
                 <div className="control">
@@ -236,20 +298,11 @@ export function AddProductComponent({ addProduct, restAddProduct, productsState 
                         setValue('category', e.target.value, { shouldValidate: true })
                       }
                     >
-                      <option defaultValue="all products" value="All Products">
-                        All Products
-                      </option>
-                      <option value="sports">Sports</option>
-                      <option value="Football">Football</option>
-                      <option value="books">Books</option>
-                      <option value="electronics">Electronics</option>
-                      <option value="personal computers">Computers</option>
-                      <option value="women's clothing">Women&apos;s clothing</option>
-                      <option value="women's shoes">Women&apos;s Shoes</option>
-                      <option value="jewelery">Jewelery</option>
-                      <option value="men's clothing">Men&apos;s clothing</option>
-                      <option value="men's shoes">Men&apos;s Shoes</option>
-                      <option value="toys">Toys</option>
+                      {productCategory.map((item: any, index: number) => (
+                        <option selected={index === 0} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

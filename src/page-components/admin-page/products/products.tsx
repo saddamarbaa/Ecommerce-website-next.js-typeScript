@@ -185,7 +185,7 @@ PropsType) {
 
                   <div className="relative h-[200px] overflow-hidden">
                     <Image
-                      src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                      src={`${product?.productImages && product?.productImages[0]?.url}`}
                       layout="fill"
                       objectFit="contain"
                       className="overflow-hidden rounded"

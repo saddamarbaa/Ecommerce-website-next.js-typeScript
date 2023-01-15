@@ -199,7 +199,9 @@ export function ProductDetailPageComponent({
                 <div className="flex w-full flex-wrap  justify-around">
                   <div className="relative h-[200px] w-[200px]  object-cover ">
                     <Image
-                      src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${individualProduct.productImage}`}
+                      src={`${
+                        individualProduct?.productImages && individualProduct?.productImages[0]?.url
+                      }`}
                       layout="fill"
                       objectFit="contain"
                       className="overflow-hidden rounded"
@@ -385,7 +387,9 @@ export function ProductDetailPageComponent({
 
                                 <div className="relative h-[200px]">
                                   <Image
-                                    src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                                    src={`${
+                                      product?.productImages && product?.productImages[0]?.url
+                                    }`}
                                     layout="fill"
                                     objectFit="contain"
                                     className="overflow-hidden rounded"

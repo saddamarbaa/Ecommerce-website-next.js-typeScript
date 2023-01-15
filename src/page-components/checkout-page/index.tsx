@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { connect } from 'react-redux';
 import { Alert } from '@mui/material';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -66,7 +65,7 @@ PropsType) {
   } = listState;
 
   // const { loginUser } = authState;
-  const { publicRuntimeConfig } = getConfig();
+
   const router = useRouter();
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
@@ -79,7 +78,7 @@ PropsType) {
   const getTotalPrice = () =>
     cart.reduce(
       (accumulator, currentValue: CartItemsTpe) =>
-        accumulator + currentValue.product.price * currentValue.quantity,
+        accumulator + Number(currentValue.product.price) * currentValue.quantity,
       0
     );
 
@@ -126,7 +125,15 @@ PropsType) {
         Authorization: `Bearer ${JSON.parse(localStorage.getItem('authToken'))}`,
       },
       body: JSON.stringify({
-        cartItems: cart,
+        orderItems: cart?.map(({ quantity, product }: CartItemsTpe) => ({
+          quantity,
+          product: {
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            productImage: product?.productImages && product?.productImages[0]?.url,
+          },
+        })),
       }),
     })
       .then((response) => response.json())
@@ -190,7 +197,7 @@ PropsType) {
                     <div className="flex w-2/5">
                       <div>
                         <Image
-                          src={`${publicRuntimeConfig.CONSOLE_BACKEND_IMG_ENDPOIN}${product.productImage}`}
+                          src={`${product?.productImages && product?.productImages[0]?.url}`}
                           alt={product.name}
                           objectFit="contain"
                           className="mx-auto h-[105px] w-[150px] overflow-hidden rounded-md"
@@ -246,7 +253,7 @@ PropsType) {
                     <span className="w-1/5 pt-4 text-center text-sm font-semibold">
                       {' '}
                       <NumberFormat
-                        value={quantity * product.price}
+                        value={quantity * Number(product.price)}
                         displayType="text"
                         thousandSeparator
                         prefix="$"
