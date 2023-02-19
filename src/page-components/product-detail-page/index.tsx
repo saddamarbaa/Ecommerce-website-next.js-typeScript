@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import ReactStars from 'react-rating-stars-component';
 import { connect } from 'react-redux';
-import { Alert } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
-import getConfig from 'next/config';
+import { Alert, CircularProgress } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,14 +18,14 @@ import {
   ReducerType,
   restGetIndividualProduct,
 } from '@/global-states';
+import { createSocketClient } from '@/services';
+import { SocketClient } from '@/services/socketType';
 import {
   _authPrototypeReducerState as ReducerState,
   _productPrototypeReducerState as ReducerProductState,
   ProductType,
 } from '@/types';
 import { getHostUrl, truncate } from '@/utils';
-
-const { publicRuntimeConfig } = getConfig();
 
 // props passed in to the component
 interface OwnProps {
@@ -79,6 +77,47 @@ export function ProductDetailPageComponent({
   const [rating, setRating] = React.useState(1);
   const [isAddCommentApiSuccess, setIsAddCommentApiSuccess] = React.useState(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [socketConnection, setSocketConnection] = useState<SocketClient | null>(null);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const newSocketConnection = createSocketClient();
+    console.log('Connecting to server...');
+
+    newSocketConnection.on('connect_error', (error: Record<string, unknown>) => {
+      setConnectionError(`Failed to connect to server: ${error.message}`);
+    });
+
+    newSocketConnection.on('connect', () => {
+      setConnectionError(null);
+      console.log('Connected to server!');
+    });
+
+    setSocketConnection(newSocketConnection);
+
+    return () => {
+      if (socketConnection) {
+        socketConnection.disconnect();
+        console.log('Disconnected from server.');
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socketConnection) return;
+
+    socketConnection.addHandler('product', (event: any) => {
+      if (event?.action === 'add-review' || event?.action === 'delete-review')
+        setIsAddCommentApiSuccess(true);
+      console.log('data from socket ', event);
+    });
+
+    return () => {
+      socketConnection.removeHandler('product');
+    };
+  }, [socketConnection]);
+
+  console.log('connection Error', connectionError);
 
   useEffect(() => {
     restGetIndividualProduct();
@@ -91,7 +130,7 @@ export function ProductDetailPageComponent({
     return () => {
       setIsAddCommentApiSuccess(false);
     };
-  }, [productId, isAddCommentApiSuccess, deleteReviewIsSuccess]);
+  }, [productId, isAddCommentApiSuccess]);
 
   useEffect(() => {
     if (deleteReviewIsError || deleteReviewIsSuccess) {
@@ -145,7 +184,7 @@ export function ProductDetailPageComponent({
     })
       .then((response) => response.json())
       .then(() => {
-        setIsAddCommentApiSuccess(true);
+        // setIsAddCommentApiSuccess(true);
         setComment(' ');
       })
       .catch((error) => {
@@ -172,7 +211,7 @@ export function ProductDetailPageComponent({
       />
       <div className="md:min-w[32rem] mx-auto w-[90%]   lg:w-[70%] ">
         {getIndividualProductIsPending && (
-          <div className=" flex items-center justify-center ">
+          <div className="flex items-center justify-center ">
             <CircularProgress color="secondary" />
           </div>
         )}
@@ -196,7 +235,7 @@ export function ProductDetailPageComponent({
             </Head>
             <div className="mx-auto w-full max-w-[90%]  sm:container">
               <div className="">
-                <div className="flex w-full flex-wrap  justify-around">
+                <div className="flex w-full flex-wrap justify-around">
                   <div className="relative h-[200px] w-[200px]  object-cover ">
                     <Image
                       src={`${
@@ -259,7 +298,7 @@ export function ProductDetailPageComponent({
                         }}
                         id="custom-button"
                         type="submit"
-                        className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                        className="inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide transition duration-200 focus:shadow-outline focus:outline-none"
                         disabled={AddToCartIsLoading}
                       >
                         Add to Cart
@@ -273,7 +312,7 @@ export function ProductDetailPageComponent({
                   </h2>
                   <form
                     action=""
-                    className="flex  w-full flex-col space-y-4"
+                    className="flex w-full flex-col space-y-4"
                     onSubmit={handleSubmit}
                   >
                     <div>
@@ -443,7 +482,7 @@ export function ProductDetailPageComponent({
                                   <button
                                     type="button"
                                     id="custom-button"
-                                    className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                                    className="inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide transition duration-200 focus:shadow-outline focus:outline-none"
                                   >
                                     Details
                                   </button>
@@ -454,7 +493,7 @@ export function ProductDetailPageComponent({
                                   disabled={AddToCartIsLoading}
                                   type="button"
                                   id="custom-button"
-                                  className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                                  className="inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide transition duration-200 focus:shadow-outline focus:outline-none"
                                   onClick={() => {
                                     if (product._id) {
                                       addProductToCart(product._id);

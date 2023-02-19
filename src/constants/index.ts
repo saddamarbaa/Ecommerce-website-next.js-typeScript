@@ -63,6 +63,7 @@ export const productCategory = [
   { value: 'all products', label: 'All Products' },
   { value: 'books', label: 'Books' },
   { value: 'sports', label: 'Sports' },
+  { value: 'electronics', label: 'Electronics' },
   { value: 'football', label: 'Football' },
   { value: 'personal computers', label: 'Computers' },
   { value: "women's clothing", label: "women's clothing" },

@@ -5,7 +5,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import moment from 'moment';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -20,8 +19,6 @@ import {
   UserType,
 } from '@/types';
 import { format } from '@/utils';
-
-const { publicRuntimeConfig } = getConfig();
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
@@ -163,7 +160,7 @@ export function AdminUsersUIPage({
           />
 
           <div className="mb-4">
-            <div className="flex-wrap items-center  justify-between gap-6 md:flex">
+            <div className="flex-wrap items-center justify-between gap-6 md:flex">
               <button
                 type="button"
                 onClick={() => setAddNewUser(true)}
@@ -322,7 +319,7 @@ export function AdminUsersUIPage({
                   </div>
                   <div>
                     <div className="mb-8 -mt-4 px-7">
-                      <h2 className="text-3xl font-bold capitalize  text-green-800">
+                      <h2 className="text-3xl font-bold capitalize text-green-800">
                         {user.name} {user.surname}{' '}
                       </h2>
                       <div className="mt-2 flex gap-4">
@@ -368,7 +365,7 @@ export function AdminUsersUIPage({
 
                       <div className="flex gap-4">
                         <p className="min-w-[100px] truncate  text-gray-500"> Role: </p>
-                        <p className=" truncate text-gray-500 "> {user.role}</p>
+                        <p className="truncate text-gray-500 "> {user.role}</p>
                       </div>
 
                       <div className="flex gap-4">
@@ -423,7 +420,7 @@ export function AdminUsersUIPage({
                         </p>
                       </div>
 
-                      <div className=" mt-4 flex gap-4" style={{ minHeight: '50px' }}>
+                      <div className="mt-4 flex gap-4 " style={{ minHeight: '50px' }}>
                         <p className="min-w-[100px] truncate  text-gray-500"> Bio </p>
                         <p className="text-gray-500  hover:text-[#c45500]">{user.bio || '-'}</p>
                       </div>
@@ -431,15 +428,15 @@ export function AdminUsersUIPage({
                         <Link href={`/admin/users/${user._id}`}>
                           <button
                             type="button"
-                            className="inline-flex items-center rounded-lg bg-blue-700 py-2 px-4 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                           >
-                            Edit <EditIcon className=" ml-4" />
+                            Edit <EditIcon className="ml-4 " />
                           </button>
                         </Link>
 
                         <button
                           type="button"
-                          className="inline-flex items-center rounded-lg bg-red-700 py-2 px-4 text-center text-sm font-bold text-white hover:bg-red-800 focus:ring-4"
+                          className="inline-flex items-center rounded-lg bg-red-700 px-4 py-2 text-center text-sm font-bold text-white hover:bg-red-800 focus:ring-4"
                           onClick={() => {
                             setId(() => user._id);
                             handleOpen();
@@ -455,9 +452,9 @@ export function AdminUsersUIPage({
           </div>
           <div>
             {!users.length && (
-              <div className="easy-in-out  container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
+              <div className="easy-in-out container m-12 w-full transform rounded bg-white font-bold shadow-lg duration-200">
                 {listIsLoading && (
-                  <div className=" flex items-center justify-center ">
+                  <div className="flex items-center justify-center ">
                     <CircularProgress color="secondary" />
                   </div>
                 )}
