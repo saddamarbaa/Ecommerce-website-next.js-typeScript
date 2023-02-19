@@ -4,7 +4,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,8 +22,6 @@ import {
 } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
 import { truncate } from '@/utils/functions/helpers';
-
-const { publicRuntimeConfig } = getConfig();
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
@@ -134,9 +131,9 @@ PropsType) {
       )}
       <div>
         {!products.length && (
-          <div className="easy-in-out container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
+          <div className="easy-in-out container m-12 w-full transform rounded bg-white font-bold shadow-lg duration-200">
             {listIsLoading && (
-              <div className=" flex items-center justify-center ">
+              <div className="flex items-center justify-center ">
                 <CircularProgress color="secondary" />
               </div>
             )}
@@ -238,15 +235,15 @@ PropsType) {
                   <a>
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-lg bg-blue-700 py-2 px-4 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      Edit <EditIcon className=" ml-4" />
+                      Edit <EditIcon className="ml-4 " />
                     </button>
                   </a>
                 </Link>
                 <button
                   type="button"
-                  className="inline-flex items-center rounded-lg bg-red-700 py-2 px-4 text-center text-sm font-bold text-white hover:bg-red-800 focus:ring-4 focus:ring-blue-300"
+                  className="inline-flex items-center rounded-lg bg-red-700 px-4 py-2 text-center text-sm font-bold text-white hover:bg-red-800 focus:ring-4 focus:ring-blue-300"
                   onClick={() => {
                     setId(() => product._id);
                     handleOpen();

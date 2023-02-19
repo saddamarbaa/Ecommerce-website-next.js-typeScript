@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,8 +18,6 @@ import {
 } from '@/global-states';
 import { _productPrototypeReducerState as ReducerState, ProductType } from '@/types';
 import { truncate } from '@/utils/functions/helpers';
-
-const { publicRuntimeConfig } = getConfig();
 
 // props from connect mapDispatchToProps
 interface MapDispatchProps {
@@ -100,9 +97,9 @@ export function HomePageComponent({
       ) : null}
       <div>
         {!products.length && (
-          <div className="easy-in-out container m-12  w-full transform rounded bg-white font-bold  shadow-lg  duration-200">
+          <div className="easy-in-out container m-12 w-full transform rounded bg-white font-bold shadow-lg duration-200">
             {listIsLoading && (
-              <div className=" flex items-center justify-center ">
+              <div className="flex items-center justify-center ">
                 <CircularProgress color="secondary" />
               </div>
             )}
@@ -191,7 +188,7 @@ export function HomePageComponent({
                     <button
                       type="button"
                       id="custom-button"
-                      className="inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                      className="inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide transition duration-200 focus:shadow-outline focus:outline-none "
                     >
                       Details
                     </button>
@@ -206,7 +203,7 @@ export function HomePageComponent({
                     }}
                     type="button"
                     id="custom-button"
-                    className=" inline-flex h-12 w-full items-center justify-center  px-6 font-medium tracking-wide transition  duration-200 focus:shadow-outline focus:outline-none "
+                    className="inline-flex h-12 w-full items-center justify-center px-6 font-medium tracking-wide transition duration-200 focus:shadow-outline focus:outline-none"
                   >
                     Add to Cart
                   </button>
